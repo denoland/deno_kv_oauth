@@ -25,9 +25,6 @@ interface OAuthSession {
 
 const kv = await Deno.openKv();
 
-const iter = kv.list({ prefix: [] });
-for await (const entry of iter) await kv.delete(entry.key);
-
 class KvOAuthClient {
   req: Request;
   oauth2Client: OAuth2Client;
