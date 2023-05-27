@@ -1,8 +1,8 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import { createKvOAuthClient } from "deno_kv_oauth";
+import { createGitHubProvider, type Provider } from "deno_kv_oauth";
 
 export interface State {
-  kvOAuthClient: ReturnType<typeof createKvOAuthClient>;
+  provider: Provider;
 }
 
 export async function handler(
@@ -10,9 +10,9 @@ export async function handler(
   ctx: MiddlewareHandlerContext<State>,
 ) {
   // Don't process session-related data for keepalive and static requests
-  if (new URL(req.url).pathname.includes("_frsh")) {
+  if (new URL(req.url).pathname.startsWith("_frsh")) {
     return await ctx.next();
   }
-  ctx.state.kvOAuthClient = createKvOAuthClient(req);
+  ctx.state.provider = createGitHubProvider();
   return await ctx.next();
 }

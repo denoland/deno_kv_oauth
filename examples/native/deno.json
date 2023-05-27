@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "start": "deno run -A --unstable mod.ts"
+  }
+}

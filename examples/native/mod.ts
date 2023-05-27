@@ -1,22 +1,30 @@
 import "https://deno.land/std@0.189.0/dotenv/load.ts";
 import { Status } from "https://deno.land/std@0.189.0/http/http_status.ts";
-import { createKvOAuthClient } from "../../mod.ts";
+import {
+  createGitHubProvider,
+  getUser,
+  handleCallback,
+  isSignedIn,
+  signIn,
+  signOut,
+} from "../../mod.ts";
 
-async function handler(req: Request): Promise<Response> {
-  if (req.method !== "GET") {
+const provider = createGitHubProvider();
+
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== "GET") {
     return new Response(null, { status: Status.NotFound });
   }
 
-  const { pathname } = new URL(req.url);
-  const kvOAuthClient = createKvOAuthClient(req);
+  const { pathname } = new URL(request.url);
 
   if (pathname === "/") {
     let body = `
       <p>Who are you?</p>
       <a href="/signin">Sign in</a>
     `;
-    if (kvOAuthClient.isSignedIn()) {
-      const user = await kvOAuthClient.getUser();
+    if (isSignedIn(request)) {
+      const user = await getUser(request, provider);
       body = `
         <p>Hello, ${user.login}!</p>
         <a href="/signout">Sign out</a>
@@ -28,15 +36,15 @@ async function handler(req: Request): Promise<Response> {
   }
 
   if (pathname === "/signin") {
-    return await kvOAuthClient.signIn();
+    return await signIn(provider);
   }
 
   if (pathname === "/callback") {
-    return await kvOAuthClient.handleCallback("/");
+    return await handleCallback(request, provider);
   }
 
   if (pathname === "/signout") {
-    return await kvOAuthClient.signOut("/");
+    return signOut(request);
   }
 
   return new Response(null, { status: Status.NotFound });
