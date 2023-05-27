@@ -1,6 +1,7 @@
 {
   "tasks": {
     "eg:fresh": "deno task --cwd=examples/fresh start",
-    "eg:native": "deno task --cwd=examples/native start"
+    "eg:native": "deno task --cwd=examples/native start",
+    "test": "deno test -A --unstable --allow-env --allow-read"
   }
 }

@@ -120,12 +120,7 @@ export async function signOut(
   const siteSessionId = getCookies(request.headers)[SITE_SESSION_COOKIE_NAME];
   assert(siteSessionId, `Cookie ${SITE_SESSION_COOKIE_NAME} not found`);
 
-  const tokensRes = await kv.get<Tokens>([
-    TOKENS_BY_SITE_SESSION_KV_PREFIX,
-    siteSessionId,
-  ]);
-  const tokens = tokensRes.value;
-  assert(tokens, `Tokens by site session ${siteSessionId} entry not found`);
+  await kv.delete([TOKENS_BY_SITE_SESSION_KV_PREFIX, siteSessionId]);
 
   const headers = new Headers({ location: redirectUrl });
   deleteCookie(headers, SITE_SESSION_COOKIE_NAME);
