@@ -1,10 +1,9 @@
 import { Handlers } from "$fresh/server.ts";
 import { handleCallback } from "deno_kv_oauth";
-import { State } from "./_middleware.ts";
+import { provider } from "@/utils/provider.ts";
 
-// deno-lint-ignore no-explicit-any
-export const handler: Handlers<any, State> = {
-  async GET(req, ctx) {
-    return await handleCallback(req, ctx.state.provider);
+export const handler: Handlers = {
+  async GET(req) {
+    return await handleCallback(req, provider);
   },
 };

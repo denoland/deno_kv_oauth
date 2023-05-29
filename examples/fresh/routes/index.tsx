@@ -1,16 +1,16 @@
 // deno-lint-ignore-file no-explicit-any
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { State } from "./_middleware.ts";
 import { getUser, isSignedIn } from "deno_kv_oauth";
+import { provider } from "@/utils/provider.ts";
 
 interface Data {
   user?: any;
 }
 
-export const handler: Handlers<Data, State> = {
+export const handler: Handlers<Data> = {
   async GET(req, ctx) {
     const user = await isSignedIn(req)
-      ? await getUser(req, ctx.state.provider)
+      ? await getUser(req, provider)
       : undefined;
     return ctx.render({ user });
   },
