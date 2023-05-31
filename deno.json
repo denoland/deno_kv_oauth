@@ -1,7 +1,6 @@
 {
   "tasks": {
-    "eg:fresh": "deno task --cwd=examples/fresh start",
-    "eg:native": "deno task --cwd=examples/native start",
+    "demo": "deno run --allow-net --allow-env --allow-read --unstable --watch=demo/,mod.ts demo/mod.ts",
     "test": "deno test -A --unstable --allow-env --allow-read"
   }
 }
