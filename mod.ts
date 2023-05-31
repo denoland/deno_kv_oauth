@@ -78,6 +78,7 @@ export async function signIn(
   setCookie(headers, {
     name: OAUTH_SESSION_COOKIE_NAME,
     value: oauthSessionId,
+    path: "/",
   });
 
   // Redirect to the authorization endpoint
@@ -121,6 +122,7 @@ export async function handleCallback(
   setCookie(headers, {
     name: SITE_SESSION_COOKIE_NAME,
     value: siteSessionId,
+    path: "/",
   });
   return new Response(null, { status: Status.Found, headers });
 }
