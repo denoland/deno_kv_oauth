@@ -1,8 +1,3 @@
-import "https://deno.land/std@0.189.0/dotenv/load.ts";
-import {
-  assert,
-  assertEquals,
-} from "https://deno.land/std@0.189.0/testing/asserts.ts";
 import {
   createProvider,
   isSignedIn,
@@ -10,8 +5,15 @@ import {
   signIn,
   signOut,
 } from "./mod.ts";
-import { isRedirectStatus } from "https://deno.land/std@0.189.0/http/http_status.ts";
-import { getSetCookies } from "https://deno.land/std@0.189.0/http/cookie.ts";
+import {
+  assert,
+  assertEquals,
+  getSetCookies,
+  isRedirectStatus,
+  loadSync,
+} from "./deps.ts";
+
+loadSync({ export: true });
 
 Deno.test("createProvider()", () => {
   const clientId = Deno.env.get("GITHUB_CLIENT_ID")!;
