@@ -1,38 +1,29 @@
-import {
-  createProvider,
-  isSignedIn,
-  type Provider,
-  signIn,
-  signOut,
-} from "./mod.ts";
+import { createClientConfig, isSignedIn, signIn, signOut } from "./mod.ts";
 import {
   assert,
   assertEquals,
   getSetCookies,
   isRedirectStatus,
   loadSync,
+  type OAuth2ClientConfig,
 } from "./deps.ts";
 
 loadSync({ export: true });
 
-Deno.test("createProvider()", () => {
+Deno.test("createClient()", () => {
   const clientId = Deno.env.get("GITHUB_CLIENT_ID")!;
   const clientSecret = Deno.env.get("GITHUB_CLIENT_SECRET")!;
 
-  assertEquals<Provider>(createProvider("github"), {
-    oauth2ClientConfig: {
-      clientId,
-      clientSecret,
-      authorizationEndpointUri: "https://github.com/login/oauth/authorize",
-      tokenUri: "https://github.com/login/oauth/access_token",
-    },
-    getUserUrl: "https://api.github.com/user",
+  assertEquals<OAuth2ClientConfig>(createClientConfig("github"), {
+    clientId,
+    clientSecret,
+    authorizationEndpointUri: "https://github.com/login/oauth/authorize",
+    tokenUri: "https://github.com/login/oauth/access_token",
   });
 });
 
 Deno.test("signIn()", async () => {
-  const provider = createProvider("github");
-  const response = await signIn(provider);
+  const response = await signIn("github");
 
   assert(isRedirectStatus(response.status));
   assertEquals(typeof response.headers.get("location"), "string");
