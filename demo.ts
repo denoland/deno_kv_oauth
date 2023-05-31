@@ -1,4 +1,10 @@
-import { getUser, handleCallback, isSignedIn, signIn, signOut } from "./mod.ts";
+import {
+  getSessionTokens,
+  handleCallback,
+  isSignedIn,
+  signIn,
+  signOut,
+} from "./mod.ts";
 import { loadSync, serve, Status } from "./deps.ts";
 
 loadSync({ export: true });
@@ -16,9 +22,10 @@ async function handler(request: Request): Promise<Response> {
       <a href="/signin">Sign in</a>
     `;
     if (isSignedIn(request)) {
-      const user = await getUser(request, "github");
+      const tokens = await getSessionTokens(request);
       body = `
-        <p>Hello, ${user.login}!</p>
+        <p>Your tokens:<p>
+        <pre>${JSON.stringify(tokens, undefined, 2)}</pre>
         <a href="/signout">Sign out</a>
       `;
     }

@@ -31,42 +31,34 @@ const COOKIE_BASE = {
 
 const kv = await Deno.openKv();
 
-export interface Provider {
-  oauth2ClientConfig: OAuth2ClientConfig;
-  getUserUrl: string;
-}
+export type Provider = "github";
 
-function createGitHubProvider(): Provider {
+function createGitHubClient(): OAuth2ClientConfig {
   return {
-    oauth2ClientConfig: {
-      clientId: Deno.env.get("GITHUB_CLIENT_ID")!,
-      clientSecret: Deno.env.get("GITHUB_CLIENT_SECRET")!,
-      authorizationEndpointUri: "https://github.com/login/oauth/authorize",
-      tokenUri: "https://github.com/login/oauth/access_token",
-    },
-    getUserUrl: "https://api.github.com/user",
+    clientId: Deno.env.get("GITHUB_CLIENT_ID")!,
+    clientSecret: Deno.env.get("GITHUB_CLIENT_SECRET")!,
+    authorizationEndpointUri: "https://github.com/login/oauth/authorize",
+    tokenUri: "https://github.com/login/oauth/access_token",
   };
 }
 
-export type ProviderId = "github";
-
-export function createProvider(providerId: ProviderId) {
-  switch (providerId) {
+export function createClientConfig(provider: Provider): OAuth2ClientConfig {
+  switch (provider) {
     case "github":
-      return createGitHubProvider();
+      return createGitHubClient();
     default:
-      throw new Error(`Provider ID "${providerId}" not supported`);
+      throw new Error(`Provider ID "${provider}" not supported`);
   }
 }
 
 export async function signIn(
-  providerIdOrProvider: ProviderId | Provider,
+  providerOrClientConfig: Provider | OAuth2ClientConfig,
 ): Promise<Response> {
-  const provider = typeof providerIdOrProvider === "string"
-    ? createProvider(providerIdOrProvider)
-    : providerIdOrProvider;
+  const clientConfig = typeof providerOrClientConfig === "string"
+    ? createClientConfig(providerOrClientConfig)
+    : providerOrClientConfig;
 
-  const oauth2Client = new OAuth2Client(provider.oauth2ClientConfig);
+  const oauth2Client = new OAuth2Client(clientConfig);
 
   // Generate a random state
   const state = crypto.randomUUID();
@@ -95,12 +87,12 @@ export async function signIn(
 
 export async function handleCallback(
   request: Request,
-  providerIdOrProvider: ProviderId | Provider,
+  providerOrClientConfig: Provider | OAuth2ClientConfig,
   redirectUrl = "/",
 ): Promise<Response> {
-  const provider = typeof providerIdOrProvider === "string"
-    ? createProvider(providerIdOrProvider)
-    : providerIdOrProvider;
+  const clientConfig = typeof providerOrClientConfig === "string"
+    ? createClientConfig(providerOrClientConfig)
+    : providerOrClientConfig;
 
   // Get the OAuth session ID from the client's cookie and ensure it's defined
   const oauthSessionId = getCookies(request.headers)[OAUTH_SESSION_COOKIE_NAME];
@@ -118,7 +110,7 @@ export async function handleCallback(
   await kv.delete([OAUTH_SESSION_KV_PREFIX, oauthSessionId]);
 
   // Generate a random site session ID for the new user cookie
-  const oauth2Client = new OAuth2Client(provider.oauth2ClientConfig);
+  const oauth2Client = new OAuth2Client(clientConfig);
   const siteSessionId = crypto.randomUUID();
   const tokens = await oauth2Client.code.getToken(
     request.url,
@@ -153,14 +145,7 @@ export async function signOut(
   return new Response(null, { status: Status.Found, headers });
 }
 
-export async function getUser(
-  request: Request,
-  providerIdOrProvider: ProviderId | Provider,
-) {
-  const provider = typeof providerIdOrProvider === "string"
-    ? createProvider(providerIdOrProvider)
-    : providerIdOrProvider;
-
+export async function getSessionTokens(request: Request) {
   const siteSessionId = getCookies(request.headers)[SITE_SESSION_COOKIE_NAME];
   assert(siteSessionId, `Cookie ${SITE_SESSION_COOKIE_NAME} not found`);
 
@@ -170,11 +155,5 @@ export async function getUser(
   ]);
   const tokens = tokensRes.value;
   assert(tokens, `Tokens by site session ${siteSessionId} entry not found`);
-
-  const resp = await fetch(provider.getUserUrl, {
-    headers: { authorization: `Bearer ${tokens.accessToken}` },
-  });
-
-  if (!resp.ok) throw new Error(await resp.text());
-  return await resp.json();
+  return tokens;
 }
