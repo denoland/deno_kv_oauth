@@ -29,7 +29,8 @@ Deno.test("signIn()", async () => {
   assertEquals(typeof response.headers.get("location"), "string");
   assert(
     getSetCookies(response.headers).some((setCookie) =>
-      setCookie.name === "oauth-session" && typeof setCookie.value === "string"
+      setCookie.name === "oauth-session" && setCookie.path === "/" &&
+      typeof setCookie.value === "string"
     ),
   );
 });
@@ -49,6 +50,7 @@ Deno.test("signOut()", async () => {
     {
       name: "site-session",
       value: "",
+      path: "/",
       expires: new Date(0),
     },
   );
