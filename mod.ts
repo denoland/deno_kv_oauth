@@ -21,6 +21,14 @@ const OAUTH_SESSION_KV_PREFIX = "oauth_sessions";
 const SITE_SESSION_COOKIE_NAME = "site-session";
 const TOKENS_BY_SITE_SESSION_KV_PREFIX = "tokens_by_site_session";
 
+const COOKIE_BASE = {
+  path: "/",
+  secure: true,
+  httpOnly: true,
+  maxAge: 7776000,
+  sameSite: "Lax",
+} as const;
+
 const kv = await Deno.openKv();
 
 export interface Provider {
@@ -78,7 +86,7 @@ export async function signIn(
   setCookie(headers, {
     name: OAUTH_SESSION_COOKIE_NAME,
     value: oauthSessionId,
-    path: "/",
+    ...COOKIE_BASE,
   });
 
   // Redirect to the authorization endpoint
@@ -122,7 +130,7 @@ export async function handleCallback(
   setCookie(headers, {
     name: SITE_SESSION_COOKIE_NAME,
     value: siteSessionId,
-    path: "/",
+    ...COOKIE_BASE,
   });
   return new Response(null, { status: Status.Found, headers });
 }
