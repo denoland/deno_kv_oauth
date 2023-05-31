@@ -59,6 +59,7 @@ Deno.test("signOut()", async () => {
     {
       name: "site-session",
       value: "",
+      path: "/",
       expires: new Date(0),
     },
   );

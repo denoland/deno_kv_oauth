@@ -141,7 +141,7 @@ export async function signOut(
   await kv.delete([TOKENS_BY_SITE_SESSION_KV_PREFIX, siteSessionId]);
 
   const headers = new Headers({ location: redirectUrl });
-  deleteCookie(headers, SITE_SESSION_COOKIE_NAME);
+  deleteCookie(headers, SITE_SESSION_COOKIE_NAME, { path: "/" });
   return new Response(null, { status: Status.Found, headers });
 }
 
