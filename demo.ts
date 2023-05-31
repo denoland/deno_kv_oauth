@@ -1,5 +1,5 @@
 import { getUser, handleCallback, isSignedIn, signIn, signOut } from "./mod.ts";
-import { loadSync, Status } from "./deps.ts";
+import { loadSync, serve, Status } from "./deps.ts";
 
 loadSync({ export: true });
 
@@ -42,4 +42,4 @@ async function handler(request: Request): Promise<Response> {
   return new Response(null, { status: Status.NotFound });
 }
 
-Deno.serve(handler);
+serve(handler);

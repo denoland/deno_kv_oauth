@@ -6,6 +6,7 @@ export {
   isRedirectStatus,
   Status,
 } from "https://deno.land/std@0.189.0/http/http_status.ts";
+export { serve } from "https://deno.land/std@0.189.0/http/server.ts";
 export { loadSync } from "https://deno.land/std@0.189.0/dotenv/mod.ts";
 export {
   deleteCookie,
