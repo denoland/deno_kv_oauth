@@ -7,7 +7,7 @@ import {
   isSignedIn,
   signIn,
   signOut,
-} from "../mod.ts";
+} from "./mod.ts";
 
 const provider = createGitHubProvider();
 

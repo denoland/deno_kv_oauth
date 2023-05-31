@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "demo": "deno run --allow-net --allow-env --allow-read --unstable --watch=demo/,mod.ts demo/mod.ts",
+    "demo": "deno run --allow-net --allow-env --allow-read --unstable --watch=demo.ts,mod.ts demo.ts",
     "test": "deno test -A --unstable --allow-env --allow-read"
   }
 }
