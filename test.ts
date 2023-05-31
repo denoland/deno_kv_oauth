@@ -4,7 +4,7 @@ import {
   assertEquals,
 } from "https://deno.land/std@0.189.0/testing/asserts.ts";
 import {
-  createGitHubProvider,
+  createProvider,
   isSignedIn,
   type Provider,
   signIn,
@@ -13,25 +13,23 @@ import {
 import { isRedirectStatus } from "https://deno.land/std@0.189.0/http/http_status.ts";
 import { getSetCookies } from "https://deno.land/std@0.189.0/http/cookie.ts";
 
-Deno.test("createGitHubProvider()", () => {
+Deno.test("createProvider()", () => {
   const clientId = Deno.env.get("GITHUB_CLIENT_ID")!;
   const clientSecret = Deno.env.get("GITHUB_CLIENT_SECRET")!;
-  const defaults = { scope: "read:user" };
 
-  assertEquals<Provider>(createGitHubProvider({ defaults }), {
+  assertEquals<Provider>(createProvider("github"), {
     oauth2ClientConfig: {
       clientId,
       clientSecret,
       authorizationEndpointUri: "https://github.com/login/oauth/authorize",
       tokenUri: "https://github.com/login/oauth/access_token",
-      defaults,
     },
     getUserUrl: "https://api.github.com/user",
   });
 });
 
 Deno.test("signIn()", async () => {
-  const provider = createGitHubProvider();
+  const provider = createProvider("github");
   const response = await signIn(provider);
 
   assert(isRedirectStatus(response.status));
