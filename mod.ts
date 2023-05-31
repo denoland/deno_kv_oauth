@@ -43,7 +43,28 @@ export function createClientConfig(provider: Provider): OAuth2ClientConfig {
   }
 }
 
+function getCookieName(request: Request, name: string) {
+  if (request.url.startsWith("https://")) {
+    return "__HOST-" + name;
+  }
+  return name;
+}
+
+function getCookieObject(request: Request, name: string, value: string) {
+  const secure = request.url.startsWith("https://");
+  return {
+    name: getCookieName(request, name),
+    value: value,
+    path: "/",
+    secure,
+    httpOnly: true,
+    maxAge: 7776000,
+    sameSite: "Lax",
+  } as const;
+}
+
 export async function signIn(
+  request: Request,
   providerOrClientConfig: Provider | OAuth2ClientConfig,
 ): Promise<Response> {
   const clientConfig = typeof providerOrClientConfig === "string"
@@ -67,10 +88,10 @@ export async function signIn(
 
   // Store the ID of that OAuth session object in a client cookie
   const headers = new Headers({ location: uri.toString() });
-  setCookie(headers, {
-    name: OAUTH_SESSION_COOKIE_NAME,
-    value: oauthSessionId,
-  });
+  setCookie(
+    headers,
+    getCookieObject(request, OAUTH_SESSION_COOKIE_NAME, oauthSessionId),
+  );
 
   // Redirect to the authorization endpoint
   return new Response(null, { status: Status.Found, headers });
@@ -81,13 +102,15 @@ export async function handleCallback(
   providerOrClientConfig: Provider | OAuth2ClientConfig,
   redirectUrl = "/",
 ): Promise<Response> {
+  const OAUTH_COOKIE_NAME = getCookieName(request, OAUTH_SESSION_COOKIE_NAME);
+
   const clientConfig = typeof providerOrClientConfig === "string"
     ? createClientConfig(providerOrClientConfig)
     : providerOrClientConfig;
 
   // Get the OAuth session ID from the client's cookie and ensure it's defined
-  const oauthSessionId = getCookies(request.headers)[OAUTH_SESSION_COOKIE_NAME];
-  assert(oauthSessionId, `Cookie ${OAUTH_SESSION_COOKIE_NAME} not found`);
+  const oauthSessionId = getCookies(request.headers)[OAUTH_COOKIE_NAME];
+  assert(oauthSessionId, `Cookie ${OAUTH_COOKIE_NAME} not found`);
 
   // Get the OAuth session object stored in Deno KV and ensure it's defined
   const oauthSessionRes = await kv.get<OAuthSession>([
@@ -110,34 +133,39 @@ export async function handleCallback(
   await kv.set([TOKENS_BY_SITE_SESSION_KV_PREFIX, siteSessionId], tokens);
 
   const headers = new Headers({ location: redirectUrl });
-  setCookie(headers, {
-    name: SITE_SESSION_COOKIE_NAME,
-    value: siteSessionId,
-  });
+  setCookie(
+    headers,
+    getCookieObject(request, SITE_SESSION_COOKIE_NAME, siteSessionId),
+  );
   return new Response(null, { status: Status.Found, headers });
 }
 
 export function isSignedIn(request: Request) {
-  return Boolean(getCookies(request.headers)[SITE_SESSION_COOKIE_NAME]);
+  const SITE_COOKIE_NAME = getCookieName(request, SITE_SESSION_COOKIE_NAME);
+  return Boolean(getCookies(request.headers)[SITE_COOKIE_NAME]);
 }
 
 export async function signOut(
   request: Request,
   redirectUrl = "/",
 ): Promise<Response> {
-  const siteSessionId = getCookies(request.headers)[SITE_SESSION_COOKIE_NAME];
-  assert(siteSessionId, `Cookie ${SITE_SESSION_COOKIE_NAME} not found`);
+  const SITE_COOKIE_NAME = getCookieName(request, SITE_SESSION_COOKIE_NAME);
+
+  const siteSessionId = getCookies(request.headers)[SITE_COOKIE_NAME];
+  assert(siteSessionId, `Cookie ${SITE_COOKIE_NAME} not found`);
 
   await kv.delete([TOKENS_BY_SITE_SESSION_KV_PREFIX, siteSessionId]);
 
   const headers = new Headers({ location: redirectUrl });
-  deleteCookie(headers, SITE_SESSION_COOKIE_NAME);
+  deleteCookie(headers, SITE_COOKIE_NAME);
   return new Response(null, { status: Status.Found, headers });
 }
 
 export async function getSessionTokens(request: Request) {
-  const siteSessionId = getCookies(request.headers)[SITE_SESSION_COOKIE_NAME];
-  assert(siteSessionId, `Cookie ${SITE_SESSION_COOKIE_NAME} not found`);
+  const SITE_COOKIE_NAME = getCookieName(request, SITE_SESSION_COOKIE_NAME);
+
+  const siteSessionId = getCookies(request.headers)[SITE_COOKIE_NAME];
+  assert(siteSessionId, `Cookie ${SITE_COOKIE_NAME} not found`);
 
   const tokensRes = await kv.get<Tokens>([
     TOKENS_BY_SITE_SESSION_KV_PREFIX,
