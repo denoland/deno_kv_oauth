@@ -1,6 +1,7 @@
-import "https://deno.land/std@0.189.0/dotenv/load.ts";
-import { Status } from "https://deno.land/std@0.189.0/http/http_status.ts";
 import { getUser, handleCallback, isSignedIn, signIn, signOut } from "./mod.ts";
+import { loadSync, Status } from "./deps.ts";
+
+loadSync({ export: true });
 
 async function handler(request: Request): Promise<Response> {
   if (request.method !== "GET") {

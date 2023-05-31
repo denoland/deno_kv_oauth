@@ -1,16 +1,14 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
+  assert,
   deleteCookie,
   getCookies,
-  setCookie,
-} from "https://deno.land/std@0.188.0/http/cookie.ts";
-import {
   OAuth2Client,
   type OAuth2ClientConfig,
-  Tokens,
-} from "https://deno.land/x/oauth2_client@v1.0.0/mod.ts";
-import { Status } from "https://deno.land/std@0.188.0/http/http_status.ts";
-import { assert } from "https://deno.land/std@0.188.0/_util/asserts.ts";
+  setCookie,
+  Status,
+  type Tokens,
+} from "./deps.ts";
 
 interface OAuthSession {
   state: string;
