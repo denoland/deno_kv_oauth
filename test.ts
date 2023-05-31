@@ -10,7 +10,7 @@ import {
 
 loadSync({ export: true });
 
-Deno.test("createClient()", () => {
+Deno.test("createClientConfig()", () => {
   const clientId = Deno.env.get("GITHUB_CLIENT_ID")!;
   const clientSecret = Deno.env.get("GITHUB_CLIENT_SECRET")!;
 
