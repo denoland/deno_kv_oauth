@@ -1,15 +1,12 @@
 import "https://deno.land/std@0.189.0/dotenv/load.ts";
 import { Status } from "https://deno.land/std@0.189.0/http/http_status.ts";
 import {
-  createGitHubProvider,
   getUser,
   handleCallback,
   isSignedIn,
   signIn,
   signOut,
 } from "../../mod.ts";
-
-const provider = createGitHubProvider();
 
 async function handler(request: Request): Promise<Response> {
   if (request.method !== "GET") {
@@ -24,7 +21,7 @@ async function handler(request: Request): Promise<Response> {
       <a href="/signin">Sign in</a>
     `;
     if (isSignedIn(request)) {
-      const user = await getUser(request, provider);
+      const user = await getUser(request, "github");
       body = `
         <p>Hello, ${user.login}!</p>
         <a href="/signout">Sign out</a>
@@ -36,11 +33,11 @@ async function handler(request: Request): Promise<Response> {
   }
 
   if (pathname === "/signin") {
-    return await signIn(provider);
+    return await signIn("github");
   }
 
   if (pathname === "/callback") {
-    return await handleCallback(request, provider);
+    return await handleCallback(request, "github");
   }
 
   if (pathname === "/signout") {

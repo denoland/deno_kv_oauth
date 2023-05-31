@@ -30,22 +30,36 @@ export interface Provider {
   getUserUrl: string;
 }
 
-export function createGitHubProvider(
-  additionalOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
-): Provider {
+function createGitHubProvider(): Provider {
   return {
     oauth2ClientConfig: {
       clientId: Deno.env.get("GITHUB_CLIENT_ID")!,
       clientSecret: Deno.env.get("GITHUB_CLIENT_SECRET")!,
       authorizationEndpointUri: "https://github.com/login/oauth/authorize",
       tokenUri: "https://github.com/login/oauth/access_token",
-      ...additionalOAuth2ClientConfig,
     },
     getUserUrl: "https://api.github.com/user",
   };
 }
 
-export async function signIn(provider: Provider): Promise<Response> {
+export type ProviderId = "github";
+
+export function createProvider(providerId: ProviderId) {
+  switch (providerId) {
+    case "github":
+      return createGitHubProvider();
+    default:
+      throw new Error(`Provider ID "${providerId}" not supported`);
+  }
+}
+
+export async function signIn(
+  providerIdOrProvider: ProviderId | Provider,
+): Promise<Response> {
+  const provider = typeof providerIdOrProvider === "string"
+    ? createProvider(providerIdOrProvider)
+    : providerIdOrProvider;
+
   const oauth2Client = new OAuth2Client(provider.oauth2ClientConfig);
 
   // Generate a random state
@@ -74,9 +88,13 @@ export async function signIn(provider: Provider): Promise<Response> {
 
 export async function handleCallback(
   request: Request,
-  provider: Provider,
+  providerIdOrProvider: ProviderId | Provider,
   redirectUrl = "/",
 ): Promise<Response> {
+  const provider = typeof providerIdOrProvider === "string"
+    ? createProvider(providerIdOrProvider)
+    : providerIdOrProvider;
+
   // Get the OAuth session ID from the client's cookie and ensure it's defined
   const oauthSessionId = getCookies(request.headers)[OAUTH_SESSION_COOKIE_NAME];
   assert(oauthSessionId, `Cookie ${OAUTH_SESSION_COOKIE_NAME} not found`);
@@ -127,7 +145,14 @@ export async function signOut(
   return new Response(null, { status: Status.Found, headers });
 }
 
-export async function getUser(request: Request, provider: Provider) {
+export async function getUser(
+  request: Request,
+  providerIdOrProvider: ProviderId | Provider,
+) {
+  const provider = typeof providerIdOrProvider === "string"
+    ? createProvider(providerIdOrProvider)
+    : providerIdOrProvider;
+
   const siteSessionId = getCookies(request.headers)[SITE_SESSION_COOKIE_NAME];
   assert(siteSessionId, `Cookie ${SITE_SESSION_COOKIE_NAME} not found`);
 
