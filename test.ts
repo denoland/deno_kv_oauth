@@ -10,15 +10,29 @@ import {
 
 loadSync({ export: true });
 
-Deno.test("createClientConfig()", () => {
-  const clientId = Deno.env.get("GITHUB_CLIENT_ID")!;
-  const clientSecret = Deno.env.get("GITHUB_CLIENT_SECRET")!;
+Deno.test("createClientConfig()", async (test) => {
+  await test.step("github", () => {
+    const clientId = Deno.env.get("GITHUB_CLIENT_ID")!;
+    const clientSecret = Deno.env.get("GITHUB_CLIENT_SECRET")!;
 
-  assertEquals<OAuth2ClientConfig>(createClientConfig("github"), {
-    clientId,
-    clientSecret,
-    authorizationEndpointUri: "https://github.com/login/oauth/authorize",
-    tokenUri: "https://github.com/login/oauth/access_token",
+    assertEquals<OAuth2ClientConfig>(createClientConfig("github"), {
+      clientId,
+      clientSecret,
+      authorizationEndpointUri: "https://github.com/login/oauth/authorize",
+      tokenUri: "https://github.com/login/oauth/access_token",
+    });
+  });
+
+  await test.step("discord", () => {
+    const clientId = Deno.env.get("DISCORD_CLIENT_ID")!;
+    const clientSecret = Deno.env.get("DISCORD_CLIENT_SECRET")!;
+
+    assertEquals<OAuth2ClientConfig>(createClientConfig("discord"), {
+      clientId,
+      clientSecret,
+      authorizationEndpointUri: "https://discord.com/oauth2/authorize",
+      tokenUri: "https://discord.com/api/oauth2/token",
+    });
   });
 });
 
