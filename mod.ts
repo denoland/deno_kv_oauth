@@ -24,7 +24,7 @@ const TOKENS_BY_SITE_SESSION_KV_PREFIX = "tokens_by_site_session";
 
 const kv = await Deno.openKv();
 
-export type Provider = "github";
+export type Provider = "github" | "discord";
 
 function createGitHubClient(): OAuth2ClientConfig {
   return {
@@ -35,10 +35,21 @@ function createGitHubClient(): OAuth2ClientConfig {
   };
 }
 
+function createDiscordClient(): OAuth2ClientConfig {
+  return {
+    clientId: Deno.env.get("DISCORD_CLIENT_ID")!,
+    clientSecret: Deno.env.get("DISCORD_CLIENT_SECRET")!,
+    authorizationEndpointUri: "https://discord.com/oauth2/authorize",
+    tokenUri: "https://discord.com/api/oauth2/token",
+  };
+}
+
 export function createClientConfig(provider: Provider): OAuth2ClientConfig {
   switch (provider) {
     case "github":
       return createGitHubClient();
+    case "discord":
+      return createDiscordClient();
     default:
       throw new Error(`Provider ID "${provider}" not supported`);
   }
@@ -64,12 +75,16 @@ function createCookie(name: string, value: string, secure: boolean) {
 export async function signIn(
   request: Request,
   providerOrClientConfig: Provider | OAuth2ClientConfig,
+  scope?: string,
 ): Promise<Response> {
   const clientConfig = typeof providerOrClientConfig === "string"
     ? createClientConfig(providerOrClientConfig)
     : providerOrClientConfig;
 
-  const oauth2Client = new OAuth2Client(clientConfig);
+  const oauth2Client = new OAuth2Client({
+    ...clientConfig,
+    defaults: { scope },
+  });
 
   // Generate a random state
   const state = crypto.randomUUID();
