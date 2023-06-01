@@ -75,22 +75,19 @@ function createCookie(name: string, value: string, secure: boolean) {
 export async function signIn(
   request: Request,
   providerOrClientConfig: Provider | OAuth2ClientConfig,
-  scope?: string,
+  scope?: string | string[],
 ): Promise<Response> {
   const clientConfig = typeof providerOrClientConfig === "string"
     ? createClientConfig(providerOrClientConfig)
     : providerOrClientConfig;
 
-  const oauth2Client = new OAuth2Client({
-    ...clientConfig,
-    defaults: { scope },
-  });
+  const oauth2Client = new OAuth2Client(clientConfig);
 
   // Generate a random state
   const state = crypto.randomUUID();
   // Use that state to generate the authorization URI
   const { uri, codeVerifier } = await oauth2Client.code
-    .getAuthorizationUri({ state });
+    .getAuthorizationUri({ state, scope });
 
   // Store the OAuth session object (state and PKCE code verifier) in Deno KV
   const oauthSessionId = crypto.randomUUID();

@@ -12,7 +12,8 @@ loadSync({ export: true });
 async function indexHandler(request: Request) {
   let body = `
     <p>Who are you?</p>
-    <a href="/signin">Sign in</a>
+    <p><a href="/signin/github">Sign in with GitHub</a></p>
+    <p><a href="/signin/discord">Sign in with Discord</a></p>
   `;
   if (isSignedIn(request)) {
     const tokens = await getSessionTokens(request);
@@ -28,10 +29,12 @@ async function indexHandler(request: Request) {
 }
 
 const router: Record<string, (request: Request) => Promise<Response>> = {
-  "/": async (request) => await indexHandler(request),
-  "/signin": async (request) => await signIn(request, "github"),
-  "/callback": async (request) => await handleCallback(request, "github"),
-  "/signout": async (request) => await signOut(request),
+  "/": (request) => indexHandler(request),
+  "/signin/discord": (request) => signIn(request, "discord", "identify"),
+  "/callback/discord": (request) => handleCallback(request, "discord"),
+  "/signin/github": (request) => signIn(request, "github"),
+  "/callback/github": (request) => handleCallback(request, "github"),
+  "/signout": (request) => signOut(request),
 };
 
 async function handler(request: Request): Promise<Response> {
