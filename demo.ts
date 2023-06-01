@@ -35,7 +35,7 @@ async function handler(request: Request): Promise<Response> {
   }
 
   if (pathname === "/signin") {
-    return await signIn("github");
+    return await signIn(request, "github");
   }
 
   if (pathname === "/callback") {

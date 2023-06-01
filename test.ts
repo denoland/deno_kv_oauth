@@ -22,14 +22,30 @@ Deno.test("createClientConfig()", () => {
   });
 });
 
-Deno.test("signIn()", async () => {
-  const response = await signIn("github");
+Deno.test("signIn() - secure", async () => {
+  const request = new Request("https://example.com");
+  const response = await signIn(request, "github");
 
   assert(isRedirectStatus(response.status));
   assertEquals(typeof response.headers.get("location"), "string");
   assert(
     getSetCookies(response.headers).some((setCookie) =>
-      setCookie.name === "oauth-session" && typeof setCookie.value === "string"
+      setCookie.name === "__Host-oauth-session" &&
+      typeof setCookie.value === "string" && setCookie.secure === true
+    ),
+  );
+});
+
+Deno.test("signIn() - insecure", async () => {
+  const request = new Request("http://example.com");
+  const response = await signIn(request, "github");
+
+  assert(isRedirectStatus(response.status));
+  assertEquals(typeof response.headers.get("location"), "string");
+  assert(
+    getSetCookies(response.headers).some((setCookie) =>
+      setCookie.name === "oauth-session" &&
+      typeof setCookie.value === "string" && setCookie.secure === undefined
     ),
   );
 });
@@ -54,7 +70,17 @@ Deno.test("signOut()", async () => {
   );
 });
 
-Deno.test("isSignedIn()", () => {
+Deno.test("isSignedIn() - secure", () => {
+  // No headers
+  const request = new Request("https://example.com");
+  assertEquals(isSignedIn(request), false);
+
+  // With valid site session cookie
+  request.headers.set("cookie", "__Host-site-session=cookie-value");
+  assertEquals(isSignedIn(request), true);
+});
+
+Deno.test("isSignedIn() - insecure", () => {
   // No headers
   const request = new Request("http://example.com");
   assertEquals(isSignedIn(request), false);
