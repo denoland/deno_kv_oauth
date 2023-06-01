@@ -30,7 +30,7 @@ Deno.test("signIn() - secure", async () => {
   assertEquals(typeof response.headers.get("location"), "string");
   assert(
     getSetCookies(response.headers).some((setCookie) =>
-      setCookie.name === "__HOST-oauth-session" &&
+      setCookie.name === "__Host-oauth-session" &&
       typeof setCookie.value === "string" && setCookie.secure === true
     ),
   );
@@ -76,7 +76,7 @@ Deno.test("isSignedIn() - secure", () => {
   assertEquals(isSignedIn(request), false);
 
   // With valid site session cookie
-  request.headers.set("cookie", "__HOST-site-session=cookie-value");
+  request.headers.set("cookie", "__Host-site-session=cookie-value");
   assertEquals(isSignedIn(request), true);
 });
 

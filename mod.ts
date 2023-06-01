@@ -1,6 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
   assert,
+  type Cookie,
   deleteCookie,
   getCookies,
   OAuth2Client,
@@ -15,10 +16,10 @@ interface OAuthSession {
   codeVerifier: string;
 }
 
-const OAUTH_SESSION_COOKIE_NAME = "oauth-session";
+const OAUTH_COOKIE_NAME = "oauth-session";
 const OAUTH_SESSION_KV_PREFIX = "oauth_sessions";
 
-const SITE_SESSION_COOKIE_NAME = "site-session";
+const SITE_COOKIE_NAME = "site-session";
 const TOKENS_BY_SITE_SESSION_KV_PREFIX = "tokens_by_site_session";
 
 const kv = await Deno.openKv();
@@ -43,24 +44,21 @@ export function createClientConfig(provider: Provider): OAuth2ClientConfig {
   }
 }
 
-function getCookieName(request: Request, name: string) {
-  if (request.url.startsWith("https://")) {
-    return "__HOST-" + name;
-  }
-  return name;
+function getCookieName(name: string, secure: boolean) {
+  return secure ? `__Host-${name}` : name;
 }
 
-function getCookieObject(request: Request, name: string, value: string) {
-  const secure = request.url.startsWith("https://");
+/** Copied from https://web.dev/first-party-cookie-recipes/#the-good-first-party-cookie-recipe */
+function createCookie(name: string, value: string, secure: boolean) {
   return {
-    name: getCookieName(request, name),
+    name: getCookieName(name, secure),
     value: value,
     path: "/",
     secure,
     httpOnly: true,
     maxAge: 7776000,
     sameSite: "Lax",
-  } as const;
+  } as Cookie;
 }
 
 export async function signIn(
@@ -90,7 +88,11 @@ export async function signIn(
   const headers = new Headers({ location: uri.toString() });
   setCookie(
     headers,
-    getCookieObject(request, OAUTH_SESSION_COOKIE_NAME, oauthSessionId),
+    createCookie(
+      OAUTH_COOKIE_NAME,
+      oauthSessionId,
+      request.url.startsWith("https"),
+    ),
   );
 
   // Redirect to the authorization endpoint
@@ -102,15 +104,18 @@ export async function handleCallback(
   providerOrClientConfig: Provider | OAuth2ClientConfig,
   redirectUrl = "/",
 ): Promise<Response> {
-  const OAUTH_COOKIE_NAME = getCookieName(request, OAUTH_SESSION_COOKIE_NAME);
+  const oauthCookieName = getCookieName(
+    OAUTH_COOKIE_NAME,
+    request.url.startsWith("https"),
+  );
 
   const clientConfig = typeof providerOrClientConfig === "string"
     ? createClientConfig(providerOrClientConfig)
     : providerOrClientConfig;
 
   // Get the OAuth session ID from the client's cookie and ensure it's defined
-  const oauthSessionId = getCookies(request.headers)[OAUTH_COOKIE_NAME];
-  assert(oauthSessionId, `Cookie ${OAUTH_COOKIE_NAME} not found`);
+  const oauthSessionId = getCookies(request.headers)[oauthCookieName];
+  assert(oauthSessionId, `Cookie ${oauthCookieName} not found`);
 
   // Get the OAuth session object stored in Deno KV and ensure it's defined
   const oauthSessionRes = await kv.get<OAuthSession>([
@@ -135,37 +140,50 @@ export async function handleCallback(
   const headers = new Headers({ location: redirectUrl });
   setCookie(
     headers,
-    getCookieObject(request, SITE_SESSION_COOKIE_NAME, siteSessionId),
+    createCookie(
+      SITE_COOKIE_NAME,
+      siteSessionId,
+      request.url.startsWith("https"),
+    ),
   );
   return new Response(null, { status: Status.Found, headers });
 }
 
 export function isSignedIn(request: Request) {
-  const SITE_COOKIE_NAME = getCookieName(request, SITE_SESSION_COOKIE_NAME);
-  return Boolean(getCookies(request.headers)[SITE_COOKIE_NAME]);
+  const siteCookieName = getCookieName(
+    SITE_COOKIE_NAME,
+    request.url.startsWith("https"),
+  );
+  return Boolean(getCookies(request.headers)[siteCookieName]);
 }
 
 export async function signOut(
   request: Request,
   redirectUrl = "/",
 ): Promise<Response> {
-  const SITE_COOKIE_NAME = getCookieName(request, SITE_SESSION_COOKIE_NAME);
+  const siteCookieName = getCookieName(
+    SITE_COOKIE_NAME,
+    request.url.startsWith("https"),
+  );
 
-  const siteSessionId = getCookies(request.headers)[SITE_COOKIE_NAME];
-  assert(siteSessionId, `Cookie ${SITE_COOKIE_NAME} not found`);
+  const siteSessionId = getCookies(request.headers)[siteCookieName];
+  assert(siteSessionId, `Cookie ${siteCookieName} not found`);
 
   await kv.delete([TOKENS_BY_SITE_SESSION_KV_PREFIX, siteSessionId]);
 
   const headers = new Headers({ location: redirectUrl });
-  deleteCookie(headers, SITE_COOKIE_NAME);
+  deleteCookie(headers, siteCookieName);
   return new Response(null, { status: Status.Found, headers });
 }
 
 export async function getSessionTokens(request: Request) {
-  const SITE_COOKIE_NAME = getCookieName(request, SITE_SESSION_COOKIE_NAME);
+  const siteCookieName = getCookieName(
+    SITE_COOKIE_NAME,
+    request.url.startsWith("https"),
+  );
 
-  const siteSessionId = getCookies(request.headers)[SITE_COOKIE_NAME];
-  assert(siteSessionId, `Cookie ${SITE_COOKIE_NAME} not found`);
+  const siteSessionId = getCookies(request.headers)[siteCookieName];
+  assert(siteSessionId, `Cookie ${siteCookieName} not found`);
 
   const tokensRes = await kv.get<Tokens>([
     TOKENS_BY_SITE_SESSION_KV_PREFIX,

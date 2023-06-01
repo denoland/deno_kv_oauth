@@ -9,6 +9,7 @@ export {
 export { serve } from "https://deno.land/std@0.189.0/http/server.ts";
 export { loadSync } from "https://deno.land/std@0.189.0/dotenv/mod.ts";
 export {
+  type Cookie,
   deleteCookie,
   getCookies,
   getSetCookies,
