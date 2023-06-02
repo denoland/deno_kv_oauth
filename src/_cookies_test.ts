@@ -6,7 +6,7 @@ import {
   SITE_COOKIE_NAME,
 } from "./_cookies.ts";
 
-Deno.test("getOAuthCookie() - insecure", () => {
+Deno.test("getOAuthCookie() for insecure origin", () => {
   const request = new Request("http://example.com");
 
   // OAuth session doesn't yet exist
@@ -21,7 +21,7 @@ Deno.test("getOAuthCookie() - insecure", () => {
   assertEquals(getOAuthCookie(request), undefined);
 });
 
-Deno.test("getOAuthCookie() - secure", () => {
+Deno.test("getOAuthCookie() for secure origin", () => {
   const request = new Request("https://example.com");
 
   // OAuth session doesn't yet exist
@@ -36,7 +36,7 @@ Deno.test("getOAuthCookie() - secure", () => {
   assertEquals(getOAuthCookie(request), undefined);
 });
 
-Deno.test("getSiteCookie() - insecure", () => {
+Deno.test("getSiteCookie() for insecure origin", () => {
   const request = new Request("http://example.com");
 
   // OAuth session doesn't yet exist
@@ -51,7 +51,7 @@ Deno.test("getSiteCookie() - insecure", () => {
   assertEquals(getSiteCookie(request), undefined);
 });
 
-Deno.test("getSiteCookie() - secure", () => {
+Deno.test("getSiteCookie() for secure origin", () => {
   const request = new Request("https://example.com");
 
   // OAuth session doesn't yet exist

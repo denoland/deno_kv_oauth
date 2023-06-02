@@ -2,7 +2,7 @@
 import { redirect } from "./_http.ts";
 import { assert, assertEquals, Status } from "../deps.ts";
 
-Deno.test("[_http] redirect()", () => {
+Deno.test("redirect()", () => {
   const location = "/hello-there";
 
   const response = redirect(location);

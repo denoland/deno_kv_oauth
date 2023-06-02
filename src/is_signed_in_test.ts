@@ -1,7 +1,7 @@
 import { assertEquals } from "../deps.ts";
 import { isSignedIn } from "./is_signed_in.ts";
 
-Deno.test("isSignedIn() - insecure", () => {
+Deno.test("isSignedIn() for insecure origin", () => {
   const request = new Request("http://example.com");
   assertEquals(isSignedIn(request), false);
 
@@ -9,7 +9,7 @@ Deno.test("isSignedIn() - insecure", () => {
   assertEquals(isSignedIn(request), true);
 });
 
-Deno.test("isSignedIn() - secure", () => {
+Deno.test("isSignedIn() for secure origin", () => {
   const request = new Request("https://example.com");
   assertEquals(isSignedIn(request), false);
 
