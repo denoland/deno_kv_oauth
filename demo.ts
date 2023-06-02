@@ -1,4 +1,5 @@
 import {
+  createClient,
   getSessionTokens,
   handleCallback,
   isSignedIn,
@@ -8,6 +9,9 @@ import {
 import { loadSync, serve, Status } from "./deps.ts";
 
 loadSync({ export: true });
+
+const githubclient = createClient("github");
+const discordClient = createClient("discord");
 
 async function indexHandler(request: Request) {
   let body = `
@@ -30,10 +34,10 @@ async function indexHandler(request: Request) {
 
 const router: Record<string, (request: Request) => Promise<Response>> = {
   "/": (request) => indexHandler(request),
-  "/signin/discord": (request) => signIn(request, "discord", "identify"),
-  "/callback/discord": (request) => handleCallback(request, "discord"),
-  "/signin/github": (request) => signIn(request, "github"),
-  "/callback/github": (request) => handleCallback(request, "github"),
+  "/signin/discord": (request) => signIn(request, discordClient, "identify"),
+  "/callback/discord": (request) => handleCallback(request, discordClient),
+  "/signin/github": (request) => signIn(request, githubclient),
+  "/callback/github": (request) => handleCallback(request, githubclient),
   "/signout": (request) => signOut(request),
 };
 

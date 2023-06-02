@@ -4,6 +4,7 @@ export {
 } from "https://deno.land/std@0.189.0/testing/asserts.ts";
 export {
   isRedirectStatus,
+  type RedirectStatus,
   Status,
 } from "https://deno.land/std@0.189.0/http/http_status.ts";
 export { serve } from "https://deno.land/std@0.189.0/http/server.ts";
