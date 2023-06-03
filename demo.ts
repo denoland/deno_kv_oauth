@@ -10,14 +10,22 @@ import { loadSync, serve, Status } from "./deps.ts";
 
 loadSync({ export: true });
 
-const githubclient = createClient("github");
-const discordClient = createClient("discord");
+const redirectUriBase = Deno.env.get("DENO_DEPLOYMENT_ID")
+  ? "https://kv-oauth.deno.dev"
+  : "http://localhost:8000";
+const githubclient = createClient("github", {
+  redirectUri: redirectUriBase + "/callback/github",
+});
+const discordClient = createClient("discord", {
+  redirectUri: redirectUriBase + "/callback/discord",
+  defaults: { scope: "identify" },
+});
 
 async function indexHandler(request: Request) {
   let body = `
     <p>Who are you?</p>
-    <p><a href="/signin/github">Sign in with GitHub</a></p>
     <p><a href="/signin/discord">Sign in with Discord</a></p>
+    <p><a href="/signin/github">Sign in with GitHub</a></p>
   `;
   if (isSignedIn(request)) {
     const tokens = await getSessionTokens(request);
