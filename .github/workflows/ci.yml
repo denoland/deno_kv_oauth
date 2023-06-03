@@ -26,3 +26,9 @@ jobs:
 
       - name: Check formatting, linting, types and run tests
         run: deno task ok
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          name: ${{ matrix.os }}
+          files: cov.lcov
