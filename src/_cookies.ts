@@ -1,3 +1,4 @@
+// Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { type Cookie, deleteCookie, getCookies, setCookie } from "../deps.ts";
 
 function isSecure(url: string) {
