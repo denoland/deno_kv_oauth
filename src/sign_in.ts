@@ -1,8 +1,13 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import type { OAuth2Client } from "../deps.ts";
-import { setOAuthCookie } from "./_cookies.ts";
-import { redirect } from "./_http.ts";
-import { setOAuthSession } from "./_kv.ts";
+import { type OAuth2Client, setCookie } from "../deps.ts";
+import {
+  COOKIE_BASE,
+  getCookieName,
+  isSecure,
+  OAUTH_COOKIE_NAME,
+  redirect,
+  setOAuthSession,
+} from "./_core.ts";
 
 export async function signIn(
   request: Request,
@@ -21,6 +26,14 @@ export async function signIn(
 
   // Store the ID of that OAuth session object in a client cookie
   const response = redirect(uri.toString());
-  setOAuthCookie(request.url, response.headers, oauthSessionId);
+  setCookie(
+    response.headers,
+    {
+      ...COOKIE_BASE,
+      name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
+      value: oauthSessionId,
+      secure: isSecure(request.url),
+    },
+  );
   return response;
 }

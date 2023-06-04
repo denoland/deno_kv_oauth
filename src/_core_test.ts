@@ -1,16 +1,17 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assertEquals, Tokens } from "../deps.ts";
+import { assert, assertEquals, Status, type Tokens } from "../deps.ts";
 import {
   deleteOAuthSession,
   deleteTokensBySiteSession,
   getOAuthSession,
   getTokensBySiteSession,
   type OAuthSession,
+  redirect,
   setOAuthSession,
   setTokensBySiteSession,
-} from "./_kv.ts";
+} from "./_core.ts";
 
-Deno.test("getOAuthSession() + setOAuthSession() + deleteOAuthSession()", async () => {
+Deno.test("(get/set/delete)OAuthSession()", async () => {
   const id = crypto.randomUUID();
 
   // OAuth session doesn't yet exist
@@ -29,7 +30,7 @@ Deno.test("getOAuthSession() + setOAuthSession() + deleteOAuthSession()", async 
   assertEquals(await getOAuthSession(id), null);
 });
 
-Deno.test("getTokensBySiteSession() + setTokensBySiteSession() + deleteTokensBySiteSession()", async () => {
+Deno.test("(get/set/delete)TokensBySiteSession()", async () => {
   const id = crypto.randomUUID();
 
   // Tokens don't yet exist
@@ -46,4 +47,14 @@ Deno.test("getTokensBySiteSession() + setTokensBySiteSession() + deleteTokensByS
   await deleteTokensBySiteSession(id);
 
   assertEquals(await getTokensBySiteSession(id), null);
+});
+
+Deno.test("redirect()", () => {
+  const location = "/hello-there";
+
+  const response = redirect(location);
+  assert(!response.ok);
+  assertEquals(response.body, null);
+  assertEquals(response.headers.get("location"), location);
+  assertEquals(response.status, Status.Found);
 });

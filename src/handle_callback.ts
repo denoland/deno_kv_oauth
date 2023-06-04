@@ -1,12 +1,16 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, type OAuth2Client } from "../deps.ts";
-import { getOAuthCookie, setSiteCookie } from "./_cookies.ts";
-import { redirect } from "./_http.ts";
+import { assert, getCookies, type OAuth2Client, setCookie } from "../deps.ts";
 import {
+  COOKIE_BASE,
   deleteOAuthSession,
+  getCookieName,
   getOAuthSession,
+  isSecure,
+  OAUTH_COOKIE_NAME,
+  redirect,
   setTokensBySiteSession,
-} from "./_kv.ts";
+  SITE_COOKIE_NAME,
+} from "./_core.ts";
 
 export async function handleCallback(
   request: Request,
@@ -14,7 +18,11 @@ export async function handleCallback(
   redirectUrl = "/",
 ): Promise<Response> {
   // Get the OAuth session ID from the client's cookie and ensure it's defined
-  const oauthSessionId = getOAuthCookie(request);
+  const oauthCookieName = getCookieName(
+    OAUTH_COOKIE_NAME,
+    isSecure(request.url),
+  );
+  const oauthSessionId = getCookies(request.headers)[oauthCookieName];
   assert(oauthSessionId, `OAuth cookie not found`);
 
   // Get the OAuth session object stored in Deno KV and ensure it's defined
@@ -33,6 +41,14 @@ export async function handleCallback(
   await setTokensBySiteSession(siteSessionId, tokens);
 
   const response = redirect(redirectUrl);
-  setSiteCookie(response.headers, request.url, siteSessionId);
+  setCookie(
+    response.headers,
+    {
+      ...COOKIE_BASE,
+      name: getCookieName(SITE_COOKIE_NAME, isSecure(request.url)),
+      value: siteSessionId,
+      secure: isSecure(request.url),
+    },
+  );
   return response;
 }
