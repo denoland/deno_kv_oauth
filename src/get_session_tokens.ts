@@ -1,3 +1,4 @@
+// Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assert } from "../deps.ts";
 import { getSiteCookie } from "./_cookies.ts";
 import { getTokensBySiteSession } from "./_kv.ts";

@@ -1,3 +1,4 @@
+// Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type { OAuth2Client } from "../deps.ts";
 import { setOAuthCookie } from "./_cookies.ts";
 import { redirect } from "./_http.ts";

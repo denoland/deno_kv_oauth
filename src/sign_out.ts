@@ -1,3 +1,4 @@
+// Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { deleteSiteCookie, getSiteCookie } from "./_cookies.ts";
 import { redirect } from "./_http.ts";
 import { deleteTokensBySiteSession } from "./_kv.ts";
