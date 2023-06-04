@@ -20,7 +20,7 @@ import {
   isSignedIn,
   signIn,
   signOut,
-} from "https://deno.land/x/deno_kv_oauth@v0.1.2-beta/mod.ts";
+} from "https://deno.land/x/deno_kv_oauth/mod.ts";
 import { serve, Status } from "https://deno.land/std/http/mod.ts";
 
 const client = createClient("github");
