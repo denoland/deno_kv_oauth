@@ -7,11 +7,14 @@ import {
   redirect,
   SITE_COOKIE_NAME,
 } from "./_core.ts";
+import { isSignedIn } from "./is_signed_in.ts";
 
 export async function signOut(request: Request, redirectUrl = "/") {
+  if (!isSignedIn(request)) return redirect(redirectUrl);
+
   const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
   const siteSessionId = getCookies(request.headers)[cookieName];
-  if (siteSessionId) await deleteTokensBySiteSession(siteSessionId);
+  await deleteTokensBySiteSession(siteSessionId);
 
   const response = redirect(redirectUrl);
   deleteCookie(response.headers, cookieName);
