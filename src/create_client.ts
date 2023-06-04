@@ -1,6 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert } from "https://deno.land/std@0.189.0/testing/asserts.ts";
-import { OAuth2Client, OAuth2ClientConfig } from "../deps.ts";
+import { assert, OAuth2Client, OAuth2ClientConfig } from "../deps.ts";
 
 export type Provider = "discord" | "github";
 

@@ -1,10 +1,15 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert } from "../deps.ts";
-import { getSiteCookie } from "./_cookies.ts";
-import { getTokensBySiteSession } from "./_kv.ts";
+import { assert, getCookies } from "../deps.ts";
+import {
+  getCookieName,
+  getTokensBySiteSession,
+  isSecure,
+  SITE_COOKIE_NAME,
+} from "./_core.ts";
 
 export async function getSessionTokens(request: Request) {
-  const siteSessionId = getSiteCookie(request);
+  const siteCookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
+  const siteSessionId = getCookies(request.headers)[siteCookieName];
   assert(siteSessionId, `Site cookie not found`);
 
   const tokens = await getTokensBySiteSession(siteSessionId);
