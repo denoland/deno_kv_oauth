@@ -3,6 +3,11 @@ import { assertEquals, assertThrows } from "../deps.ts";
 import { createClient } from "./create_client.ts";
 
 Deno.test("createClient()", async (test) => {
+  await test.step("non-existent provider", () => {
+    // @ts-ignore Trust me
+    assertThrows(() => createClient("acme"));
+  });
+
   await test.step("discord", () => {
     assertThrows(() => createClient("discord"));
     assertThrows(() =>
