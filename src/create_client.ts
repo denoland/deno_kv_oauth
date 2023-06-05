@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assert, OAuth2Client, OAuth2ClientConfig } from "../deps.ts";
 
-export type Provider = "discord" | "github";
+export type Provider = "discord" | "github" | "google";
 
 /** @todo Define required config via types instead of assertions. */
 function createDiscordClientConfig(
@@ -33,6 +33,24 @@ function createGitHubClientConfig(
   };
 }
 
+/** @todo Define required config via types instead of assertions. */
+function createGoogleClientConfig(
+  moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
+): OAuth2ClientConfig {
+  assert(moreOAuth2ClientConfig?.redirectUri, "`redirectUri` must be defined");
+  assert(
+    moreOAuth2ClientConfig?.defaults?.scope,
+    "`defaults.scope` must be defined",
+  );
+  return {
+    ...moreOAuth2ClientConfig,
+    clientId: Deno.env.get("GOOGLE_CLIENT_ID")!,
+    clientSecret: Deno.env.get("GOOGLE_CLIENT_SECRET")!,
+    authorizationEndpointUri: "https://accounts.google.com/o/oauth2/v2/auth",
+    tokenUri: "https://oauth2.googleapis.com/token",
+  };
+}
+
 export function createClient(
   provider: Provider,
   moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
@@ -44,6 +62,8 @@ export function createClient(
       );
     case "github":
       return new OAuth2Client(createGitHubClientConfig(moreOAuth2ClientConfig));
+    case "google":
+      return new OAuth2Client(createGoogleClientConfig(moreOAuth2ClientConfig));
     default:
       throw new Error(`Provider ID "${provider}" not supported`);
   }
