@@ -17,6 +17,6 @@ export async function signOut(request: Request, redirectUrl = "/") {
   await deleteTokensBySiteSession(siteSessionId);
 
   const response = redirect(redirectUrl);
-  deleteCookie(response.headers, cookieName);
+  deleteCookie(response.headers, cookieName, { path: "/" });
   return response;
 }

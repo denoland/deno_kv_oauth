@@ -48,7 +48,7 @@ Deno.test("signOut()", async (test) => {
     assertEquals(response.status, Status.Found);
     assertEquals(
       response.headers.get("set-cookie"),
-      `${SITE_COOKIE_NAME}=; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+      `${SITE_COOKIE_NAME}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
     );
 
     // Cleanup
