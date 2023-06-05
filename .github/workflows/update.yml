@@ -33,6 +33,6 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5
         with:
-          title: "chore(deps): Update dependencies"
+          title: "chore: update dependencies"
           delete-branch: true
 
