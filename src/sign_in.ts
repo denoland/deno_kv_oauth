@@ -12,13 +12,12 @@ import {
 export async function signIn(
   request: Request,
   oauth2Client: OAuth2Client,
-  scope?: string | string[],
 ): Promise<Response> {
   // Generate a random state
   const state = crypto.randomUUID();
   // Use that state to generate the authorization URI
   const { uri, codeVerifier } = await oauth2Client.code
-    .getAuthorizationUri({ state, scope });
+    .getAuthorizationUri({ state });
 
   // Store the OAuth session object (state and PKCE code verifier) in Deno KV
   const oauthSessionId = crypto.randomUUID();
