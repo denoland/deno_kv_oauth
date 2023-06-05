@@ -29,3 +29,10 @@ jobs:
         with:
           name: ${{ matrix.os }}
           files: cov.lcov
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "chore(deps): Update dependencies"
+          delete-branch: true
+
