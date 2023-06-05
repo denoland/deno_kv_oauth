@@ -6,6 +6,7 @@
     "check": "deno task check:license && deno task check:types",
     "test": "deno test -A --unstable --allow-env --allow-read --coverage=./cov",
     "ok": "deno fmt --check && deno lint && deno task check && deno task test",
-    "cov": "deno coverage ./cov/ --lcov --exclude='test.ts|testdata' > cov.lcov"
+    "cov": "deno coverage ./cov/ --lcov --exclude='test.ts|testdata' > cov.lcov",
+    "update": "deno run -A https://deno.land/x/udd/main.ts --test=\"deno task test\" deps.ts"
   }
 }
