@@ -3,7 +3,10 @@ import { assert, OAuth2Client, OAuth2ClientConfig } from "../deps.ts";
 
 export type Provider = "discord" | "github" | "google";
 
-/** @todo Define required config via types instead of assertions. */
+/**
+ * @see {@link https://discord.com/developers/docs/topics/oauth2}
+ * @todo Define required config via types instead of assertions.
+ */
 function createDiscordClientConfig(
   moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
 ): OAuth2ClientConfig {
@@ -21,6 +24,9 @@ function createDiscordClientConfig(
   };
 }
 
+/**
+ * @see {@link https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps}
+ */
 function createGitHubClientConfig(
   moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
 ): OAuth2ClientConfig {
@@ -33,7 +39,10 @@ function createGitHubClientConfig(
   };
 }
 
-/** @todo Define required config via types instead of assertions. */
+/**
+ * @see {@link https://developers.google.com/identity/protocols/oauth2/web-server}
+ * @todo Define required config via types instead of assertions.
+ */
 function createGoogleClientConfig(
   moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
 ): OAuth2ClientConfig {
