@@ -1,24 +1,24 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assertEquals } from "../deps.ts";
+import { assertEquals, assertNotEquals } from "../deps.ts";
 import { SITE_COOKIE_NAME } from "./_core.ts";
-import { isSignedIn } from "./is_signed_in.ts";
+import { getSessionId } from "./get_session_id.ts";
 
-Deno.test("isSignedIn()", () => {
+Deno.test("getSessionId()", () => {
   const insecureRequest = new Request("http://example.com");
-  assertEquals(isSignedIn(insecureRequest), false);
+  assertEquals(getSessionId(insecureRequest), null);
 
   insecureRequest.headers.set("cookie", "not-site-session=xxx");
-  assertEquals(isSignedIn(insecureRequest), false);
+  assertEquals(getSessionId(insecureRequest), null);
 
   insecureRequest.headers.set("cookie", `${SITE_COOKIE_NAME}=xxx`);
-  assertEquals(isSignedIn(insecureRequest), true);
+  assertNotEquals(getSessionId(insecureRequest), null);
 
   const secureRequest = new Request("https://example.com");
-  assertEquals(isSignedIn(secureRequest), false);
+  assertEquals(getSessionId(secureRequest), null);
 
   secureRequest.headers.set("cookie", "not-site-session=xxx");
-  assertEquals(isSignedIn(secureRequest), false);
+  assertEquals(getSessionId(secureRequest), null);
 
   secureRequest.headers.set("cookie", `__Host-${SITE_COOKIE_NAME}=xxx`);
-  assertEquals(isSignedIn(secureRequest), true);
+  assertNotEquals(getSessionId(secureRequest), null);
 });

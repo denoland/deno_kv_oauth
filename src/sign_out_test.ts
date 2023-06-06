@@ -29,21 +29,21 @@ Deno.test("signOut()", async (test) => {
   });
 
   await test.step("signed in with insecure origin", async () => {
-    const siteSessionId = crypto.randomUUID();
+    const sessionId = crypto.randomUUID();
     const tokens: Tokens = {
       accessToken: crypto.randomUUID(),
       tokenType: crypto.randomUUID(),
     };
-    await setTokensBySiteSession(siteSessionId, tokens);
+    await setTokensBySiteSession(sessionId, tokens);
     const request = new Request("http://example.com", {
       headers: {
-        cookie: `${SITE_COOKIE_NAME}=${siteSessionId}`,
+        cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
       },
     });
     const redirectUrl = "/why-hello-there";
     const response = await signOut(request, redirectUrl);
 
-    assertEquals(await getTokensBySiteSession(siteSessionId), null);
+    assertEquals(await getTokensBySiteSession(sessionId), null);
     assertEquals(response.headers.get("location"), redirectUrl);
     assertEquals(response.status, Status.Found);
     assertEquals(
@@ -52,25 +52,25 @@ Deno.test("signOut()", async (test) => {
     );
 
     // Cleanup
-    deleteTokensBySiteSession(siteSessionId);
+    deleteTokensBySiteSession(sessionId);
   });
 
   await test.step("signed in with secure origin", async () => {
-    const siteSessionId = crypto.randomUUID();
+    const sessionId = crypto.randomUUID();
     const tokens: Tokens = {
       accessToken: crypto.randomUUID(),
       tokenType: crypto.randomUUID(),
     };
-    await setTokensBySiteSession(siteSessionId, tokens);
+    await setTokensBySiteSession(sessionId, tokens);
     const request = new Request("https://example.com", {
       headers: {
-        cookie: `__Host-${SITE_COOKIE_NAME}=${siteSessionId}`,
+        cookie: `__Host-${SITE_COOKIE_NAME}=${sessionId}`,
       },
     });
     const redirectUrl = "/why-hello-there";
     const response = await signOut(request, redirectUrl);
 
-    assertEquals(await getTokensBySiteSession(siteSessionId), null);
+    assertEquals(await getTokensBySiteSession(sessionId), null);
     assertEquals(response.headers.get("location"), redirectUrl);
     assertEquals(response.status, Status.Found);
     assertEquals(
@@ -79,6 +79,6 @@ Deno.test("signOut()", async (test) => {
     );
 
     // Cleanup
-    deleteTokensBySiteSession(siteSessionId);
+    deleteTokensBySiteSession(sessionId);
   });
 });

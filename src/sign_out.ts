@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { deleteCookie, getCookies } from "../deps.ts";
+import { deleteCookie } from "../deps.ts";
 import {
   deleteTokensBySiteSession,
   getCookieName,
@@ -7,16 +7,16 @@ import {
   redirect,
   SITE_COOKIE_NAME,
 } from "./_core.ts";
-import { isSignedIn } from "./is_signed_in.ts";
+import { getSessionId } from "./get_session_id.ts";
 
 export async function signOut(request: Request, redirectUrl = "/") {
-  if (!isSignedIn(request)) return redirect(redirectUrl);
+  const sessionId = getSessionId(request);
+  if (sessionId === null) return redirect(redirectUrl);
 
-  const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
-  const siteSessionId = getCookies(request.headers)[cookieName];
-  await deleteTokensBySiteSession(siteSessionId);
+  await deleteTokensBySiteSession(sessionId);
 
   const response = redirect(redirectUrl);
+  const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
   deleteCookie(response.headers, cookieName, { path: "/" });
   return response;
 }

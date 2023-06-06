@@ -15,9 +15,9 @@ Minimal OAuth powered by Deno KV.
 // deno run --unstable --allow-env --allow-net demo.ts
 import {
   createClient,
+  getSessionId,
   getSessionTokens,
   handleCallback,
-  isSignedIn,
   signIn,
   signOut,
 } from "https://deno.land/x/deno_kv_oauth/mod.ts";
@@ -30,8 +30,9 @@ async function indexHandler(request: Request) {
     <p>Who are you?</p>
     <p><a href="/signin">Sign in with GitHub</a></p>
   `;
-  if (isSignedIn(request)) {
-    const tokens = await getSessionTokens(request);
+  const sessionId = getSessionId(request);
+  if (sessionId !== null) {
+    const tokens = await getSessionTokens(sessionId);
     body = `
       <p>Your tokens:<p>
       <pre>${JSON.stringify(tokens, undefined, 2)}</pre>

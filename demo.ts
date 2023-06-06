@@ -1,9 +1,9 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
   createClient,
+  getSessionId,
   getSessionTokens,
   handleCallback,
-  isSignedIn,
   signIn,
   signOut,
 } from "./mod.ts";
@@ -18,8 +18,9 @@ async function indexHandler(request: Request) {
     <p>Who are you?</p>
     <p><a href="/signin">Sign in with GitHub</a></p>
   `;
-  if (isSignedIn(request)) {
-    const tokens = await getSessionTokens(request);
+  const sessionId = getSessionId(request);
+  if (sessionId !== null) {
+    const tokens = await getSessionTokens(sessionId);
     body = `
       <p>Your tokens:<p>
       <pre>${JSON.stringify(tokens, undefined, 2)}</pre>
