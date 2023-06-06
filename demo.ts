@@ -46,7 +46,8 @@ async function handler(request: Request): Promise<Response> {
       return await signIn(request, client);
     }
     case "/callback": {
-      return await handleCallback(request, client);
+      const { response } = await handleCallback(request, client);
+      return response;
     }
     case "/signout": {
       return await signOut(request);
