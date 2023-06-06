@@ -16,7 +16,7 @@ export async function handleCallback(
   request: Request,
   oauth2Client: OAuth2Client,
   redirectUrl = "/",
-): Promise<Response> {
+) {
   // Get the OAuth session ID from the client's cookie and ensure it's defined
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
@@ -50,5 +50,9 @@ export async function handleCallback(
       secure: isSecure(request.url),
     },
   );
-  return response;
+  return {
+    response,
+    sessionId,
+    tokens,
+  };
 }
