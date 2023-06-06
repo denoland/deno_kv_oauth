@@ -2,10 +2,12 @@
 import { handleCallback } from "./handle_callback.ts";
 import { assertRejects, OAuth2Client } from "../deps.ts";
 import {
+  getOAuthSession,
   OAUTH_COOKIE_NAME,
   type OAuthSession,
   setOAuthSession,
 } from "./_core.ts";
+import { assertEquals } from "https://deno.land/std@0.190.0/testing/asserts.ts";
 
 Deno.test("handleCallback()", async (test) => {
   const client = new OAuth2Client({
@@ -20,7 +22,7 @@ Deno.test("handleCallback()", async (test) => {
     await assertRejects(() => handleCallback(request, client));
   });
 
-  await test.step("oauth cookie with invalid value", async () => {
+  await test.step("no oauth session", async () => {
     const request = new Request("http://example.com", {
       headers: { cookie: `${OAUTH_COOKIE_NAME}=xxx` },
     });
@@ -41,5 +43,6 @@ Deno.test("handleCallback()", async (test) => {
       },
     );
     await assertRejects(async () => await handleCallback(request, client));
+    assertEquals(await getOAuthSession(oauthSessionId), null);
   });
 });
