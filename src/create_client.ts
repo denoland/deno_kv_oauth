@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assert, OAuth2Client, OAuth2ClientConfig } from "../deps.ts";
 
-export type Provider = "discord" | "github" | "google";
+export type Provider = "discord" | "github" | "gitlab" | "google";
 
 /**
  * @see {@link https://discord.com/developers/docs/topics/oauth2}
@@ -60,6 +60,27 @@ function createGoogleClientConfig(
   };
 }
 
+/**
+ * @see {@link https://docs.gitlab.com/ee/api/oauth2.html}
+ * @todo Define required config via types instead of assertions.
+ */
+function createGitlabClientConfig(
+  moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
+): OAuth2ClientConfig {
+  assert(moreOAuth2ClientConfig?.redirectUri, "`redirectUri` must be defined");
+  assert(
+    moreOAuth2ClientConfig?.defaults?.scope,
+    "`defaults.scope` must be defined",
+  );
+  return {
+    ...moreOAuth2ClientConfig,
+    clientId: Deno.env.get("GITLAB_CLIENT_ID")!,
+    clientSecret: Deno.env.get("GITLAB_CLIENT_SECRET")!,
+    authorizationEndpointUri: "https://gitlab.com/oauth/authorize",
+    tokenUri: "https://gitlab.com/oauth/token",
+  };
+}
+
 export function createClient(
   provider: Provider,
   moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
@@ -71,6 +92,8 @@ export function createClient(
       );
     case "github":
       return new OAuth2Client(createGitHubClientConfig(moreOAuth2ClientConfig));
+    case "gitlab":
+      return new OAuth2Client(createGitlabClientConfig(moreOAuth2ClientConfig));
     case "google":
       return new OAuth2Client(createGoogleClientConfig(moreOAuth2ClientConfig));
     default:
