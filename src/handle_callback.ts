@@ -33,12 +33,12 @@ export async function handleCallback(
   await deleteOAuthSession(oauthSessionId);
 
   // Generate a random site session ID for the new user cookie
-  const siteSessionId = crypto.randomUUID();
+  const sessionId = crypto.randomUUID();
   const tokens = await oauth2Client.code.getToken(
     request.url,
     oauthSession,
   );
-  await setTokensBySiteSession(siteSessionId, tokens);
+  await setTokensBySiteSession(sessionId, tokens);
 
   const response = redirect(redirectUrl);
   setCookie(
@@ -46,7 +46,7 @@ export async function handleCallback(
     {
       ...COOKIE_BASE,
       name: getCookieName(SITE_COOKIE_NAME, isSecure(request.url)),
-      value: siteSessionId,
+      value: sessionId,
       secure: isSecure(request.url),
     },
   );
