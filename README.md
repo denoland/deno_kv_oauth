@@ -72,7 +72,7 @@ async function handler(request: Request): Promise<Response> {
 serve(handler);
 ```
 
-You can also check out a live demo at https://kv-oauth.deno.com.
+You can also check out a live demo at https://kv-oauth.deno.dev.
 
 ## Contributing
 
