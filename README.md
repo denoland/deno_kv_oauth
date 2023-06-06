@@ -9,70 +9,57 @@ Minimal OAuth powered by Deno KV.
 > Note: this project is in beta. API design and functionality are subject to
 > change.
 
-## Getting Started
+## Live Demo
 
-```ts
-// deno run --unstable --allow-env --allow-net demo.ts
-import {
-  createClient,
-  getSessionId,
-  getSessionTokens,
-  handleCallback,
-  signIn,
-  signOut,
-} from "https://deno.land/x/deno_kv_oauth/mod.ts";
-import { serve, Status } from "https://deno.land/std/http/mod.ts";
-
-const client = createClient("github");
-
-async function indexHandler(request: Request) {
-  let body = `
-    <p>Who are you?</p>
-    <p><a href="/signin">Sign in with GitHub</a></p>
-  `;
-  const sessionId = getSessionId(request);
-  if (sessionId !== null) {
-    const tokens = await getSessionTokens(sessionId);
-    body = `
-      <p>Your tokens:<p>
-      <pre>${JSON.stringify(tokens, undefined, 2)}</pre>
-      <a href="/signout">Sign out</a>
-    `;
-  }
-  return new Response(body, {
-    headers: { "content-type": "text/html; charset=utf-8" },
-  });
-}
-
-async function handler(request: Request): Promise<Response> {
-  if (request.method !== "GET") {
-    return new Response(null, { status: Status.NotFound });
-  }
-
-  const { pathname } = new URL(request.url);
-  switch (pathname) {
-    case "/": {
-      return await indexHandler(request);
-    }
-    case "/signin": {
-      return await signIn(request, client);
-    }
-    case "/callback": {
-      return await handleCallback(request, client);
-    }
-    case "/signout": {
-      return await signOut(request);
-    }
-    default: {
-      return new Response(null, { status: Status.NotFound });
-    }
-  }
-}
-
-serve(handler);
-```
+You can check out the live demo, using GitHub as the OAuth provider, at
+https://kv-oauth.deno.dev.
 
 You can also check out a live demo at https://kv-oauth.deno.dev.
+
+## Usage
+
+### Provider OAuth2 Pre-configurations
+
+This module comes with a suite of OAuth2 provider pre-configurations. To create
+a pre-configured OAuth2 client, use `createClient(provider)` and define your
+`${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` environment variables.
+E.g. for GitHub, your OAuth 2 client object would be set by:
+
+```ts
+// GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net ...
+import { createClient } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+const client = createClient("github");
+```
+
+OAuth2 provider pre-configurations include (with their `provider` ID):
+
+- Discord (`discord`)
+- GitHub (`github`)
+- GitLab (`gitlab`)
+- Google (`google`)
+
+> Note: providers differ in their required OAuth parameters. `createClient()`
+> throws when required OAuth configuration parameters aren't provided.
+
+### Custom OAuth2 Configurations
+
+If you require custom OAuth2 configuration, you must define your `client` using
+[`new OAuth2Client()`](https://deno.land/x/oauth2_client/mod.ts?s=OAuth2Client)
+from the [`oauth2_client` module](https://deno.land/x/oauth2_client/mod.ts).
+E.g.:
+
+```ts
+import { OAuth2Client } from "https://deno.land/x/oauth2_client/mod.ts";
+
+const client = new OAuth2Client({
+  clientId: Deno.env.get("CUSTOM_CLIENT_ID")!,
+  clientSecret: Deno.env.get("CUSTOM_CLIENT_SECRET")!,
+  authorizationEndpointUri: "https://custom.com/oauth/authorize",
+  tokenUri: "https://custom.com/oauth/token",
+  redirectUri: "https://my-site.com",
+});
+```
 
 ## Contributing
 
