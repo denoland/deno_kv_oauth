@@ -21,7 +21,9 @@ import {
   signIn,
   signOut,
 } from "https://deno.land/x/deno_kv_oauth/mod.ts";
-import { serve, Status } from "https://deno.land/std/http/mod.ts";
+import { loadSync, serve, Status } from "https://deno.land/std/http/mod.ts";
+
+loadSync({ export: true });
 
 const client = createClient("github");
 
@@ -58,7 +60,8 @@ async function handler(request: Request): Promise<Response> {
       return await signIn(request, client);
     }
     case "/callback": {
-      return await handleCallback(request, client);
+      const { response } = await handleCallback(request, client);
+      return response;
     }
     case "/signout": {
       return await signOut(request);
