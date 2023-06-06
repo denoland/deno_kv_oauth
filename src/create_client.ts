@@ -64,7 +64,7 @@ function createGoogleClientConfig(
  * @see {@link https://docs.gitlab.com/ee/api/oauth2.html}
  * @todo Define required config via types instead of assertions.
  */
-function createGitlabClientConfig(
+function createGitLabClientConfig(
   moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
 ): OAuth2ClientConfig {
   assert(moreOAuth2ClientConfig?.redirectUri, "`redirectUri` must be defined");
@@ -93,7 +93,7 @@ export function createClient(
     case "github":
       return new OAuth2Client(createGitHubClientConfig(moreOAuth2ClientConfig));
     case "gitlab":
-      return new OAuth2Client(createGitlabClientConfig(moreOAuth2ClientConfig));
+      return new OAuth2Client(createGitLabClientConfig(moreOAuth2ClientConfig));
     case "google":
       return new OAuth2Client(createGoogleClientConfig(moreOAuth2ClientConfig));
     default:
