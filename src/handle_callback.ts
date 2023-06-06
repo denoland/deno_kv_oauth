@@ -33,6 +33,7 @@ export async function handleCallback(
   await deleteOAuthSession(oauthSessionId);
 
   // Generate a random site session ID for the new user cookie
+  // This is as far as automated testing can go
   const sessionId = crypto.randomUUID();
   const tokens = await oauth2Client.code.getToken(
     request.url,
