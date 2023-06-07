@@ -107,4 +107,20 @@ Deno.test("createClient()", async (test) => {
     assertEquals(client.config.redirectUri, redirectUri);
     assertEquals(client.config.defaults, defaults);
   });
+
+  await test.step("slack", () => {
+    assertThrows(() => createClient("slack"));
+
+    const clientId = crypto.randomUUID();
+    const clientSecret = crypto.randomUUID();
+    const defaults = { scope: "scope" };
+
+    Deno.env.set("SLACK_CLIENT_ID", clientId);
+    Deno.env.set("SLACK_CLIENT_SECRET", clientSecret);
+
+    const client = createClient("slack", { defaults });
+    assertEquals(client.config.clientId, clientId);
+    assertEquals(client.config.clientSecret, clientSecret);
+    assertEquals(client.config.defaults, defaults);
+  });
 });
