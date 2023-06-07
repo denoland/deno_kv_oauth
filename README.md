@@ -14,7 +14,7 @@ Minimal OAuth powered by [Deno KV](https://deno.com/kv).
 - Uses [Deno KV](https://deno.com/kv) for storage of session data.
 - Uses authorization code flow with
   [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/).
-- [A suite of pre-configured OAuth2 clients for popular providers.](#pre-configured-oauth2-clients).
+- [A suite of pre-configured OAuth2 clients for popular providers](#pre-configured-oauth2-clients).
 - Straightforward API which aims to require minimal input.
 - Works locally, in the cloud and on [Deno Deploy](https://deno.com/deploy).
 
@@ -39,13 +39,17 @@ Github as the OAuth2 provider. Source code is located in [demo.ts](demo.ts).
 
 ### Pre-configured OAuth2 Clients
 
-This module comes with a suite of OAuth2 pre-configurations for the following
-providers (and their provider IDs):
+This module comes with a suite of pre-configured OAuth2 clients for the
+following providers (and their provider IDs):
 
-- Discord (`discord`)
-- GitHub (`github`)
-- GitLab (`gitlab`)
-- Google (`google`)
+1. Discord (`discord`)
+1. GitHub (`github`)
+1. GitLab (`gitlab`)
+1. Google (`google`)
+
+> If there's a pre-configured OAuth2 client for a provider you'd like added,
+> please submit a pull request or
+> [create a new issue](https://github.com/denoland/deno_kv_oauth/issues/new).
 
 To create a pre-configured OAuth2 client, use `createClient()` and define your
 `${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` environment variables.
