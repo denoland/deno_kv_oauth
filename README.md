@@ -104,3 +104,13 @@ const client = new OAuth2Client({
 
 Before submitting a pull request, please run `deno task ok` and ensure all
 checks pass. This checks formatting, linting, types and runs tests.
+
+## In the Wild
+
+Check out the projects powered by Deno KV OAuth:
+
+1. [Deno SaaSKit / Deno Hunt](https://saaskit.deno.dev/) - A modern SaaS
+   template built on Fresh.
+
+> Do you have a project powered by Deno KV OAuth that you'd like to share?
+> Please submit a pull request adding that project to this list.
