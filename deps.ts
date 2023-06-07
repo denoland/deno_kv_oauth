@@ -11,8 +11,6 @@ export {
   type RedirectStatus,
   Status,
 } from "https://deno.land/std@0.190.0/http/http_status.ts";
-export { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-export { loadSync } from "https://deno.land/std@0.190.0/dotenv/mod.ts";
 export {
   type Cookie,
   deleteCookie,

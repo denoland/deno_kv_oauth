@@ -1,4 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
+import "https://deno.land/std@0.190.0/dotenv/load.ts";
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Status } from "https://deno.land/std@0.190.0/http/http_status.ts";
 import {
   createClient,
   getSessionId,
@@ -6,10 +9,7 @@ import {
   handleCallback,
   signIn,
   signOut,
-} from "./mod.ts";
-import { loadSync, serve, Status } from "./deps.ts";
-
-loadSync({ export: true });
+} from "https://deno.land/x/deno_kv_oauth@v0.1.6-beta/mod.ts";
 
 const client = createClient("github");
 
