@@ -107,7 +107,7 @@ checks pass. This checks formatting, linting, types and runs tests.
 
 ## In the Wild
 
-Check out the projects powered by Deno KV OAuth:
+Check out these projects powered by Deno KV OAuth:
 
 1. [Deno SaaSKit / Deno Hunt](https://saaskit.deno.dev/) - A modern SaaS
    template built on Fresh.
