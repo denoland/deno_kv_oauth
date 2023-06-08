@@ -9,7 +9,7 @@ import {
   handleCallback,
   signIn,
   signOut,
-} from "https://deno.land/x/deno_kv_oauth@v0.1.6-beta/mod.ts";
+} from "https://deno.land/x/deno_kv_oauth@v0.1.7-beta/mod.ts";
 
 const client = createClient("github");
 
