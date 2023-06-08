@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assert, OAuth2Client, OAuth2ClientConfig } from "../deps.ts";
 
-export type Provider = "discord" | "github" | "gitlab" | "google";
+export type Provider = "discord" | "github" | "gitlab" | "google" | "slack";
 
 /**
  * @see {@link https://discord.com/developers/docs/topics/oauth2}
@@ -81,6 +81,26 @@ function createGitLabClientConfig(
   };
 }
 
+/**
+ * @see {@link https://api.slack.com/authentication/oauth-v2}
+ * @todo Define required config via types instead of assertions.
+ */
+function createSlackClientConfig(
+  moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
+): OAuth2ClientConfig {
+  assert(
+    moreOAuth2ClientConfig?.defaults?.scope,
+    "`defaults.scope` must be defined",
+  );
+  return {
+    ...moreOAuth2ClientConfig,
+    clientId: Deno.env.get("SLACK_CLIENT_ID")!,
+    clientSecret: Deno.env.get("SLACK_CLIENT_SECRET")!,
+    authorizationEndpointUri: "https://slack.com/oauth/v2/authorize",
+    tokenUri: "https://slack.com/api/oauth.v2.access",
+  };
+}
+
 export function createClient(
   provider: Provider,
   moreOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
@@ -96,6 +116,8 @@ export function createClient(
       return new OAuth2Client(createGitLabClientConfig(moreOAuth2ClientConfig));
     case "google":
       return new OAuth2Client(createGoogleClientConfig(moreOAuth2ClientConfig));
+    case "slack":
+      return new OAuth2Client(createSlackClientConfig(moreOAuth2ClientConfig));
     default:
       throw new Error(`Provider ID "${provider}" not supported`);
   }
