@@ -82,7 +82,7 @@ function createGitLabClientConfig(
 }
 
 /**
- * @see {@link https://api.slack.com/legacy/oauth}
+ * @see {@link https://api.slack.com/authentication/oauth-v2}
  * @todo Define required config via types instead of assertions.
  */
 function createSlackClientConfig(
@@ -96,8 +96,8 @@ function createSlackClientConfig(
     ...moreOAuth2ClientConfig,
     clientId: Deno.env.get("SLACK_CLIENT_ID")!,
     clientSecret: Deno.env.get("SLACK_CLIENT_SECRET")!,
-    authorizationEndpointUri: "https://slack.com/oauth/authorize",
-    tokenUri: "https://slack.com/api/oauth.access",
+    authorizationEndpointUri: "https://slack.com/oauth/v2/authorize",
+    tokenUri: "https://slack.com/api/oauth.v2.access",
   };
 }
 
