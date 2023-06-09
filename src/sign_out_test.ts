@@ -52,7 +52,7 @@ Deno.test("signOut()", async (test) => {
     );
 
     // Cleanup
-    deleteStoredTokensBySiteSession(sessionId);
+    await deleteStoredTokensBySiteSession(sessionId);
   });
 
   await test.step("signed in with secure origin", async () => {
@@ -79,6 +79,6 @@ Deno.test("signOut()", async (test) => {
     );
 
     // Cleanup
-    deleteStoredTokensBySiteSession(sessionId);
+    await deleteStoredTokensBySiteSession(sessionId);
   });
 });
