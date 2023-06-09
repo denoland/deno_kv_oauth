@@ -48,6 +48,7 @@ following providers (and their provider IDs):
 1. GitLab (`gitlab`)
 1. Google (`google`)
 1. Slack (`slack`)
+1. Twitter (`twitter`)
 
 > If there's a pre-configured OAuth2 client for a provider you'd like added,
 > please submit a pull request or
