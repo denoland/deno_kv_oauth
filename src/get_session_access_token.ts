@@ -9,7 +9,7 @@ export async function getSessionAccessToken(
   const tokens = await getTokensBySiteSession(sessionId);
   if (tokens === null) return null;
   if (
-    (tokens.refreshToken === undefined || tokens.expiresIn === undefined) ||
+    tokens.refreshToken === undefined ||
     // 5 second buffer
     (tokens.expiresIn && tokens.expiresIn < (5 * SECOND))
   ) {
