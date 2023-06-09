@@ -15,18 +15,17 @@ import {
 const client = createClient("github");
 
 async function indexHandler(request: Request) {
-  let body = `
-    <p>Who are you?</p>
-    <p><a href="/signin">Sign in with GitHub</a></p>
-  `;
   const sessionId = getSessionId(request);
-  if (sessionId !== null) {
-    const accessToken = await getSessionAccessToken(client, sessionId);
-    body = `
-      <p>Your access token: ${accessToken}<p>
-      <a href="/signout">Sign out</a>
-    `;
-  }
+  const accessToken = sessionId !== undefined
+    ? await getSessionAccessToken(client, sessionId)
+    : "undefined";
+  const action = sessionId !== undefined ? "out" : "in";
+
+  const body = `
+    <p>Your access token: ${accessToken}</p>
+    <p><a href="/sign${action}">Sign ${action}</a></p>
+  `;
+
   return new Response(body, {
     headers: { "content-type": "text/html; charset=utf-8" },
   });
