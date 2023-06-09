@@ -113,6 +113,8 @@ Check out these projects powered by Deno KV OAuth:
 
 1. [Deno SaaSKit / Deno Hunt](https://saaskit.deno.dev/) - A modern SaaS
    template built on Fresh.
+1. [KV SketchBook](https://hashrock-kv-sketchbook.deno.dev/) - Dead simple
+   sketchbook app.
 
 > Do you have a project powered by Deno KV OAuth that you'd like to share?
 > Please submit a pull request adding that project to this list.
