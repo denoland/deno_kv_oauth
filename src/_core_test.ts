@@ -2,13 +2,15 @@
 import { assert, assertEquals, Status, type Tokens } from "../deps.ts";
 import {
   deleteOAuthSession,
-  deleteTokensBySiteSession,
+  deleteStoredTokensBySiteSession,
   getOAuthSession,
   getTokensBySiteSession,
   type OAuthSession,
   redirect,
   setOAuthSession,
   setTokensBySiteSession,
+  toStoredTokens,
+  toTokens,
 } from "./_core.ts";
 
 Deno.test("(get/set/delete)OAuthSession()", async () => {
@@ -30,6 +32,18 @@ Deno.test("(get/set/delete)OAuthSession()", async () => {
   assertEquals(await getOAuthSession(id), null);
 });
 
+Deno.test("toStoredTokens() + toTokens()", () => {
+  const intialTokens: Tokens = {
+    accessToken: crypto.randomUUID(),
+    tokenType: crypto.randomUUID(),
+    expiresIn: 42,
+  };
+  const currentTokens = toTokens(toStoredTokens(intialTokens));
+  assertEquals(currentTokens.accessToken, intialTokens.accessToken);
+  assertEquals(currentTokens.tokenType, intialTokens.tokenType);
+  assert(currentTokens.expiresIn! < intialTokens.expiresIn!);
+});
+
 Deno.test("(get/set/delete)TokensBySiteSession()", async () => {
   const id = crypto.randomUUID();
 
@@ -44,7 +58,7 @@ Deno.test("(get/set/delete)TokensBySiteSession()", async () => {
 
   assertEquals(await getTokensBySiteSession(id), tokens);
 
-  await deleteTokensBySiteSession(id);
+  await deleteStoredTokensBySiteSession(id);
 
   assertEquals(await getTokensBySiteSession(id), null);
 });
