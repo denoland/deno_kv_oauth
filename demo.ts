@@ -2,31 +2,30 @@
 import "https://deno.land/std@0.191.0/dotenv/load.ts";
 import { serve } from "https://deno.land/std@0.191.0/http/server.ts";
 import { Status } from "https://deno.land/std@0.191.0/http/http_status.ts";
+// Replace with https://deno.land/x/deno_kv_oauth@VERSION/mod.ts
 import {
   createClient,
+  getSessionAccessToken,
   getSessionId,
-  getSessionTokens,
   handleCallback,
   signIn,
   signOut,
-} from "https://deno.land/x/deno_kv_oauth@v0.1.7-beta/mod.ts";
+} from "./mod.ts";
 
 const client = createClient("github");
 
 async function indexHandler(request: Request) {
-  let body = `
-    <p>Who are you?</p>
-    <p><a href="/signin">Sign in with GitHub</a></p>
-  `;
   const sessionId = getSessionId(request);
-  if (sessionId !== null) {
-    const tokens = await getSessionTokens(sessionId);
-    body = `
-      <p>Your tokens:<p>
-      <pre>${JSON.stringify(tokens, undefined, 2)}</pre>
-      <a href="/signout">Sign out</a>
-    `;
-  }
+  const accessToken = sessionId !== undefined
+    ? await getSessionAccessToken(client, sessionId)
+    : "undefined";
+  const action = sessionId !== undefined ? "out" : "in";
+
+  const body = `
+    <p>Your access token: ${accessToken}</p>
+    <p><a href="/sign${action}">Sign ${action}</a></p>
+  `;
+
   return new Response(body, {
     headers: { "content-type": "text/html; charset=utf-8" },
   });

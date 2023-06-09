@@ -54,6 +54,6 @@ export async function handleCallback(
   return {
     response,
     sessionId,
-    tokens,
+    accessToken: tokens.accessToken,
   };
 }
