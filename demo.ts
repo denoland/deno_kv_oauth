@@ -12,14 +12,17 @@ import {
   signOut,
 } from "./mod.ts";
 
-const client = createClient("github");
+const client = createClient("twitter", {
+  redirectUri: "http://localhost:8000/callback",
+  defaults: { scope: "users.read" },
+});
 
 async function indexHandler(request: Request) {
   const sessionId = getSessionId(request);
-  const accessToken = sessionId !== undefined
+  const accessToken = sessionId !== null
     ? await getSessionAccessToken(client, sessionId)
     : "undefined";
-  const action = sessionId !== undefined ? "out" : "in";
+  const action = sessionId !== undefined ? "in" : "out";
 
   const body = `
     <p>Your access token: ${accessToken}</p>
