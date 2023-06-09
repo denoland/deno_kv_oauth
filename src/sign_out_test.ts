@@ -2,7 +2,7 @@
 import { assertEquals, Status, type Tokens } from "../deps.ts";
 import { signOut } from "./sign_out.ts";
 import {
-  deleteTokensBySiteSession,
+  deleteStoredTokensBySiteSession,
   getTokensBySiteSession,
   setTokensBySiteSession,
   SITE_COOKIE_NAME,
@@ -52,7 +52,7 @@ Deno.test("signOut()", async (test) => {
     );
 
     // Cleanup
-    deleteTokensBySiteSession(sessionId);
+    deleteStoredTokensBySiteSession(sessionId);
   });
 
   await test.step("signed in with secure origin", async () => {
@@ -79,6 +79,6 @@ Deno.test("signOut()", async (test) => {
     );
 
     // Cleanup
-    deleteTokensBySiteSession(sessionId);
+    deleteStoredTokensBySiteSession(sessionId);
   });
 });

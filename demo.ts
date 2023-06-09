@@ -2,14 +2,15 @@
 import "https://deno.land/std@0.190.0/dotenv/load.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Status } from "https://deno.land/std@0.190.0/http/http_status.ts";
+// Replace with https://deno.land/x/deno_kv_oauth@VERSION/mod.ts
 import {
   createClient,
+  getSessionAccessToken,
   getSessionId,
-  getSessionTokens,
   handleCallback,
   signIn,
   signOut,
-} from "https://deno.land/x/deno_kv_oauth@v0.1.7-beta/mod.ts";
+} from "./mod.ts";
 
 const client = createClient("github");
 
@@ -20,10 +21,9 @@ async function indexHandler(request: Request) {
   `;
   const sessionId = getSessionId(request);
   if (sessionId !== null) {
-    const tokens = await getSessionTokens(sessionId);
+    const accessToken = await getSessionAccessToken(client, sessionId);
     body = `
-      <p>Your tokens:<p>
-      <pre>${JSON.stringify(tokens, undefined, 2)}</pre>
+      <p>Your access token: ${accessToken}<p>
       <a href="/signout">Sign out</a>
     `;
   }

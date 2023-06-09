@@ -25,3 +25,4 @@ export {
 } from "https://deno.land/x/oauth2_client@v1.0.0/mod.ts";
 export { walk } from "https://deno.land/std@0.190.0/fs/walk.ts";
 export { globToRegExp } from "https://deno.land/std@0.190.0/path/glob.ts";
+export { SECOND } from "https://deno.land/std@0.190.0/datetime/constants.ts";

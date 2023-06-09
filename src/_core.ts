@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { type Cookie, Status, type Tokens } from "../deps.ts";
+import { type Cookie, SECOND, Status, type Tokens } from "../deps.ts";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
@@ -46,19 +46,53 @@ export async function deleteOAuthSession(id: string) {
 }
 
 // Tokens by session
-const TOKENS_BY_SESSION_PREFIX = "tokens_by_session";
+const STORED_TOKENS_BY_SESSION_PREFIX = "stored_tokens_by_session";
+
+interface StoredTokens extends Omit<Tokens, "expiresIn"> {
+  expiresAt?: Date;
+}
+
+// Exported for testing purposes only
+export function toStoredTokens(tokens: Tokens): StoredTokens {
+  if (tokens.expiresIn === undefined) return tokens;
+
+  const expiresAt = new Date(Date.now() + (tokens.expiresIn * SECOND));
+
+  const storedTokens = { ...tokens };
+  delete storedTokens.expiresIn;
+  return { ...storedTokens, expiresAt };
+}
+
+// Exported for testing purposes only
+export function toTokens(storedTokens: StoredTokens): Tokens {
+  if (storedTokens.expiresAt === undefined) return storedTokens;
+
+  const expiresIn =
+    (Date.now() - Date.parse(storedTokens.expiresAt.toString())) / SECOND;
+
+  const tokens = { ...storedTokens };
+  delete tokens.expiresAt;
+  return { ...tokens, expiresIn };
+}
 
 export async function getTokensBySiteSession(id: string) {
-  const result = await kv.get<Tokens>([TOKENS_BY_SESSION_PREFIX, id]);
-  return result.value;
+  const result = await kv.get<StoredTokens>([
+    STORED_TOKENS_BY_SESSION_PREFIX,
+    id,
+  ]);
+  return result.value !== null ? toTokens(result.value) : null;
 }
 
-export async function setTokensBySiteSession(id: string, tokens: Tokens) {
-  await kv.set([TOKENS_BY_SESSION_PREFIX, id], tokens);
+export async function setTokensBySiteSession(
+  id: string,
+  tokens: StoredTokens,
+) {
+  const storedTokens = toStoredTokens(tokens);
+  await kv.set([STORED_TOKENS_BY_SESSION_PREFIX, id], storedTokens);
 }
 
-export async function deleteTokensBySiteSession(id: string) {
-  await kv.delete([TOKENS_BY_SESSION_PREFIX, id]);
+export async function deleteStoredTokensBySiteSession(id: string) {
+  await kv.delete([STORED_TOKENS_BY_SESSION_PREFIX, id]);
 }
 
 /**

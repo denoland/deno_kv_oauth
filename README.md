@@ -12,6 +12,7 @@ Minimal OAuth powered by [Deno KV](https://deno.com/kv).
 ## Features
 
 - Uses [Deno KV](https://deno.com/kv) for storage of session data.
+- Automatically refreshes access tokens
 - Uses authorization code flow with
   [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/).
 - [A suite of pre-configured OAuth2 clients for popular providers](#pre-configured-oauth2-clients).
