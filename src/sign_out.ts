@@ -10,7 +10,7 @@ import {
 import { getSessionId } from "./get_session_id.ts";
 
 export async function signOut(request: Request, redirectUrl = "/") {
-  const sessionId = getSessionId(request);
+  const sessionId = await getSessionId(request);
   if (sessionId === null) return redirect(redirectUrl);
 
   await deleteStoredTokensBySiteSession(sessionId);
