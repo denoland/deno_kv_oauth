@@ -6,7 +6,7 @@ import {
   getSetCookies,
   OAuth2Client,
   Status,
-} from "../deps.ts";
+} from "../dev_deps.ts";
 import {
   deleteOAuthSession,
   getOAuthSession,

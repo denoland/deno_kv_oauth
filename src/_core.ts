@@ -107,3 +107,9 @@ export function redirect(location: string) {
     status: Status.Found,
   });
 }
+
+export function assert(cond: unknown, message: string) {
+  if (!cond) {
+    throw new Error(message);
+  }
+}

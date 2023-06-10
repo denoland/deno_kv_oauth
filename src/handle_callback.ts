@@ -1,6 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, getCookies, type OAuth2Client, setCookie } from "../deps.ts";
+import { getCookies, type OAuth2Client, setCookie } from "../deps.ts";
 import {
+  assert,
   COOKIE_BASE,
   deleteOAuthSession,
   getCookieName,
@@ -37,7 +38,7 @@ export async function handleCallback(
   const sessionId = crypto.randomUUID();
   const tokens = await oauth2Client.code.getToken(
     request.url,
-    oauthSession,
+    oauthSession ?? undefined,
   );
   await setTokensBySiteSession(sessionId, tokens);
 

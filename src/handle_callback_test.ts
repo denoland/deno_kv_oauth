@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { handleCallback } from "./handle_callback.ts";
-import { assertRejects, OAuth2Client } from "../deps.ts";
+import { assertRejects, OAuth2Client } from "../dev_deps.ts";
 import {
   getOAuthSession,
   OAUTH_COOKIE_NAME,
