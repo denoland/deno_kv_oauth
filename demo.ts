@@ -18,7 +18,7 @@ const client = createClient("twitter", {
 });
 
 async function indexHandler(request: Request) {
-  const sessionId = getSessionId(request);
+  const sessionId = await getSessionId(request);
   const accessToken = sessionId !== null
     ? await getSessionAccessToken(client, sessionId)
     : "undefined";
