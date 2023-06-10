@@ -33,7 +33,7 @@ Deno.test("signIn()", async (test) => {
     const [setCookie] = getSetCookies(response.headers);
     assertEquals(setCookie.name, OAUTH_COOKIE_NAME);
     assertEquals(setCookie.httpOnly, true);
-    assertEquals(setCookie.maxAge, 7776000);
+    assertEquals(setCookie.maxAge, 10 * 60);
     assertEquals(setCookie.sameSite, "Lax");
     assertEquals(setCookie.path, "/");
 
@@ -67,7 +67,7 @@ Deno.test("signIn()", async (test) => {
     const [setCookie] = getSetCookies(response.headers);
     assertEquals(setCookie.name, `__Host-${OAUTH_COOKIE_NAME}`);
     assertEquals(setCookie.httpOnly, true);
-    assertEquals(setCookie.maxAge, 7776000);
+    assertEquals(setCookie.maxAge, 10 * 60);
     assertEquals(setCookie.sameSite, "Lax");
     assertEquals(setCookie.path, "/");
 
