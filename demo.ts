@@ -12,12 +12,12 @@ import {
   signOut,
 } from "./mod.ts";
 
-const githubOAuth2Client = createGitHubOAuth2Client();
+const oauth2Client = createGitHubOAuth2Client();
 
 async function indexHandler(request: Request) {
   const sessionId = await getSessionId(request);
   const accessToken = sessionId !== null
-    ? await getSessionAccessToken(githubOAuth2Client, sessionId)
+    ? await getSessionAccessToken(oauth2Client, sessionId)
     : "undefined";
   const action = sessionId !== undefined ? "in" : "out";
 
@@ -42,10 +42,10 @@ async function handler(request: Request): Promise<Response> {
       return await indexHandler(request);
     }
     case "/signin": {
-      return await signIn(request, githubOAuth2Client);
+      return await signIn(request, oauth2Client);
     }
     case "/callback": {
-      const { response } = await handleCallback(request, githubOAuth2Client);
+      const { response } = await handleCallback(request, oauth2Client);
       return response;
     }
     case "/signout": {
