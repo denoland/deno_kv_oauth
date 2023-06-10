@@ -32,6 +32,13 @@ export async function signIn(
       name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
       value: oauthSessionId,
       secure: isSecure(request.url),
+      /**
+       * A maximum authorization code lifetime of 10 minutes is recommended.
+       * This cookie lifetime matches that value.
+       *
+       * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
+       */
+      maxAge: 10 * 60,
     },
   );
   return response;
