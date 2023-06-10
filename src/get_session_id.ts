@@ -12,5 +12,9 @@ export async function getSessionId(request: Request) {
   const sessionId = getCookies(request.headers)[cookieName];
   if (sessionId === undefined) return null;
 
+  /**
+   * @todo Perhaps an eventual consistency check should happen first.
+   * Revisit this once more documentation about eventual consistency is published.
+   */
   return await getTokensBySiteSession(sessionId) !== null ? sessionId : null;
 }
