@@ -38,7 +38,7 @@ export async function handleCallback(
   const sessionId = crypto.randomUUID();
   const tokens = await oauth2Client.code.getToken(
     request.url,
-    oauthSession ?? undefined,
+    oauthSession,
   );
   await setTokensBySiteSession(sessionId, tokens);
 
