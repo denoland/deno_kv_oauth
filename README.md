@@ -15,7 +15,7 @@ Minimal OAuth powered by [Deno KV](https://deno.com/kv).
 - Automatically refreshes access tokens
 - Uses authorization code flow with
   [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/).
-- [A suite of pre-configured OAuth2 clients for popular providers](#pre-configured-oauth2-clients).
+- [A suite of pre-configured OAuth 2.0 clients for popular providers](#pre-configured-oauth2-clients).
 - Straightforward API which aims to require minimal input.
 - Works locally, in the cloud and on [Deno Deploy](https://deno.com/deploy).
 
@@ -30,8 +30,8 @@ Github as the OAuth2 provider. Source code is located in [demo.ts](demo.ts).
 
 1. Download [demo.ts](demo.ts).
 1. Define your `client` object using one of the
-   [pre-configured OAuth2 clients](#pre-configured-oauth2-clients) or a
-   [custom OAuth2 client](#custom-oauth2-client).
+   [pre-configured OAuth 2.0 clients](#pre-configured-oauth2-clients) or a
+   [custom OAuth 2.0 client](#custom-oauth2-client).
 1. Run the script with the appropriate environment variables and permission
    flags defined. E.g. for GitHub:
    ```
@@ -41,48 +41,20 @@ Github as the OAuth2 provider. Source code is located in [demo.ts](demo.ts).
 ### Pre-configured OAuth2 Clients
 
 This module comes with a suite of pre-configured OAuth2 clients for the
-following providers (and their provider IDs):
+following providers:
 
-1. Discord (`discord`)
-1. GitHub (`github`)
-1. GitLab (`gitlab`)
-1. Google (`google`)
-1. Slack (`slack`)
-1. Twitter (`twitter`)
+1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuth2Client)
+1. [GitHub](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitHubOAuth2Client)
+1. [GitLab](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitLabOAuth2Client)
+1. [Google](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGoogleOAuth2Client)
+1. [Slack](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSlackOAuth2Client)
+1. [Twitter](https://deno.land/x/deno_kv_oauth/mod.ts?s=createTwitterOAuth2Client)
 
-> If there's a pre-configured OAuth2 client for a provider you'd like added,
+Each function is typed so that their respective platform's requirements are met.
+
+> If there's a pre-configured OAuth 2.0 client for a provider you'd like added,
 > please submit a pull request or
 > [create a new issue](https://github.com/denoland/deno_kv_oauth/issues/new).
-
-To create a pre-configured OAuth2 client, use `createClient()` and define your
-`${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` environment variables.
-E.g. for GitHub, your OAuth2 client object would be done by:
-
-```ts
-// GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net ...
-import { createClient } from "https://deno.land/x/deno_kv_oauth/mod.ts";
-
-const client = createClient("github");
-```
-
-Pass a 2nd paramter to `createClient()` to extend the OAuth2 client
-configuration. E.g. for Discord, extending the OAuth2 client object would be
-done by:
-
-```ts
-// DISCORD_CLIENT_ID=xxx DISCORD_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net ...
-import { createClient } from "https://deno.land/x/deno_kv_oauth/mod.ts";
-
-const client = createClient("discord", {
-  redirectUri: "http://localhost:8000/callback",
-  defaults: {
-    scope: "identify",
-  },
-});
-```
-
-> Note: providers differ in their required OAuth parameters. `createClient()`
-> throws when required OAuth configuration parameters aren't provided.
 
 ### Custom OAuth2 Client
 
