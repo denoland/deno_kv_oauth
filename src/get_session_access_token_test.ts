@@ -1,10 +1,12 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getSessionAccessToken } from "./get_session_access_token.ts";
-import { OAuth2Client, SECOND, Tokens } from "../deps.ts";
 import {
   assertEquals,
   assertRejects,
-} from "https://deno.land/std@0.190.0/testing/asserts.ts";
+  OAuth2Client,
+  SECOND,
+  Tokens,
+} from "../dev_deps.ts";
 import { setTokensBySiteSession } from "./_core.ts";
 
 Deno.test("getSessionAccessToken()", async () => {

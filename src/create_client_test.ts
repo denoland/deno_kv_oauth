@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assertEquals, assertThrows } from "../deps.ts";
+import { assertEquals, assertThrows } from "../dev_deps.ts";
 import { createClient } from "./create_client.ts";
 
 Deno.test("createClient()", async (test) => {

@@ -1,5 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, OAuth2Client, OAuth2ClientConfig } from "../deps.ts";
+import { OAuth2Client, OAuth2ClientConfig } from "../deps.ts";
+import { assert } from "./_core.ts";
 
 export type Provider =
   | "discord"
