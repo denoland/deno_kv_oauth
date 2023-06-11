@@ -4,7 +4,7 @@ import { serve } from "https://deno.land/std@0.191.0/http/server.ts";
 import { Status } from "https://deno.land/std@0.191.0/http/http_status.ts";
 // Replace with https://deno.land/x/deno_kv_oauth@VERSION/mod.ts
 import {
-  createClient,
+  createGitHubOAuth2Client,
   getSessionAccessToken,
   getSessionId,
   handleCallback,
@@ -12,15 +12,12 @@ import {
   signOut,
 } from "./mod.ts";
 
-const client = createClient("twitter", {
-  redirectUri: "http://localhost:8000/callback",
-  defaults: { scope: "users.read" },
-});
+const oauth2Client = createGitHubOAuth2Client();
 
 async function indexHandler(request: Request) {
   const sessionId = await getSessionId(request);
   const accessToken = sessionId !== null
-    ? await getSessionAccessToken(client, sessionId)
+    ? await getSessionAccessToken(oauth2Client, sessionId)
     : "undefined";
   const action = sessionId !== undefined ? "in" : "out";
 
@@ -45,10 +42,10 @@ async function handler(request: Request): Promise<Response> {
       return await indexHandler(request);
     }
     case "/signin": {
-      return await signIn(request, client);
+      return await signIn(request, oauth2Client);
     }
     case "/callback": {
-      const { response } = await handleCallback(request, client);
+      const { response } = await handleCallback(request, oauth2Client);
       return response;
     }
     case "/signout": {
