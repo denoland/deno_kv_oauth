@@ -16,14 +16,19 @@ const oauth2Client = createGitHubOAuth2Client();
 
 async function indexHandler(request: Request) {
   const sessionId = await getSessionId(request);
-  const accessToken = sessionId !== null
-    ? await getSessionAccessToken(oauth2Client, sessionId)
-    : "undefined";
-  const action = sessionId !== undefined ? "in" : "out";
+  const data = sessionId !== null
+    ? {
+      accessToken: await getSessionAccessToken(oauth2Client, sessionId),
+      action: "out",
+    }
+    : {
+      accessToken: "undefined",
+      action: "in",
+    };
 
   const body = `
-    <p>Your access token: ${accessToken}</p>
-    <p><a href="/sign${action}">Sign ${action}</a></p>
+    <p>Your access token: ${data.accessToken}</p>
+    <p><a href="/sign${data.action}">Sign ${data.action}</a></p>
   `;
 
   return new Response(body, {
