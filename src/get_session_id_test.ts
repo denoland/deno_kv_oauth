@@ -1,24 +1,41 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "../dev_deps.ts";
-import { SITE_COOKIE_NAME } from "./_core.ts";
+import {
+  deleteStoredTokensBySiteSession,
+  setTokensBySiteSession,
+  SITE_COOKIE_NAME,
+} from "./_core.ts";
 import { getSessionId } from "./get_session_id.ts";
 
-Deno.test("await getSessionId()", async () => {
-  const insecureRequest = new Request("http://example.com");
-  assertEquals(await getSessionId(insecureRequest), null);
+Deno.test("getSessionId()", async (test) => {
+  await test.step("returns null for invalid cookie", async () => {
+    const request = new Request("http://example.com");
+    assertEquals(await getSessionId(request), null);
+  });
 
-  insecureRequest.headers.set("cookie", "not-site-session=xxx");
-  assertEquals(await getSessionId(insecureRequest), null);
+  await test.step("returns null for non-existent session ID", async () => {
+    const request = new Request("http://example.com", {
+      headers: {
+        cookie: `${SITE_COOKIE_NAME}=nil`,
+      },
+    });
+    assertEquals(await getSessionId(request), null);
+  });
 
-  insecureRequest.headers.set("cookie", `${SITE_COOKIE_NAME}=xxx`);
-  assertEquals(await getSessionId(insecureRequest), null);
+  await test.step("returns valid session ID", async () => {
+    const sessionId = crypto.randomUUID();
+    await setTokensBySiteSession(sessionId, {
+      accessToken: crypto.randomUUID(),
+      tokenType: crypto.randomUUID(),
+    });
+    const request = new Request("http://example.com", {
+      headers: {
+        cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
+      },
+    });
+    assertEquals(await getSessionId(request), sessionId);
 
-  const secureRequest = new Request("https://example.com");
-  assertEquals(await getSessionId(secureRequest), null);
-
-  secureRequest.headers.set("cookie", "not-site-session=xxx");
-  assertEquals(await getSessionId(secureRequest), null);
-
-  secureRequest.headers.set("cookie", `__Host-${SITE_COOKIE_NAME}=xxx`);
-  assertEquals(await getSessionId(secureRequest), null);
+    // Cleanup
+    await deleteStoredTokensBySiteSession(sessionId);
+  });
 });

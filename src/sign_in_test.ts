@@ -1,10 +1,10 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { signIn } from "./sign_in.ts";
 import {
+  assert,
   assertEquals,
   assertNotEquals,
   getSetCookies,
-  OAuth2Client,
   Status,
 } from "../dev_deps.ts";
 import {
@@ -12,73 +12,37 @@ import {
   getOAuthSession,
   OAUTH_COOKIE_NAME,
 } from "./_core.ts";
+import { oauth2Client } from "./_test_utils.ts";
 
 Deno.test("signIn()", async (test) => {
-  await test.step("for insecure origin", async () => {
-    const client = new OAuth2Client({
-      clientId: crypto.randomUUID(),
-      clientSecret: crypto.randomUUID(),
-      authorizationEndpointUri: "https://example.com/authorize",
-      tokenUri: "https://example.com/token",
-    });
+  const request = new Request("http://my-site.com");
+  const response = await signIn(request, oauth2Client);
 
-    const request = new Request("http://my-site.com");
-    const response = await signIn(request, client);
-
+  await test.step("returns a redirect response", () => {
     assertEquals(response.body, null);
     assertNotEquals(response.headers.get("location"), null);
-    assertNotEquals(response.headers.get("set-cookie"), null);
     assertEquals(response.status, Status.Found);
+  });
 
-    const [setCookie] = getSetCookies(response.headers);
+  const [setCookie] = getSetCookies(response.headers);
+  await test.step("correctly sets the session cookie", () => {
     assertEquals(setCookie.name, OAUTH_COOKIE_NAME);
     assertEquals(setCookie.httpOnly, true);
     assertEquals(setCookie.maxAge, 10 * 60);
     assertEquals(setCookie.sameSite, "Lax");
     assertEquals(setCookie.path, "/");
+  });
 
-    const tokens = await getOAuthSession(setCookie.value);
+  await test.step("correctly sets the OAuth session entry in KV", async () => {
+    const oauthSessionId = setCookie.value;
+    const oauthSession = await getOAuthSession(oauthSessionId);
     const state = new URL(response.headers.get("location")!).searchParams.get(
       "state",
     );
-    assertNotEquals(tokens, null);
-    assertEquals(tokens!.state, state);
-
-    // Cleanup
-    await deleteOAuthSession(setCookie.value);
+    assert(oauthSession);
+    assertEquals(oauthSession.state, state);
   });
 
-  await test.step("for secure origin", async () => {
-    const client = new OAuth2Client({
-      clientId: crypto.randomUUID(),
-      clientSecret: crypto.randomUUID(),
-      authorizationEndpointUri: "https://example.com/authorize",
-      tokenUri: "https://example.com/token",
-    });
-
-    const request = new Request("https://my-site.com");
-    const response = await signIn(request, client);
-
-    assertEquals(response.body, null);
-    assertNotEquals(response.headers.get("location"), null);
-    assertNotEquals(response.headers.get("set-cookie"), null);
-    assertEquals(response.status, Status.Found);
-
-    const [setCookie] = getSetCookies(response.headers);
-    assertEquals(setCookie.name, `__Host-${OAUTH_COOKIE_NAME}`);
-    assertEquals(setCookie.httpOnly, true);
-    assertEquals(setCookie.maxAge, 10 * 60);
-    assertEquals(setCookie.sameSite, "Lax");
-    assertEquals(setCookie.path, "/");
-
-    const tokens = await getOAuthSession(setCookie.value);
-    const state = new URL(response.headers.get("location")!).searchParams.get(
-      "state",
-    );
-    assertNotEquals(tokens, null);
-    assertEquals(tokens!.state, state);
-
-    // Cleanup
-    await deleteOAuthSession(setCookie.value);
-  });
+  // Cleanup
+  await deleteOAuthSession(setCookie.value);
 });

@@ -9,7 +9,7 @@ import {
   createTwitterOAuth2Client,
 } from "./create_oauth2_client.ts";
 
-Deno.test("createDiscordOAuth2Client()", () => {
+Deno.test("createDiscordOAuth2Client() returns the correctly configured client", () => {
   const clientId = crypto.randomUUID();
   const clientSecret = crypto.randomUUID();
   const redirectUri = "http://example.com";
@@ -25,7 +25,7 @@ Deno.test("createDiscordOAuth2Client()", () => {
   assertEquals(client.config.defaults, defaults);
 });
 
-Deno.test("createGitHubOAuth2Client()", () => {
+Deno.test("createGitHubOAuth2Client() returns the correctly configured client", () => {
   const clientId = crypto.randomUUID();
   const clientSecret = crypto.randomUUID();
   const redirectUri = "http://example.com";
@@ -41,7 +41,7 @@ Deno.test("createGitHubOAuth2Client()", () => {
   assertEquals(client.config.defaults, defaults);
 });
 
-Deno.test("createGitLabOAuth2Client()", () => {
+Deno.test("createGitLabOAuth2Client() returns the correctly configured client", () => {
   const clientId = crypto.randomUUID();
   const clientSecret = crypto.randomUUID();
   const redirectUri = "http://example.com";
@@ -57,7 +57,7 @@ Deno.test("createGitLabOAuth2Client()", () => {
   assertEquals(client.config.defaults, defaults);
 });
 
-Deno.test("createGoogleOAuth2Client()", () => {
+Deno.test("createGoogleOAuth2Client() returns the correctly configured client", () => {
   const clientId = crypto.randomUUID();
   const clientSecret = crypto.randomUUID();
   const redirectUri = "http://example.com";
@@ -73,7 +73,7 @@ Deno.test("createGoogleOAuth2Client()", () => {
   assertEquals(client.config.defaults, defaults);
 });
 
-Deno.test("createSlackOAuth2Client()", () => {
+Deno.test("createSlackOAuth2Client() returns the correctly configured client", () => {
   const clientId = crypto.randomUUID();
   const clientSecret = crypto.randomUUID();
   const redirectUri = "http://example.com";
@@ -89,7 +89,7 @@ Deno.test("createSlackOAuth2Client()", () => {
   assertEquals(client.config.defaults, defaults);
 });
 
-Deno.test("createTwitterOAuth2Client()", () => {
+Deno.test("createTwitterOAuth2Client() returns the correctly configured client", () => {
   const clientId = crypto.randomUUID();
   const clientSecret = crypto.randomUUID();
   const redirectUri = "http://example.com";
