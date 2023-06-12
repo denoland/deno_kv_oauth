@@ -1,6 +1,10 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "../dev_deps.ts";
-import { setTokensBySiteSession, SITE_COOKIE_NAME } from "./_core.ts";
+import {
+  deleteStoredTokensBySiteSession,
+  setTokensBySiteSession,
+  SITE_COOKIE_NAME,
+} from "./_core.ts";
 import { getSessionId } from "./get_session_id.ts";
 
 Deno.test("getSessionId()", async (test) => {
@@ -18,7 +22,7 @@ Deno.test("getSessionId()", async (test) => {
     assertEquals(await getSessionId(request), null);
   });
 
-  await test.step("returns existent session ID", async () => {
+  await test.step("returns valid session ID", async () => {
     const sessionId = crypto.randomUUID();
     await setTokensBySiteSession(sessionId, {
       accessToken: crypto.randomUUID(),
@@ -30,5 +34,8 @@ Deno.test("getSessionId()", async (test) => {
       },
     });
     assertEquals(await getSessionId(request), sessionId);
+
+    // Cleanup
+    await deleteStoredTokensBySiteSession(sessionId);
   });
 });

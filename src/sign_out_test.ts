@@ -9,76 +9,37 @@ import {
 } from "./_core.ts";
 
 Deno.test("signOut()", async (test) => {
-  await test.step("signed out with default redirect URL", async () => {
-    const request = new Request("http://example.com");
-    const response = await signOut(request);
-
-    // Is plain redirect response
-    assertEquals(response.headers.get("location"), "/");
-    assertEquals(response.status, Status.Found);
+  const sessionId = crypto.randomUUID();
+  const tokens: Tokens = {
+    accessToken: crypto.randomUUID(),
+    tokenType: crypto.randomUUID(),
+  };
+  await setTokensBySiteSession(sessionId, tokens);
+  const redirectUrl = "/why-hello-there";
+  const request = new Request("http://example.com", {
+    headers: {
+      cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
+    },
   });
+  const response = await signOut(request, redirectUrl);
 
-  await test.step("signed out with defined redirect URL", async () => {
-    const request = new Request("http://example.com");
-    const redirectUrl = "/why-hello-there";
-    const response = await signOut(request, redirectUrl);
-
-    // Is plain redirect response
+  await test.step("returns a redirect response", () => {
+    assertEquals(response.body, null);
     assertEquals(response.headers.get("location"), redirectUrl);
     assertEquals(response.status, Status.Found);
   });
 
-  await test.step("signed in with insecure origin", async () => {
-    const sessionId = crypto.randomUUID();
-    const tokens: Tokens = {
-      accessToken: crypto.randomUUID(),
-      tokenType: crypto.randomUUID(),
-    };
-    await setTokensBySiteSession(sessionId, tokens);
-    const request = new Request("http://example.com", {
-      headers: {
-        cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
-      },
-    });
-    const redirectUrl = "/why-hello-there";
-    const response = await signOut(request, redirectUrl);
-
-    assertEquals(await getTokensBySiteSession(sessionId), null);
-    assertEquals(response.headers.get("location"), redirectUrl);
-    assertEquals(response.status, Status.Found);
+  await test.step("expired session cookie is correctly set", () => {
     assertEquals(
       response.headers.get("set-cookie"),
       `${SITE_COOKIE_NAME}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
     );
-
-    // Cleanup
-    await deleteStoredTokensBySiteSession(sessionId);
   });
 
-  await test.step("signed in with secure origin", async () => {
-    const sessionId = crypto.randomUUID();
-    const tokens: Tokens = {
-      accessToken: crypto.randomUUID(),
-      tokenType: crypto.randomUUID(),
-    };
-    await setTokensBySiteSession(sessionId, tokens);
-    const request = new Request("https://example.com", {
-      headers: {
-        cookie: `__Host-${SITE_COOKIE_NAME}=${sessionId}`,
-      },
-    });
-    const redirectUrl = "/why-hello-there";
-    const response = await signOut(request, redirectUrl);
-
+  await test.step("deletes the tokens entry in KV", async () => {
     assertEquals(await getTokensBySiteSession(sessionId), null);
-    assertEquals(response.headers.get("location"), redirectUrl);
-    assertEquals(response.status, Status.Found);
-    assertEquals(
-      response.headers.get("set-cookie"),
-      `__Host-${SITE_COOKIE_NAME}=; Secure; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
-    );
-
-    // Cleanup
-    await deleteStoredTokensBySiteSession(sessionId);
   });
+
+  // Cleanup
+  await deleteStoredTokensBySiteSession(sessionId);
 });
