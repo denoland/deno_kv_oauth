@@ -26,7 +26,7 @@ type WithRedirectUri = { redirectUri: string };
  * @see {@link https://discord.com/developers/docs/topics/oauth2}
  */
 export function createDiscordOAuth2Client(
-  additionalOAuth2ClientConfig?:
+  additionalOAuth2ClientConfig:
     & Partial<OAuth2ClientConfig>
     & WithScope
     & WithRedirectUri,
@@ -88,7 +88,7 @@ export function createGitHubOAuth2Client(
  * @see {@link https://docs.gitlab.com/ee/api/oauth2.html}
  */
 export function createGitLabOAuth2Client(
-  additionalOAuth2ClientConfig?:
+  additionalOAuth2ClientConfig:
     & Partial<OAuth2ClientConfig>
     & WithRedirectUri
     & WithScope,
@@ -123,7 +123,7 @@ export function createGitLabOAuth2Client(
  * @see {@link https://developers.google.com/identity/protocols/oauth2/web-server}
  */
 export function createGoogleOAuth2Client(
-  additionalOAuth2ClientConfig?:
+  additionalOAuth2ClientConfig:
     & Partial<OAuth2ClientConfig>
     & WithRedirectUri
     & WithScope,
@@ -158,7 +158,7 @@ export function createGoogleOAuth2Client(
  * @see {@link https://api.slack.com/authentication/oauth-v2}
  */
 export function createSlackOAuth2Client(
-  additionalOAuth2ClientConfig?: Partial<OAuth2ClientConfig> & WithScope,
+  additionalOAuth2ClientConfig: Partial<OAuth2ClientConfig> & WithScope,
 ): OAuth2Client {
   return new OAuth2Client({
     clientId: Deno.env.get("SLACK_CLIENT_ID")!,
@@ -225,7 +225,7 @@ export function createTwitchOAuth2Client(
  * @see {@link https://github.com/twitterdev/twitter-api-typescript-sdk}
  */
 export function createTwitterOAuth2Client(
-  additionalOAuth2ClientConfig?:
+  additionalOAuth2ClientConfig:
     & Partial<OAuth2ClientConfig>
     & WithRedirectUri
     & WithScope,
