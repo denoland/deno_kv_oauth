@@ -182,7 +182,7 @@ export function createSlackOAuth2Client(
  * const oauth2Client = createTwitchOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
  *  defaults: {
- *    scope: "users.read"
+ *    scope: "user:read:email"
  *  }
  * });
  * ```
@@ -190,7 +190,7 @@ export function createSlackOAuth2Client(
  * @see {@link https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow}
  */
 export function createTwitchOAuth2Client(
-  additionalOAuth2ClientConfig?:
+  additionalOAuth2ClientConfig:
     & Partial<OAuth2ClientConfig>
     & WithRedirectUri
     & WithScope,
