@@ -13,7 +13,7 @@ import {
   toTokens,
 } from "./_core.ts";
 
-Deno.test("(get/set/delete)OAuthSession()", async () => {
+Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
   const id = crypto.randomUUID();
 
   // OAuth session doesn't yet exist
@@ -32,7 +32,7 @@ Deno.test("(get/set/delete)OAuthSession()", async () => {
   assertEquals(await getOAuthSession(id), null);
 });
 
-Deno.test("toStoredTokens() + toTokens()", () => {
+Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
   const intialTokens: Tokens = {
     accessToken: crypto.randomUUID(),
     tokenType: crypto.randomUUID(),
@@ -44,7 +44,7 @@ Deno.test("toStoredTokens() + toTokens()", () => {
   assert(currentTokens.expiresIn! < intialTokens.expiresIn!);
 });
 
-Deno.test("(get/set/delete)TokensBySiteSession()", async () => {
+Deno.test("(get/set/delete)TokensBySiteSession() work interchangeably", async () => {
   const id = crypto.randomUUID();
 
   // Tokens don't yet exist
@@ -63,7 +63,7 @@ Deno.test("(get/set/delete)TokensBySiteSession()", async () => {
   assertEquals(await getTokensBySiteSession(id), null);
 });
 
-Deno.test("redirect()", () => {
+Deno.test("redirect() returns a redirect response", () => {
   const location = "/hello-there";
 
   const response = redirect(location);
