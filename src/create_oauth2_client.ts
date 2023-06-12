@@ -170,6 +170,41 @@ export function createSlackOAuth2Client(
 }
 
 /**
+ * Creates an OAuth 2.0 client with Twitch as the provider.
+ *
+ * Requires environment variables:
+ * 1. TWITCH_CLIENT_ID
+ * 2. TWITCH_CLIENT_SECRET
+ *
+ * ```ts
+ * import { createTwitchOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ *
+ * const oauth2Client = createTwitchOAuth2Client({
+ *  redirectUri: "http://localhost:8000/callback",
+ *  defaults: {
+ *    scope: "users.read"
+ *  }
+ * });
+ * ```
+ *
+ * @see {@link https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow}
+ */
+export function createTwitchOAuth2Client(
+  additionalOAuth2ClientConfig?:
+    & Partial<OAuth2ClientConfig>
+    & WithRedirectUri
+    & WithScope,
+): OAuth2Client {
+  return new OAuth2Client({
+    clientId: Deno.env.get("TWITCH_CLIENT_ID")!,
+    clientSecret: Deno.env.get("TWITCH_CLIENT_SECRET")!,
+    authorizationEndpointUri: "https://id.twitch.tv/oauth2/authorize",
+    tokenUri: "https://id.twitch.tv/oauth2/token",
+    ...additionalOAuth2ClientConfig,
+  });
+}
+
+/**
  * Creates an OAuth 2.0 client with Twitter as the provider.
  *
  * Requires environment variables:

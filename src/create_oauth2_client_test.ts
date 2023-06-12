@@ -6,6 +6,7 @@ import {
   createGitLabOAuth2Client,
   createGoogleOAuth2Client,
   createSlackOAuth2Client,
+  createTwitchOAuth2Client,
   createTwitterOAuth2Client,
 } from "./create_oauth2_client.ts";
 
@@ -83,6 +84,22 @@ Deno.test("createSlackOAuth2Client()", () => {
   Deno.env.set("SLACK_CLIENT_SECRET", clientSecret);
 
   const client = createSlackOAuth2Client({ redirectUri, defaults });
+  assertEquals(client.config.clientId, clientId);
+  assertEquals(client.config.clientSecret, clientSecret);
+  assertEquals(client.config.redirectUri, redirectUri);
+  assertEquals(client.config.defaults, defaults);
+});
+
+Deno.test("createTwitchOAuth2Client()", () => {
+  const clientId = crypto.randomUUID();
+  const clientSecret = crypto.randomUUID();
+  const redirectUri = "http://example.com";
+  const defaults = { scope: "scope" };
+
+  Deno.env.set("TWITCH_CLIENT_ID", clientId);
+  Deno.env.set("TWITCH_CLIENT_SECRET", clientSecret);
+
+  const client = createTwitchOAuth2Client({ redirectUri, defaults });
   assertEquals(client.config.clientId, clientId);
   assertEquals(client.config.clientSecret, clientSecret);
   assertEquals(client.config.redirectUri, redirectUri);

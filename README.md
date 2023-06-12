@@ -48,6 +48,7 @@ following providers:
 1. [GitLab](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitLabOAuth2Client)
 1. [Google](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGoogleOAuth2Client)
 1. [Slack](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSlackOAuth2Client)
+1. [Twitch](https://deno.land/x/deno_kv_oauth/mod.ts?s=createTwitchOAuth2Client)
 1. [Twitter](https://deno.land/x/deno_kv_oauth/mod.ts?s=createTwitterOAuth2Client)
 
 Each function is typed so that their respective platform's requirements are met.
