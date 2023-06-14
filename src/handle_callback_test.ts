@@ -10,19 +10,19 @@ import {
 import { oauth2Client } from "./_test_utils.ts";
 
 Deno.test("handleCallback()", async (test) => {
-  await test.step("rejects for no OAuth cookie", async () => {
+  await test.step("rejects for no OAuth 2.0 cookie", async () => {
     const request = new Request("http://example.com");
     await assertRejects(() => handleCallback(request, oauth2Client));
   });
 
-  await test.step("rejects for non-existent OAuth session", async () => {
+  await test.step("rejects for non-existent OAuth 2.0 session", async () => {
     const request = new Request("http://example.com", {
       headers: { cookie: `${OAUTH_COOKIE_NAME}=xxx` },
     });
     await assertRejects(() => handleCallback(request, oauth2Client));
   });
 
-  await test.step("deletes the OAuth session KV entry", async () => {
+  await test.step("deletes the OAuth 2.0 session KV entry", async () => {
     const oauthSessionId = crypto.randomUUID();
     const oauthSession: OAuthSession = {
       state: crypto.randomUUID(),

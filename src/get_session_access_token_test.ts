@@ -1,10 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getSessionAccessToken } from "./get_session_access_token.ts";
 import { assertEquals, assertRejects, SECOND, Tokens } from "../dev_deps.ts";
-import {
-  deleteStoredTokensBySiteSession,
-  setTokensBySiteSession,
-} from "./_core.ts";
+import { deleteStoredTokensBySession, setTokensBySession } from "./_core.ts";
 import { oauth2Client } from "./_test_utils.ts";
 
 Deno.test("getSessionAccessToken()", async (test) => {
@@ -18,14 +15,14 @@ Deno.test("getSessionAccessToken()", async (test) => {
       accessToken: crypto.randomUUID(),
       tokenType: "Bearer",
     };
-    await setTokensBySiteSession(sessionId, tokens);
+    await setTokensBySession(sessionId, tokens);
     assertEquals(
       await getSessionAccessToken(oauth2Client, sessionId),
       tokens.accessToken,
     );
 
     // Cleanup
-    await deleteStoredTokensBySiteSession(sessionId);
+    await deleteStoredTokensBySession(sessionId);
   });
 
   await test.step("returns the access token for session with far expiry", async () => {
@@ -36,14 +33,14 @@ Deno.test("getSessionAccessToken()", async (test) => {
       expiresIn: Date.now() + (30 * SECOND),
       refreshToken: crypto.randomUUID(),
     };
-    await setTokensBySiteSession(sessionId, tokens);
+    await setTokensBySession(sessionId, tokens);
     assertEquals(
       await getSessionAccessToken(oauth2Client, sessionId),
       tokens.accessToken,
     );
 
     // Cleanup
-    await deleteStoredTokensBySiteSession(sessionId);
+    await deleteStoredTokensBySession(sessionId);
   });
 
   await test.step("attempts to return a fresh access token for expired session", async () => {
@@ -54,12 +51,12 @@ Deno.test("getSessionAccessToken()", async (test) => {
       expiresIn: 0,
       refreshToken: crypto.randomUUID(),
     };
-    await setTokensBySiteSession(sessionId, tokens);
+    await setTokensBySession(sessionId, tokens);
     assertRejects(async () =>
       await getSessionAccessToken(oauth2Client, sessionId)
     );
 
     // Cleanup
-    await deleteStoredTokensBySiteSession(sessionId);
+    await deleteStoredTokensBySession(sessionId);
   });
 });
