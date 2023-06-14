@@ -25,6 +25,10 @@ export const COOKIE_BASE = {
 
 const kv = await Deno.openKv();
 
+addEventListener("beforeunload", async () => {
+  await kv.close();
+});
+
 // OAuth 2.0 session
 export interface OAuthSession {
   state: string;
