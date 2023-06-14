@@ -25,6 +25,7 @@ export const COOKIE_BASE = {
 
 const kv = await Deno.openKv();
 
+// For graceful shutdown after tests.
 addEventListener("beforeunload", async () => {
   await kv.close();
 });

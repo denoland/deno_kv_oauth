@@ -27,6 +27,10 @@ Minimal [OAuth 2.0](https://oauth.net/2/) powered by
   defaults.
 - Works locally and in the cloud, including
   [Deno Deploy](https://deno.com/deploy).
+- Works with any web framework that uses the Web APIs
+  [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) and
+  [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response)
+  interfaces.
 
 ## Live Demo
 
