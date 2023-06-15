@@ -97,6 +97,16 @@ const client = new OAuth2Client({
 });
 ```
 
+### `KV_PATH` Environment Variable
+
+Optionally, you can define the path that KV uses by using the
+`--allow-env[=KV_PATH]` flag and setting the `KV_PATH` environment variable.
+E.g.
+
+```
+KV_PATH=:memory: deno run --allow-write --allow-read --allow-env=KV_PATH --unstable script.ts
+```
+
 ## Contributing
 
 Before submitting a pull request, please run `deno task ok` and ensure all

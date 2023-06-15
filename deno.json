@@ -4,7 +4,7 @@
     "check:license": "deno run -A tools/check_license.ts --check",
     "check:types": "deno check --unstable demo.ts mod.ts",
     "check": "deno task check:license && deno task check:types",
-    "test": "deno test -A --unstable --allow-env --allow-read --parallel --doc --coverage=./cov",
+    "test": "KV_PATH=:memory: deno test -A --unstable --allow-env --allow-read --parallel --doc --coverage=./cov",
     "ok": "deno fmt --check && deno lint && deno task check && deno task test",
     "cov": "deno coverage ./cov/ --lcov --exclude='test.ts|testdata' > cov.lcov",
     "update": "deno run -A https://deno.land/x/udd/main.ts --test=\"deno task test\" deps.ts demo.ts"
