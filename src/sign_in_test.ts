@@ -7,11 +7,7 @@ import {
   getSetCookies,
   Status,
 } from "../dev_deps.ts";
-import {
-  deleteOAuthSession,
-  getOAuthSession,
-  OAUTH_COOKIE_NAME,
-} from "./_core.ts";
+import { getOAuthSession, OAUTH_COOKIE_NAME } from "./_core.ts";
 import { oauth2Client } from "./_test_utils.ts";
 
 Deno.test("signIn()", async (test) => {
@@ -42,7 +38,4 @@ Deno.test("signIn()", async (test) => {
     assert(oauthSession);
     assertEquals(oauthSession.state, state);
   });
-
-  // Cleanup
-  await deleteOAuthSession(setCookie.value);
 });

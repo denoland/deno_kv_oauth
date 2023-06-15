@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getSessionAccessToken } from "./get_session_access_token.ts";
 import { assertEquals, assertRejects, SECOND, Tokens } from "../dev_deps.ts";
-import { deleteStoredTokensBySession, setTokensBySession } from "./_core.ts";
+import { setTokensBySession } from "./_core.ts";
 import { oauth2Client } from "./_test_utils.ts";
 
 Deno.test("getSessionAccessToken()", async (test) => {
@@ -20,9 +20,6 @@ Deno.test("getSessionAccessToken()", async (test) => {
       await getSessionAccessToken(oauth2Client, sessionId),
       tokens.accessToken,
     );
-
-    // Cleanup
-    await deleteStoredTokensBySession(sessionId);
   });
 
   await test.step("returns the access token for session with far expiry", async () => {
@@ -38,9 +35,6 @@ Deno.test("getSessionAccessToken()", async (test) => {
       await getSessionAccessToken(oauth2Client, sessionId),
       tokens.accessToken,
     );
-
-    // Cleanup
-    await deleteStoredTokensBySession(sessionId);
   });
 
   await test.step("attempts to return a fresh access token for expired session", async () => {
@@ -55,8 +49,5 @@ Deno.test("getSessionAccessToken()", async (test) => {
     assertRejects(async () =>
       await getSessionAccessToken(oauth2Client, sessionId)
     );
-
-    // Cleanup
-    await deleteStoredTokensBySession(sessionId);
   });
 });

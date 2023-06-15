@@ -2,7 +2,6 @@
 import { assertEquals, Status, type Tokens } from "../dev_deps.ts";
 import { signOut } from "./sign_out.ts";
 import {
-  deleteStoredTokensBySession,
   getTokensBySession,
   setTokensBySession,
   SITE_COOKIE_NAME,
@@ -39,7 +38,4 @@ Deno.test("signOut()", async (test) => {
   await test.step("deletes the tokens entry in KV", async () => {
     assertEquals(await getTokensBySession(sessionId), null);
   });
-
-  // Cleanup
-  await deleteStoredTokensBySession(sessionId);
 });

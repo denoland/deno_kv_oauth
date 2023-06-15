@@ -18,12 +18,20 @@ export function getCookieName(name: string, isSecure: boolean) {
 export const COOKIE_BASE = {
   path: "/",
   httpOnly: true,
-  /** 90 days */
+  // 90 days
   maxAge: 7776000,
   sameSite: "Lax",
 } as Partial<Cookie>;
 
-const kv = await Deno.openKv();
+const KV_PATH_KEY = "KV_PATH";
+let path = undefined;
+if (
+  (await Deno.permissions.query({ name: "env", variable: KV_PATH_KEY }))
+    .state === "granted"
+) {
+  path = Deno.env.get(KV_PATH_KEY);
+}
+const kv = await Deno.openKv(path);
 
 // For graceful shutdown after tests.
 addEventListener("beforeunload", async () => {
