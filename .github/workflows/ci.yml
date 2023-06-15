@@ -12,6 +12,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        deno:
+          - v1.x
+          - canary
         os:
           - ubuntu-22.04
           - windows-2022
@@ -23,6 +26,8 @@ jobs:
 
       - name: Setup Deno
         uses: denoland/setup-deno@v1
+        with:
+          deno-version: ${{ matrix.deno }}
 
       - name: Check formatting, linting, types and run tests
         run: deno task ok
