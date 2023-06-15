@@ -33,7 +33,7 @@ Deno.test("signIn()", async (test) => {
     assertEquals(setCookie.path, "/");
   });
 
-  await test.step("correctly sets the OAuth session entry in KV", async () => {
+  await test.step("correctly sets the OAuth 2.0 session entry in KV", async () => {
     const oauthSessionId = setCookie.value;
     const oauthSession = await getOAuthSession(oauthSessionId);
     const state = new URL(response.headers.get("location")!).searchParams.get(

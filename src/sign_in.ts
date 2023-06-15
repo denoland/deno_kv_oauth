@@ -9,21 +9,34 @@ import {
   setOAuthSession,
 } from "./_core.ts";
 
+/**
+ * Handles the sign-in process by:
+ * 1. Using a randomly generated state to construct the OAuth 2.0 provider's authorization URL and code verifier.
+ * 2. Storing an OAuth 2.0 session object that contains the state and code verifier in KV. The OAuth 2.0 session object will be used in the callback handler to get the OAuth 2.0 tokens from the given provider.
+ * 3. Returning a response that sets the client's OAuth 2.0 session cookie and redirects the client to the OAuth 2.0 provider's authorization URL.
+ *
+ * @example
+ * ```ts
+ * import { signIn, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ *
+ * const oauth2Client = createGitHubOAuth2Client();
+ *
+ * export async function handleSignIn(request: Request) {
+ *  return await signIn(request, oauth2Client);
+ * }
+ * ```
+ */
 export async function signIn(
   request: Request,
   oauth2Client: OAuth2Client,
 ): Promise<Response> {
-  // Generate a random state
   const state = crypto.randomUUID();
-  // Use that state to generate the authorization URI
   const { uri, codeVerifier } = await oauth2Client.code
     .getAuthorizationUri({ state });
 
-  // Store the OAuth session object (state and PKCE code verifier) in Deno KV
   const oauthSessionId = crypto.randomUUID();
   await setOAuthSession(oauthSessionId, { state, codeVerifier });
 
-  // Store the ID of that OAuth session object in a client cookie
   const response = redirect(uri.toString());
   setCookie(
     response.headers,

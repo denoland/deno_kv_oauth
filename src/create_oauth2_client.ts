@@ -6,12 +6,11 @@ type WithScope = { defaults: { scope: string | string[] } };
 type WithRedirectUri = { redirectUri: string };
 
 /**
- * Creates an OAuth 2.0 client with Discord as the provider.
+ * Creates an OAuth 2.0 client with Discord as the provider. Requires environment variables:
+ * 1. `DISCORD_CLIENT_ID`
+ * 2. `DISCORD_CLIENT_SECRET`
  *
- * Requires environment variables:
- * 1. DISCORD_CLIENT_ID
- * 2. DISCORD_CLIENT_SECRET
- *
+ * @example
  * ```ts
  * import { createDiscordOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
@@ -41,12 +40,11 @@ export function createDiscordOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with GitHub as the provider.
+ * Creates an OAuth 2.0 client with GitHub as the provider. Requires environment variables:
+ * 1. `GITHUB_CLIENT_ID`
+ * 2. `GITHUB_CLIENT_SECRET`
  *
- * Requires environment variables:
- * 1. GITHUB_CLIENT_ID
- * 2. GITHUB_CLIENT_SECRET
- *
+ * @example
  * ```ts
  * import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
@@ -68,12 +66,11 @@ export function createGitHubOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with GitLab as the provider.
+ * Creates an OAuth 2.0 client with GitLab as the provider. Requires environment variables:
+ * 1. `GITLAB_CLIENT_ID`
+ * 2. `GITLAB_CLIENT_SECRET`
  *
- * Requires environment variables:
- * 1. GITLAB_CLIENT_ID
- * 2. GITLAB_CLIENT_SECRET
- *
+ * @example
  * ```ts
  * import { createGitLabOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
@@ -103,12 +100,11 @@ export function createGitLabOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with Google as the provider.
+ * Creates an OAuth 2.0 client with Google as the provider. Requires environment variables:
+ * 1. `GOOGLE_CLIENT_ID`
+ * 2. `GOOGLE_CLIENT_SECRET`
  *
- * Requires environment variables:
- * 1. GOOGLE_CLIENT_ID
- * 2. GOOGLE_CLIENT_SECRET
- *
+ * @example
  * ```ts
  * import { createGoogleOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
@@ -138,12 +134,11 @@ export function createGoogleOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with Slack as the provider.
+ * Creates an OAuth 2.0 client with Slack as the provider. Requires environment variables:
+ * 1. `SLACK_CLIENT_ID`
+ * 2. `SLACK_CLIENT_SECRET`
  *
- * Requires environment variables:
- * 1. SLACK_CLIENT_ID
- * 2. SLACK_CLIENT_SECRET
- *
+ * @example
  * ```ts
  * import { createSlackOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
@@ -170,12 +165,11 @@ export function createSlackOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with Twitter as the provider.
+ * Creates an OAuth 2.0 client with Twitter as the provider. Requires environment variables:
+ * 1. `TWITTER_CLIENT_ID`
+ * 2. `TWITTER_CLIENT_SECRET`
  *
- * Requires environment variables:
- * 1. TWITTER_CLIENT_ID
- * 2. TWITTER_CLIENT_SECRET
- *
+ * @example
  * ```ts
  * import { createTwitterOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *

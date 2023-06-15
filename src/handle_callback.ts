@@ -9,38 +9,61 @@ import {
   isSecure,
   OAUTH_COOKIE_NAME,
   redirect,
-  setTokensBySiteSession,
+  setTokensBySession,
   SITE_COOKIE_NAME,
 } from "./_core.ts";
 
+/**
+ * Handles the OAuth 2.0 callback request by:
+ * 1. Getting the OAuth 2.0 session ID from the cookie in the given request.
+ * 2. Getting, then deleting, the OAuth 2.0 session object from KV using the OAuth 2.0 session ID. The OAuth 2.0 session object was generated in the sign-in process.
+ * 3. Getting the OAuth 2.0 tokens from the given OAuth 2.0 client using the OAuth 2.0 session object.
+ * 4. Storing the OAuth 2.0 tokens in KV using a generated session ID.
+ * 5. Returning a response that sets a session cookie and redirects the client to the given redirect URL, the access token and the session ID for processing during the callback handler.
+ *
+ * @example
+ * ```ts
+ * import { handleCallback, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ *
+ * const oauth2Client = createGitHubOAuth2Client();
+ *
+ * export async function handleOAuthCallback(request: Request) {
+ *   const { response, accessToken, sessionId } = await handleCallback(
+ *     request,
+ *     oauth2Client,
+ *     "/redirect-path-after-handle"
+ *   );
+ *
+ *    // Perform some actions with the `accessToken` and `sessionId`.
+ *
+ *    return response;
+ * }
+ * ```
+ */
 export async function handleCallback(
   request: Request,
   oauth2Client: OAuth2Client,
   redirectUrl = "/",
 ) {
-  // Get the OAuth session ID from the client's cookie and ensure it's defined
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
     isSecure(request.url),
   );
   const oauthSessionId = getCookies(request.headers)[oauthCookieName];
-  assert(oauthSessionId, `OAuth cookie not found`);
+  assert(oauthSessionId, `OAuth 2.0 cookie not found`);
 
-  // Get the OAuth session object stored in Deno KV and ensure it's defined
   const oauthSession = await getOAuthSession(oauthSessionId);
-  assert(oauthSession, `OAuth session ${oauthSessionId} entry not found`);
-
-  // Clear the stored OAuth session now that's no longer needed
+  assert(oauthSession, `OAuth 2.0 session ${oauthSessionId} entry not found`);
   await deleteOAuthSession(oauthSessionId);
 
-  // Generate a random site session ID for the new user cookie
   // This is as far as automated testing can go
-  const sessionId = crypto.randomUUID();
   const tokens = await oauth2Client.code.getToken(
     request.url,
     oauthSession,
   );
-  await setTokensBySiteSession(sessionId, tokens);
+
+  const sessionId = crypto.randomUUID();
+  await setTokensBySession(sessionId, tokens);
 
   const response = redirect(redirectUrl);
   setCookie(
