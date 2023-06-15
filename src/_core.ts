@@ -24,11 +24,13 @@ export const COOKIE_BASE = {
 } as Partial<Cookie>;
 
 const KV_PATH_KEY = "KV_PATH";
-const path =
+let path = undefined;
+if (
   (await Deno.permissions.query({ name: "env", variable: KV_PATH_KEY }))
-      .state === "granted"
-    ? Deno.env.get(KV_PATH_KEY)
-    : undefined;
+    .state === "granted"
+) {
+  path = Deno.env.get(KV_PATH_KEY);
+}
 const kv = await Deno.openKv(path);
 
 // For graceful shutdown after tests.
