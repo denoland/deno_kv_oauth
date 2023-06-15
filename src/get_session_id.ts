@@ -31,9 +31,13 @@ export async function getSessionId(request: Request) {
   const sessionId = getCookies(request.headers)[cookieName];
   if (sessionId === undefined) return null;
 
-  /**
-   * @todo Perhaps an eventual consistency check should happen first.
-   * Revisit this once more documentation about eventual consistency is published.
-   */
-  return await getTokensBySession(sessionId) !== null ? sessionId : null;
+  // First, try with eventual consistency. If that returns null, try with strong consistency.
+  if (
+    await getTokensBySession(sessionId, "eventual") ||
+    await getTokensBySession(sessionId)
+  ) {
+    return sessionId;
+  }
+
+  return null;
 }
