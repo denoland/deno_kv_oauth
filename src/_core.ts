@@ -23,7 +23,7 @@ export const COOKIE_BASE = {
   sameSite: "Lax",
 } as Partial<Cookie>;
 
-const kv = await Deno.openKv();
+const kv = await Deno.openKv(":memory:");
 
 // For graceful shutdown after tests.
 addEventListener("beforeunload", async () => {
