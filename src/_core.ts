@@ -113,11 +113,14 @@ export function toTokens(storedTokens: StoredTokens): Tokens {
  * Retrieves the token for the given session ID.
  * Before retrieval, the stored token is converted to a normal token using {@linkcode toTokens}.
  */
-export async function getTokensBySession(sessionId: string) {
+export async function getTokensBySession(
+  sessionId: string,
+  consistency?: Deno.KvConsistencyLevel,
+) {
   const result = await kv.get<StoredTokens>([
     STORED_TOKENS_BY_SESSION_PREFIX,
     sessionId,
-  ]);
+  ], { consistency });
   return result.value !== null ? toTokens(result.value) : null;
 }
 
