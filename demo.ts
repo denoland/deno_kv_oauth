@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import "https://deno.land/std@0.191.0/dotenv/load.ts";
-import { serve } from "https://deno.land/std@0.191.0/http/server.ts";
-import { Status } from "https://deno.land/std@0.191.0/http/http_status.ts";
+import "https://deno.land/std@0.192.0/dotenv/load.ts";
+import { serve } from "https://deno.land/std@0.192.0/http/server.ts";
+import { Status } from "https://deno.land/std@0.192.0/http/http_status.ts";
 // Replace with https://deno.land/x/deno_kv_oauth@VERSION/mod.ts
 import {
   createGitHubOAuth2Client,
