@@ -12,25 +12,20 @@ Minimal [OAuth 2.0](https://oauth.net/2/) powered by
 
 ## Features
 
-- Built-upon the robust
-  [oauth2_client](https://deno.land/x/oauth2_client@v1.0.0) module for OAuth 2.0
-  2.0-related workflows.
-- Uses [Deno KV](https://deno.com/kv) for reliable and persistent storage of
-  session data.
-- Takes care of the authorization code flow with
+- Uses [oauth2_client](https://deno.land/x/oauth2_client@v1.0.0) for OAuth 2.0
+  workflows and [Deno KV](https://deno.com/kv) for persistent session storage.
+- Automatically handles the authorization code flow with
   [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/),
-  automatically refreshing access tokens, and automatically redirecting the
-  client to the next endpoint.
+  access token refresh, and client redirection.
 - Comes with
-  [a suite of pre-configured clients for popular OAuth 2.0 providers](#pre-configured-oauth2-clients).
-- Straightforward API which aims to require minimal input, thanks to reasonable
-  defaults.
+  [pre-configured OAuth 2.0 clients for popular providers](#pre-configured-oauth2-clients).
 - Works locally and in the cloud, including
   [Deno Deploy](https://deno.com/deploy).
-- Works with any web framework that uses the Web APIs
+- Based on the
   [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) and
   [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response)
-  interfaces.
+  interfaces from the
+  [Web API](https://developer.mozilla.org/en-US/docs/Web/API).
 
 ## Live Demo
 
@@ -51,13 +46,25 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
    GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net demo.ts
    ```
 
-### Defaults
+### API Reference
 
-By default, the client will be redirected to the root path, `/`, after the
-callback is handled and the sign out process is complete. This behavior can be
-changed by setting the `redirectUrl` parameter in
-[`handleCallback()`](https://deno.land/x/deno_kv_oauth/mod.ts?s=handleCallback)
-and [`signOut()`](https://deno.land/x/deno_kv_oauth/mod.ts?s=signOut)
+Check out the full documentation and API reference
+[here](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts).
+
+### Environment Variables
+
+- `KV_PATH` (optional) - defines the path that Deno KV uses. See
+  [the API reference](https://deno.land/api?s=Deno.openKv&unstable=) for further
+  details.
+- `${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` - required when
+  creating a pre-configured OAuth 2.0 client for a given provider. E.g. for
+  Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
+  `TWITTER_CLIENT_SECRET`. See
+  [the list below](#pre-configured-oauth-20-clients) for specifics.
+
+> Note: reading environment variables requires the
+> `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
+> [the manual](https://deno.com/manual/basics/permissions) for further details.
 
 ### Pre-configured OAuth 2.0 Clients
 
@@ -95,16 +102,6 @@ const client = new OAuth2Client({
   tokenUri: "https://custom.com/oauth/token",
   redirectUri: "https://my-site.com",
 });
-```
-
-### `KV_PATH` Environment Variable
-
-Optionally, you can define the path that KV uses by using the
-`--allow-env[=KV_PATH]` flag and setting the `KV_PATH` environment variable.
-E.g.
-
-```
-KV_PATH=:memory: deno run --allow-write --allow-read --allow-env=KV_PATH --unstable script.ts
 ```
 
 ## Contributing

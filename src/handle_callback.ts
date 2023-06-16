@@ -14,12 +14,17 @@ import {
 } from "./_core.ts";
 
 /**
- * Handles the OAuth 2.0 callback request by:
+ * Handles the OAuth 2.0 callback request for a given OAuth 2.0 client, and then redirects the client to the given redirect URL.
+ *
+ * It does this by:
  * 1. Getting the OAuth 2.0 session ID from the cookie in the given request.
  * 2. Getting, then deleting, the OAuth 2.0 session object from KV using the OAuth 2.0 session ID. The OAuth 2.0 session object was generated in the sign-in process.
  * 3. Getting the OAuth 2.0 tokens from the given OAuth 2.0 client using the OAuth 2.0 session object.
  * 4. Storing the OAuth 2.0 tokens in KV using a generated session ID.
  * 5. Returning a response that sets a session cookie and redirects the client to the given redirect URL, the access token and the session ID for processing during the callback handler.
+ *
+ * @param request The HTTP request from the client. The URL of the request must match that of the OAuth 2.0 redirect URL.
+ * @param redirectUrl The absolute URL or path that the client is redirected to after callback handling is complete.
  *
  * @example
  * ```ts
