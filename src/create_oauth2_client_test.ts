@@ -5,6 +5,7 @@ import {
   createGitHubOAuth2Client,
   createGitLabOAuth2Client,
   createGoogleOAuth2Client,
+  createNotionOAuth2Client,
   createSlackOAuth2Client,
   createTwitterOAuth2Client,
 } from "./create_oauth2_client.ts";
@@ -67,6 +68,22 @@ Deno.test("createGoogleOAuth2Client() returns the correctly configured client", 
   Deno.env.set("GOOGLE_CLIENT_SECRET", clientSecret);
 
   const client = createGoogleOAuth2Client({ redirectUri, defaults });
+  assertEquals(client.config.clientId, clientId);
+  assertEquals(client.config.clientSecret, clientSecret);
+  assertEquals(client.config.redirectUri, redirectUri);
+  assertEquals(client.config.defaults, defaults);
+});
+
+Deno.test("createNotionOAuth2Client() returns the correctly configured client", () => {
+  const clientId = crypto.randomUUID();
+  const clientSecret = crypto.randomUUID();
+  const redirectUri = "http://example.com";
+  const defaults = { scope: "scope" };
+
+  Deno.env.set("NOTION_CLIENT_ID", clientId);
+  Deno.env.set("NOTION_CLIENT_SECRET", clientSecret);
+
+  const client = createNotionOAuth2Client({ redirectUri, defaults });
   assertEquals(client.config.clientId, clientId);
   assertEquals(client.config.clientSecret, clientSecret);
   assertEquals(client.config.redirectUri, redirectUri);
