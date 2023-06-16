@@ -23,6 +23,9 @@ import {
  * 4. Storing the OAuth 2.0 tokens in KV using a generated session ID.
  * 5. Returning a response that sets a session cookie and redirects the client to the given redirect URL, the access token and the session ID for processing during the callback handler.
  *
+ * @param request The HTTP request from the client. The URL of the request must match that of the OAuth 2.0 redirect URL.
+ * @param redirectUrl The absolute URL or path that the client is redirected to after callback handling is complete.
+ *
  * @example
  * ```ts
  * import { handleCallback, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";

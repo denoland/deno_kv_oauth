@@ -12,6 +12,8 @@ type WithRedirectUri = { redirectUri: string };
  * 1. `DISCORD_CLIENT_ID`
  * 2. `DISCORD_CLIENT_SECRET`
  *
+ * @param additionalOAuth2ClientConfig Requires `redirectUri` and `defaults.scope` properties.
+ *
  * @example
  * ```ts
  * import { createDiscordOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
@@ -76,6 +78,8 @@ export function createGitHubOAuth2Client(
  * 1. `GITLAB_CLIENT_ID`
  * 2. `GITLAB_CLIENT_SECRET`
  *
+ * @param additionalOAuth2ClientConfig Requires `redirectUri` and `defaults.scope` properties.
+ *
  * @example
  * ```ts
  * import { createGitLabOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
@@ -111,6 +115,8 @@ export function createGitLabOAuth2Client(
  * Requires `--allow-env[=GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET]` permissions and environment variables:
  * 1. `GOOGLE_CLIENT_ID`
  * 2. `GOOGLE_CLIENT_SECRET`
+ *
+ * @param additionalOAuth2ClientConfig Requires `redirectUri` and `defaults.scope` properties.
  *
  * @example
  * ```ts
@@ -148,6 +154,8 @@ export function createGoogleOAuth2Client(
  * 1. `SLACK_CLIENT_ID`
  * 2. `SLACK_CLIENT_SECRET`
  *
+ * @param additionalOAuth2ClientConfig Requires `defaults.scope` property.
+ *
  * @example
  * ```ts
  * import { createSlackOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
@@ -180,6 +188,8 @@ export function createSlackOAuth2Client(
  * Requires `--allow-env[=TWITTER_CLIENT_ID,TWITTER_CLIENT_SECRET]` permissions and environment variables:
  * 1. `TWITTER_CLIENT_ID`
  * 2. `TWITTER_CLIENT_SECRET`
+ *
+ * @param additionalOAuth2ClientConfig Requires `redirectUri` and `defaults.scope` properties.
  *
  * @example
  * ```ts

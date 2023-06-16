@@ -14,6 +14,8 @@ import {
  * 1. Getting the session ID from the cookie in the given request. If the request has no cookie, null is returned.
  * 2. Getting the OAuth 2.0 session object using the session ID from KV. If the OAuth 2.0 token doesn't exist, null is returned.
  *
+ * @param request The HTTP request from the client.
+ *
  * @example
  * ```ts
  * import { getSessionId } from "https://deno.land/x/deno_kv_oauth/mod.ts";

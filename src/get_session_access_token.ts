@@ -9,6 +9,8 @@ import { getTokensBySession, setTokensBySession } from "./_core.ts";
  * 1. Getting the OAuth 2.0 tokens from KV using the given session ID. If the token doesn't exist, null is returned. If the token is valid, not close to expiry or unable to be refreshed, the access token is returned.
  * 2. Refreshing and updating the stored token in KV and returning the access token.
  *
+ * @param sessionId Get the client's session ID using {@linkcode getSessionId}.
+ *
  * @example.
  * ```ts
  * import { getSessionAccessToken, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";

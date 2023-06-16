@@ -17,6 +17,8 @@ import { getSessionId } from "./get_session_id.ts";
  * 2. Deleting the stored OAuth 2.0 tokens from KV.
  * 3. Returning a response that invalidates the client's session cookie and redirects the client to the given redirect URL.
  *
+ * @param redirectUrl The absolute URL or path that the client is redirected to after sign out handling is complete.
+ *
  * @example
  * ```ts
  * import { signOut } from "https://deno.land/x/deno_kv_oauth/mod.ts";

@@ -17,6 +17,8 @@ import {
  * 2. Storing an OAuth 2.0 session object that contains the state and code verifier in KV. The OAuth 2.0 session object will be used in the callback handler to get the OAuth 2.0 tokens from the given provider.
  * 3. Returning a response that sets the client's OAuth 2.0 session cookie and redirects the client to the OAuth 2.0 provider's authorization URL.
  *
+ * @param request The HTTP request from the client.
+ *
  * @example
  * ```ts
  * import { signIn, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
