@@ -6,7 +6,9 @@ type WithScope = { defaults: { scope: string | string[] } };
 type WithRedirectUri = { redirectUri: string };
 
 /**
- * Creates an OAuth 2.0 client with Discord as the provider. Requires environment variables:
+ * Creates an OAuth 2.0 client with Discord as the provider.
+ *
+ * Requires `--allow-env[=DISCORD_CLIENT_ID,DISCORD_CLIENT_SECRET]` permissions and environment variables:
  * 1. `DISCORD_CLIENT_ID`
  * 2. `DISCORD_CLIENT_SECRET`
  *
@@ -40,7 +42,9 @@ export function createDiscordOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with GitHub as the provider. Requires environment variables:
+ * Creates an OAuth 2.0 client with GitHub as the provider.
+ *
+ * Requires `--allow-env[=GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET]` permissions and environment variables:
  * 1. `GITHUB_CLIENT_ID`
  * 2. `GITHUB_CLIENT_SECRET`
  *
@@ -66,7 +70,9 @@ export function createGitHubOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with GitLab as the provider. Requires environment variables:
+ * Creates an OAuth 2.0 client with GitLab as the provider.
+ *
+ * Requires `--allow-env[=GITLAB_CLIENT_ID,GITLAB_CLIENT_SECRET]` permissions and environment variables:
  * 1. `GITLAB_CLIENT_ID`
  * 2. `GITLAB_CLIENT_SECRET`
  *
@@ -100,7 +106,9 @@ export function createGitLabOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with Google as the provider. Requires environment variables:
+ * Creates an OAuth 2.0 client with Google as the provider.
+ *
+ * Requires `--allow-env[=GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET]` permissions and environment variables:
  * 1. `GOOGLE_CLIENT_ID`
  * 2. `GOOGLE_CLIENT_SECRET`
  *
@@ -134,7 +142,9 @@ export function createGoogleOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with Slack as the provider. Requires environment variables:
+ * Creates an OAuth 2.0 client with Slack as the provider.
+ *
+ * Requires `--allow-env[=SLACK_CLIENT_ID,SLACK_CLIENT_SECRET]` permissions and environment variables:
  * 1. `SLACK_CLIENT_ID`
  * 2. `SLACK_CLIENT_SECRET`
  *
@@ -165,7 +175,9 @@ export function createSlackOAuth2Client(
 }
 
 /**
- * Creates an OAuth 2.0 client with Twitter as the provider. Requires environment variables:
+ * Creates an OAuth 2.0 client with Twitter as the provider.
+ *
+ * Requires `--allow-env[=TWITTER_CLIENT_ID,TWITTER_CLIENT_SECRET]` permissions and environment variables:
  * 1. `TWITTER_CLIENT_ID`
  * 2. `TWITTER_CLIENT_SECRET`
  *

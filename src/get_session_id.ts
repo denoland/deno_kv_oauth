@@ -8,11 +8,11 @@ import {
 } from "./_core.ts";
 
 /**
- * Gets the client's session ID by:
+ * Gets the session ID for a given request. This is well-suited for checking whether the client is signed in by checking if nullish.
+ *
+ * It does this by:
  * 1. Getting the session ID from the cookie in the given request. If the request has no cookie, null is returned.
  * 2. Getting the OAuth 2.0 session object using the session ID from KV. If the OAuth 2.0 token doesn't exist, null is returned.
- *
- * This is well-suited for checking whether the client is signed in by checking if nullish.
  *
  * @example
  * ```ts

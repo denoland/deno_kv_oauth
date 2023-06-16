@@ -3,11 +3,11 @@ import { OAuth2Client, SECOND } from "../deps.ts";
 import { getTokensBySession, setTokensBySession } from "./_core.ts";
 
 /**
- * Gets the client's session access token by:
+ * Gets the access token for a given OAuth 2.0 client and session. If null is returned, the client must sign in.
+ *
+ * It does this by:
  * 1. Getting the OAuth 2.0 tokens from KV using the given session ID. If the token doesn't exist, null is returned. If the token is valid, not close to expiry or unable to be refreshed, the access token is returned.
  * 2. Refreshing and updating the stored token in KV and returning the access token.
- *
- * If null is returned, the client must sign in.
  *
  * @example.
  * ```ts

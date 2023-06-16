@@ -13,7 +13,7 @@ Minimal [OAuth 2.0](https://oauth.net/2/) powered by
 ## Features
 
 - Built-upon the robust
-  [oauth2_client](https://deno.land/x/oauth2_client@v1.0.0) module for OAuth 2.0
+  [oauth2_client](https://deno.land/x/oauth2_client@v1.0.0) module for OAuth
   2.0-related workflows.
 - Uses [Deno KV](https://deno.com/kv) for reliable and persistent storage of
   session data.

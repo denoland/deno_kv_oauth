@@ -10,7 +10,9 @@ import {
 } from "./_core.ts";
 
 /**
- * Handles the sign-in process by:
+ * Handles the sign-in process for a given OAuth 2.0 client and redirects the client to the authorization URL.
+ *
+ * It does this by:
  * 1. Using a randomly generated state to construct the OAuth 2.0 provider's authorization URL and code verifier.
  * 2. Storing an OAuth 2.0 session object that contains the state and code verifier in KV. The OAuth 2.0 session object will be used in the callback handler to get the OAuth 2.0 tokens from the given provider.
  * 3. Returning a response that sets the client's OAuth 2.0 session cookie and redirects the client to the OAuth 2.0 provider's authorization URL.
