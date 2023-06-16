@@ -74,7 +74,7 @@ export function createGitHubOAuth2Client(
 /**
  * Creates an OAuth 2.0 client with Facebook as the provider.
  *
- * Requires `--allow-env[=GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET]` permissions and environment variables:
+ * Requires `--allow-env[=FACEBOOK_CLIENT_ID,FACEBOOK_CLIENT_SECRET]` permissions and environment variables:
  * 1. `FACEBOOK_CLIENT_ID`
  * 2. `FACEBOOK_CLIENT_SECRET`
  *
