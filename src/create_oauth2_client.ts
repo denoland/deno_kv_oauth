@@ -44,6 +44,36 @@ export function createDiscordOAuth2Client(
 }
 
 /**
+ * Creates an OAuth 2.0 client with Dropbox as the provider.
+ *
+ * Requires `--allow-env[=DROPBOX_CLIENT_ID,DROPBOX_CLIENT_SECRET]` permissions and environment variables:
+ * 1. `DROPBOX_CLIENT_ID`
+ * 2. `DROPBOX_CLIENT_SECRET`
+ *
+ * @example
+ * ```ts
+ * import { createDropboxOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ *
+ * const oauth2Client = createDropboxOAuth2Client();
+ * ```
+ *
+ * @see {@link https://developers.dropbox.com/oauth-guide}
+ */
+export function createDropboxOAuth2Client(
+  additionalOAuth2ClientConfig:
+    & Partial<OAuth2ClientConfig>
+    & WithRedirectUri,
+): OAuth2Client {
+  return new OAuth2Client({
+    clientId: Deno.env.get("DROPBOX_CLIENT_ID")!,
+    clientSecret: Deno.env.get("DROPBOX_CLIENT_SECRET")!,
+    authorizationEndpointUri: "https://www.dropbox.com/oauth2/authorize",
+    tokenUri: "https://api.dropboxapi.com/oauth2/token",
+    ...additionalOAuth2ClientConfig,
+  });
+}
+
+/**
  * Creates an OAuth 2.0 client with GitHub as the provider.
  *
  * Requires `--allow-env[=GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET]` permissions and environment variables:
