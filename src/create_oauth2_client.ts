@@ -78,6 +78,8 @@ export function createGitHubOAuth2Client(
  * 1. `FACEBOOK_CLIENT_ID`
  * 2. `FACEBOOK_CLIENT_SECRET`
  *
+ * @param additionalOAuth2ClientConfig Requires `redirectUri` and `defaults.scope` properties.
+ *
  * @example
  * ```ts
  * import { createFacebookOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
