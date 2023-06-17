@@ -16,7 +16,7 @@ type WithRedirectUri = { redirectUri: string };
  *
  * @example
  * ```ts
- * import { createDiscordOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createDiscordOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createDiscordOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
@@ -44,6 +44,40 @@ export function createDiscordOAuth2Client(
 }
 
 /**
+ * Creates an OAuth 2.0 client with Dropbox as the provider.
+ *
+ * Requires `--allow-env[=DROPBOX_CLIENT_ID,DROPBOX_CLIENT_SECRET]` permissions and environment variables:
+ * 1. `DROPBOX_CLIENT_ID`
+ * 2. `DROPBOX_CLIENT_SECRET`
+ *
+ * @param additionalOAuth2ClientConfig Requires `redirectUri` property.
+ *
+ * @example
+ * ```ts
+ * import { createDropboxOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ *
+ * const oauth2Client = createDropboxOAuth2Client({
+ *   redirectUri: "http://localhost:8000/callback",
+ * });
+ * ```
+ *
+ * @see {@link https://developers.dropbox.com/oauth-guide}
+ */
+export function createDropboxOAuth2Client(
+  additionalOAuth2ClientConfig:
+    & Partial<OAuth2ClientConfig>
+    & WithRedirectUri,
+): OAuth2Client {
+  return new OAuth2Client({
+    clientId: Deno.env.get("DROPBOX_CLIENT_ID")!,
+    clientSecret: Deno.env.get("DROPBOX_CLIENT_SECRET")!,
+    authorizationEndpointUri: "https://www.dropbox.com/oauth2/authorize",
+    tokenUri: "https://api.dropboxapi.com/oauth2/token",
+    ...additionalOAuth2ClientConfig,
+  });
+}
+
+/**
  * Creates an OAuth 2.0 client with GitHub as the provider.
  *
  * Requires `--allow-env[=GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET]` permissions and environment variables:
@@ -52,7 +86,7 @@ export function createDiscordOAuth2Client(
  *
  * @example
  * ```ts
- * import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createGitHubOAuth2Client();
  * ```
@@ -72,6 +106,44 @@ export function createGitHubOAuth2Client(
 }
 
 /**
+ * Creates an OAuth 2.0 client with Facebook as the provider.
+ *
+ * Requires `--allow-env[=FACEBOOK_CLIENT_ID,FACEBOOK_CLIENT_SECRET]` permissions and environment variables:
+ * 1. `FACEBOOK_CLIENT_ID`
+ * 2. `FACEBOOK_CLIENT_SECRET`
+ *
+ * @param additionalOAuth2ClientConfig Requires `redirectUri` and `defaults.scope` properties.
+ *
+ * @example
+ * ```ts
+ * import { createFacebookOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ *
+ * const oauth2Client = createFacebookOAuth2Client({
+ *   redirectUri: "http://localhost:8000/callback",
+ *   defaults: {
+ *    scope: "email"
+ *   }
+ * });
+ * ```
+ *
+ * @see {@link https://developers.facebook.com/docs/facebook-login/guides/advanced/manual-flow}
+ */
+export function createFacebookOAuth2Client(
+  additionalOAuth2ClientConfig:
+    & Partial<OAuth2ClientConfig>
+    & WithScope
+    & WithRedirectUri,
+): OAuth2Client {
+  return new OAuth2Client({
+    clientId: Deno.env.get("FACEBOOK_CLIENT_ID")!,
+    clientSecret: Deno.env.get("FACEBOOK_CLIENT_SECRET")!,
+    authorizationEndpointUri: "https://www.facebook.com/v17.0/dialog/oauth",
+    tokenUri: "https://graph.facebook.com/v17.0/oauth/access_token",
+    ...additionalOAuth2ClientConfig,
+  });
+}
+
+/**
  * Creates an OAuth 2.0 client with GitLab as the provider.
  *
  * Requires `--allow-env[=GITLAB_CLIENT_ID,GITLAB_CLIENT_SECRET]` permissions and environment variables:
@@ -82,7 +154,7 @@ export function createGitHubOAuth2Client(
  *
  * @example
  * ```ts
- * import { createGitLabOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createGitLabOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createGitLabOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
@@ -120,7 +192,7 @@ export function createGitLabOAuth2Client(
  *
  * @example
  * ```ts
- * import { createGoogleOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createGoogleOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createGoogleOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
@@ -187,7 +259,7 @@ export function createNotionOAuth2Client(
  *
  * @example
  * ```ts
- * import { createSlackOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createSlackOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createSlackOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
@@ -222,7 +294,7 @@ export function createSlackOAuth2Client(
  *
  * @example
  * ```ts
- * import { createTwitterOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createTwitterOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createTwitterOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",

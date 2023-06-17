@@ -21,7 +21,7 @@ import {
  *
  * @example
  * ```ts
- * import { signIn, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { signIn, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createGitHubOAuth2Client();
  *
