@@ -164,12 +164,13 @@ export function createGoogleOAuth2Client(
  * @see {@link https://developers.notion.com/docs/authorization}
  */
 export function createNotionOAuth2Client(
-  additionalOAuth2ClientConfig?: Partial<OAuth2ClientConfig>
+  additionalOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
 ): OAuth2Client {
   return new OAuth2Client({
     clientId: Deno.env.get("NOTION_CLIENT_ID")!,
     clientSecret: Deno.env.get("NOTION_CLIENT_SECRET")!,
-    authorizationEndpointUri: "https://api.notion.com/v1/oauth/authorize?owner=user",
+    authorizationEndpointUri:
+      "https://api.notion.com/v1/oauth/authorize?owner=user",
     tokenUri: "https://api.notion.com/v1/oauth/token",
     ...additionalOAuth2ClientConfig,
   });
