@@ -82,7 +82,7 @@ export function createGitHubOAuth2Client(
  *
  * @example
  * ```ts
- * import { createFacebookOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createFacebookOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createFacebookOAuth2Client({
  *   redirectUri: "http://localhost:8000/callback",
