@@ -72,6 +72,7 @@ This module comes with a suite of pre-configured OAuth 2.0 clients for the
 following providers:
 
 1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuth2Client)
+1. [Dropbox](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDropboxOAuth2Client)
 1. [Facebook](https://deno.land/x/deno_kv_oauth/mod.ts?s=createFacebookOAuth2Client)
 1. [GitHub](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitHubOAuth2Client)
 1. [GitLab](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitLabOAuth2Client)
