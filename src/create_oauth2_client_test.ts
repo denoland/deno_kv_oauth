@@ -41,8 +41,8 @@ Deno.test("createDropboxOAuth2Client() returns the correctly configured client",
   assertEquals(client.config.clientSecret, clientSecret);
   assertEquals(client.config.redirectUri, redirectUri);
   assertEquals(client.config.defaults, defaults);
-}
-          
+});
+
 Deno.test("createFacebookOAuth2Client() returns the correctly configured client", () => {
   const clientId = crypto.randomUUID();
   const clientSecret = crypto.randomUUID();
