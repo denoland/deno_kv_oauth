@@ -1,4 +1,7 @@
 {
+  "imports": {
+    "https://deno.land/x/deno_kv_oauth@$VERSION/": "./"
+  },
   "tasks": {
     "demo": "deno run --allow-net --allow-env --allow-read --unstable --watch=demo.ts,mod.ts demo.ts",
     "check:license": "deno run -A tools/check_license.ts --check",

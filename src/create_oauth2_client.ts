@@ -16,7 +16,7 @@ type WithRedirectUri = { redirectUri: string };
  *
  * @example
  * ```ts
- * import { createDiscordOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createDiscordOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createDiscordOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
@@ -52,7 +52,7 @@ export function createDiscordOAuth2Client(
  *
  * @example
  * ```ts
- * import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createGitHubOAuth2Client();
  * ```
@@ -120,7 +120,7 @@ export function createFacebookOAuth2Client(
  *
  * @example
  * ```ts
- * import { createGitLabOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createGitLabOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createGitLabOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
@@ -158,7 +158,7 @@ export function createGitLabOAuth2Client(
  *
  * @example
  * ```ts
- * import { createGoogleOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createGoogleOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createGoogleOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
@@ -196,7 +196,7 @@ export function createGoogleOAuth2Client(
  *
  * @example
  * ```ts
- * import { createSlackOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createSlackOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createSlackOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
@@ -231,7 +231,7 @@ export function createSlackOAuth2Client(
  *
  * @example
  * ```ts
- * import { createTwitterOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createTwitterOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createTwitterOAuth2Client({
  *  redirectUri: "http://localhost:8000/callback",
