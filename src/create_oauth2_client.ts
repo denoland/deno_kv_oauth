@@ -156,7 +156,7 @@ export function createGoogleOAuth2Client(
  *
  * @example
  * ```ts
- * import { createNotionOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createNotionOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createNotionOAuth2Client();
  * ```
