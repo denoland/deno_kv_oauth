@@ -54,9 +54,11 @@ export function createDiscordOAuth2Client(
  *
  * @example
  * ```ts
- * import { createDropboxOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createDropboxOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauth2Client = createDropboxOAuth2Client();
+ * const oauth2Client = createDropboxOAuth2Client({
+ *   redirectUri: "http://localhost:8000/callback",
+ * });
  * ```
  *
  * @see {@link https://developers.dropbox.com/oauth-guide}
