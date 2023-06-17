@@ -1,157 +1,34 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "../dev_deps.ts";
-import {
-  createDiscordOAuth2Client,
-  createDropboxOAuth2Client,
-  createFacebookOAuth2Client,
-  createGitHubOAuth2Client,
-  createGitLabOAuth2Client,
-  createGoogleOAuth2Client,
-  createPatreonOAuth2Client,
-  createSlackOAuth2Client,
-  createTwitterOAuth2Client,
-} from "./create_oauth2_client.ts";
+import * as createOAuth2ClientFns from "./create_oauth2_client.ts";
 
-Deno.test("createDiscordOAuth2Client() returns the correctly configured client", () => {
-  const clientId = crypto.randomUUID();
-  const clientSecret = crypto.randomUUID();
-  const redirectUri = "http://example.com";
-  const defaults = { scope: "scope" };
+[
+  "Discord",
+  "Dropbox",
+  "Facebook",
+  "GitHub",
+  "GitLab",
+  "Google",
+  "Patreon",
+  "Slack",
+  "Twitter",
+].map((provider) => {
+  const fnName = `create${provider}OAuth2Client`;
+  Deno.test(`${fnName}() returns the correctly configured client`, () => {
+    const clientId = crypto.randomUUID();
+    const clientSecret = crypto.randomUUID();
+    const redirectUri = "http://example.com";
+    const defaults = { scope: "scope" };
 
-  Deno.env.set("DISCORD_CLIENT_ID", clientId);
-  Deno.env.set("DISCORD_CLIENT_SECRET", clientSecret);
+    const envVarKeyPrefix = provider.toUpperCase();
+    Deno.env.set(`${envVarKeyPrefix}_CLIENT_ID`, clientId);
+    Deno.env.set(`${envVarKeyPrefix}_CLIENT_SECRET`, clientSecret);
 
-  const client = createDiscordOAuth2Client({ redirectUri, defaults });
-  assertEquals(client.config.clientId, clientId);
-  assertEquals(client.config.clientSecret, clientSecret);
-  assertEquals(client.config.redirectUri, redirectUri);
-  assertEquals(client.config.defaults, defaults);
-});
-
-Deno.test("createDropboxOAuth2Client() returns the correctly configured client", () => {
-  const clientId = crypto.randomUUID();
-  const clientSecret = crypto.randomUUID();
-  const redirectUri = "http://example.com";
-  const defaults = { scope: "scope" };
-
-  Deno.env.set("DROPBOX_CLIENT_ID", clientId);
-  Deno.env.set("DROPBOX_CLIENT_SECRET", clientSecret);
-
-  const client = createDropboxOAuth2Client({ redirectUri, defaults });
-  assertEquals(client.config.clientId, clientId);
-  assertEquals(client.config.clientSecret, clientSecret);
-  assertEquals(client.config.redirectUri, redirectUri);
-  assertEquals(client.config.defaults, defaults);
-});
-
-Deno.test("createFacebookOAuth2Client() returns the correctly configured client", () => {
-  const clientId = crypto.randomUUID();
-  const clientSecret = crypto.randomUUID();
-  const redirectUri = "http://example.com";
-  const defaults = { scope: "scope" };
-
-  Deno.env.set("FACEBOOK_CLIENT_ID", clientId);
-  Deno.env.set("FACEBOOK_CLIENT_SECRET", clientSecret);
-
-  const client = createFacebookOAuth2Client({ redirectUri, defaults });
-  assertEquals(client.config.clientId, clientId);
-  assertEquals(client.config.clientSecret, clientSecret);
-  assertEquals(client.config.redirectUri, redirectUri);
-  assertEquals(client.config.defaults, defaults);
-});
-
-Deno.test("createGitHubOAuth2Client() returns the correctly configured client", () => {
-  const clientId = crypto.randomUUID();
-  const clientSecret = crypto.randomUUID();
-  const redirectUri = "http://example.com";
-  const defaults = { scope: "scope" };
-
-  Deno.env.set("GITHUB_CLIENT_ID", clientId);
-  Deno.env.set("GITHUB_CLIENT_SECRET", clientSecret);
-
-  const client = createGitHubOAuth2Client({ redirectUri, defaults });
-  assertEquals(client.config.clientId, clientId);
-  assertEquals(client.config.clientSecret, clientSecret);
-  assertEquals(client.config.redirectUri, redirectUri);
-  assertEquals(client.config.defaults, defaults);
-});
-
-Deno.test("createGitLabOAuth2Client() returns the correctly configured client", () => {
-  const clientId = crypto.randomUUID();
-  const clientSecret = crypto.randomUUID();
-  const redirectUri = "http://example.com";
-  const defaults = { scope: "scope" };
-
-  Deno.env.set("GITLAB_CLIENT_ID", clientId);
-  Deno.env.set("GITLAB_CLIENT_SECRET", clientSecret);
-
-  const client = createGitLabOAuth2Client({ redirectUri, defaults });
-  assertEquals(client.config.clientId, clientId);
-  assertEquals(client.config.clientSecret, clientSecret);
-  assertEquals(client.config.redirectUri, redirectUri);
-  assertEquals(client.config.defaults, defaults);
-});
-
-Deno.test("createGoogleOAuth2Client() returns the correctly configured client", () => {
-  const clientId = crypto.randomUUID();
-  const clientSecret = crypto.randomUUID();
-  const redirectUri = "http://example.com";
-  const defaults = { scope: "scope" };
-
-  Deno.env.set("GOOGLE_CLIENT_ID", clientId);
-  Deno.env.set("GOOGLE_CLIENT_SECRET", clientSecret);
-
-  const client = createGoogleOAuth2Client({ redirectUri, defaults });
-  assertEquals(client.config.clientId, clientId);
-  assertEquals(client.config.clientSecret, clientSecret);
-  assertEquals(client.config.redirectUri, redirectUri);
-  assertEquals(client.config.defaults, defaults);
-});
-
-Deno.test("createPatreonOAuth2Client() returns the correctly configured client", () => {
-  const clientId = crypto.randomUUID();
-  const clientSecret = crypto.randomUUID();
-  const redirectUri = "http://example.com";
-  const defaults = { scope: "scope" };
-
-  Deno.env.set("PATREON_CLIENT_ID", clientId);
-  Deno.env.set("PATREON_CLIENT_SECRET", clientSecret);
-
-  const client = createPatreonOAuth2Client({ redirectUri, defaults });
-  assertEquals(client.config.clientId, clientId);
-  assertEquals(client.config.clientSecret, clientSecret);
-  assertEquals(client.config.redirectUri, redirectUri);
-  assertEquals(client.config.defaults, defaults);
-});
-
-Deno.test("createSlackOAuth2Client() returns the correctly configured client", () => {
-  const clientId = crypto.randomUUID();
-  const clientSecret = crypto.randomUUID();
-  const redirectUri = "http://example.com";
-  const defaults = { scope: "scope" };
-
-  Deno.env.set("SLACK_CLIENT_ID", clientId);
-  Deno.env.set("SLACK_CLIENT_SECRET", clientSecret);
-
-  const client = createSlackOAuth2Client({ redirectUri, defaults });
-  assertEquals(client.config.clientId, clientId);
-  assertEquals(client.config.clientSecret, clientSecret);
-  assertEquals(client.config.redirectUri, redirectUri);
-  assertEquals(client.config.defaults, defaults);
-});
-
-Deno.test("createTwitterOAuth2Client() returns the correctly configured client", () => {
-  const clientId = crypto.randomUUID();
-  const clientSecret = crypto.randomUUID();
-  const redirectUri = "http://example.com";
-  const defaults = { scope: "scope" };
-
-  Deno.env.set("TWITTER_CLIENT_ID", clientId);
-  Deno.env.set("TWITTER_CLIENT_SECRET", clientSecret);
-
-  const client = createTwitterOAuth2Client({ redirectUri, defaults });
-  assertEquals(client.config.clientId, clientId);
-  assertEquals(client.config.clientSecret, clientSecret);
-  assertEquals(client.config.redirectUri, redirectUri);
-  assertEquals(client.config.defaults, defaults);
+    // @ts-ignore Trust me
+    const client = createOAuth2ClientFns[fnName]({ redirectUri, defaults });
+    assertEquals(client.config.clientId, clientId);
+    assertEquals(client.config.clientSecret, clientSecret);
+    assertEquals(client.config.redirectUri, redirectUri);
+    assertEquals(client.config.defaults, defaults);
+  });
 });
