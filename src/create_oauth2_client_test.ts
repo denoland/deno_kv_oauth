@@ -9,6 +9,7 @@ import * as createOAuth2ClientFns from "./create_oauth2_client.ts";
   "GitHub",
   "GitLab",
   "Google",
+  "Notion",
   "Slack",
   "Twitter",
 ].map((provider) => {
