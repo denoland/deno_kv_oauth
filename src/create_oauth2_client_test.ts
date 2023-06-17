@@ -3,6 +3,7 @@ import { assertEquals } from "../dev_deps.ts";
 import {
   createDiscordOAuth2Client,
   createDropboxOAuth2Client,
+  createFacebookOAuth2Client,
   createGitHubOAuth2Client,
   createGitLabOAuth2Client,
   createGoogleOAuth2Client,
@@ -36,6 +37,22 @@ Deno.test("createDropboxOAuth2Client() returns the correctly configured client",
   Deno.env.set("DROPBOX_CLIENT_SECRET", clientSecret);
 
   const client = createDropboxOAuth2Client({ redirectUri, defaults });
+  assertEquals(client.config.clientId, clientId);
+  assertEquals(client.config.clientSecret, clientSecret);
+  assertEquals(client.config.redirectUri, redirectUri);
+  assertEquals(client.config.defaults, defaults);
+}
+          
+Deno.test("createFacebookOAuth2Client() returns the correctly configured client", () => {
+  const clientId = crypto.randomUUID();
+  const clientSecret = crypto.randomUUID();
+  const redirectUri = "http://example.com";
+  const defaults = { scope: "scope" };
+
+  Deno.env.set("FACEBOOK_CLIENT_ID", clientId);
+  Deno.env.set("FACEBOOK_CLIENT_SECRET", clientSecret);
+
+  const client = createFacebookOAuth2Client({ redirectUri, defaults });
   assertEquals(client.config.clientId, clientId);
   assertEquals(client.config.clientSecret, clientSecret);
   assertEquals(client.config.redirectUri, redirectUri);
