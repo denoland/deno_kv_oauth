@@ -13,7 +13,7 @@ import { getTokensBySession, setTokensBySession } from "./_core.ts";
  *
  * @example.
  * ```ts
- * import { getSessionAccessToken, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { getSessionAccessToken, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauth2Client = createGitHubOAuth2Client();
  * const accessToken = await getSessionAccessToken(oauth2Client, "my-session-id");

@@ -4,6 +4,8 @@ import * as createOAuth2ClientFns from "./create_oauth2_client.ts";
 
 [
   "Discord",
+  "Dropbox",
+  "Facebook",
   "GitHub",
   "GitLab",
   "Google",
@@ -28,4 +30,3 @@ import * as createOAuth2ClientFns from "./create_oauth2_client.ts";
     assertEquals(client.config.redirectUri, redirectUri);
     assertEquals(client.config.defaults, defaults);
   });
-});
