@@ -96,9 +96,9 @@ export function createGitHubOAuth2Client(
  */
 export function createFacebookOAuth2Client(
   additionalOAuth2ClientConfig:
-  & Partial<OAuth2ClientConfig>
-  & WithScope
-  & WithRedirectUri,
+    & Partial<OAuth2ClientConfig>
+    & WithScope
+    & WithRedirectUri,
 ): OAuth2Client {
   return new OAuth2Client({
     clientId: Deno.env.get("FACEBOOK_CLIENT_ID")!,
@@ -108,7 +108,6 @@ export function createFacebookOAuth2Client(
     ...additionalOAuth2ClientConfig,
   });
 }
-
 
 /**
  * Creates an OAuth 2.0 client with GitLab as the provider.
