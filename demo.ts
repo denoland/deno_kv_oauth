@@ -73,7 +73,7 @@ async function indexHandler(request: Request) {
     : null;
 
   const accessTokenInnerText = accessToken !== null
-    ? `Your access token (copyable but blurred on-purpose): <span style="filter:blur(3px)">${accessToken}</span>`
+    ? `Your access token (intentionally blurred but copyable): <span style="filter:blur(3px)">${accessToken}</span>`
     : `Your access token: ${accessToken}`;
   const body = `
     <p>Provider: ${provider}</p>
