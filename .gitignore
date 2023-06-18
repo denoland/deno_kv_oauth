@@ -2,3 +2,4 @@
 *.DS_Store
 cov/
 cov.lcov
+custom_demo.ts
