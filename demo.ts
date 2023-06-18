@@ -55,8 +55,13 @@ export async function handler(request: Request): Promise<Response> {
       try {
         const { response } = await handleCallback(request, oauth2Client);
         return response;
-      } catch (error) {
-        console.error(error);
+      } catch {
+        /**
+         * Here, you can print the error:
+         * ```ts
+         * console.error(error);
+         * ```
+         */
         return new Response(null, { status: Status.InternalServerError });
       }
     }
