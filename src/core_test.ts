@@ -11,7 +11,7 @@ import {
   setTokensBySession,
   toStoredTokens,
   toTokens,
-} from "./_core.ts";
+} from "./core.ts";
 
 Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
   const id = crypto.randomUUID();

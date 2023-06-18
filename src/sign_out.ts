@@ -6,7 +6,7 @@ import {
   isSecure,
   redirect,
   SITE_COOKIE_NAME,
-} from "./_core.ts";
+} from "./core.ts";
 import { getSessionId } from "./get_session_id.ts";
 
 /**

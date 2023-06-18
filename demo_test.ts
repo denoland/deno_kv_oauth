@@ -8,7 +8,7 @@ import {
   isRedirectStatus,
 } from "./dev_deps.ts";
 import { Status } from "./deps.ts";
-import { setTokensBySession, SITE_COOKIE_NAME } from "./src/_core.ts";
+import { setTokensBySession, SITE_COOKIE_NAME } from "./src/core.ts";
 
 const baseUrl = "http://localhost";
 

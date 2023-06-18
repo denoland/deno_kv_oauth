@@ -7,7 +7,7 @@ import {
   OAUTH_COOKIE_NAME,
   redirect,
   setOAuthSession,
-} from "./_core.ts";
+} from "./core.ts";
 
 /**
  * Handles the sign-in process for a given OAuth 2.0 client and redirects the client to the authorization URL.

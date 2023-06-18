@@ -6,8 +6,8 @@ import {
   OAUTH_COOKIE_NAME,
   OAuthSession,
   setOAuthSession,
-} from "./_core.ts";
-import { oauth2Client } from "./_test_utils.ts";
+} from "./core.ts";
+import { oauth2Client } from "./test_utils.ts";
 
 Deno.test("handleCallback()", async (test) => {
   await test.step("rejects for no OAuth 2.0 cookie", async () => {
