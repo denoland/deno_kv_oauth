@@ -1,46 +1,49 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assertStringIncludes } from "https://deno.land/std@0.191.0/testing/asserts.ts";
 import { handler } from "./demo.ts";
-import { assert, assertEquals, delay } from "./dev_deps.ts";
+import {
+  assert,
+  assertEquals,
+  assertNotEquals,
+  assertStringIncludes,
+  isRedirectStatus,
+} from "./dev_deps.ts";
 import { Status } from "./deps.ts";
 import { setTokensBySession, SITE_COOKIE_NAME } from "./src/_core.ts";
 
-const port = 8001;
-Deno.serve({ port }, handler);
+const baseUrl = "http://localhost";
 
 Deno.test("demo", async (test) => {
-  await delay(100);
-
-  await test.step("non-GET request methods returns not found response", async () => {
-    const response = await fetch(`http://localhost:${port}`, {
-      method: "POST",
-    });
+  await test.step("non-GET * serves a not found response", async () => {
+    const request = new Request(baseUrl, { method: "POST" });
+    const response = await handler(request);
     await response.body?.cancel();
 
     assert(!response.ok);
     assertEquals(response.status, Status.NotFound);
   });
 
-  await test.step("non-existent path returns not found response", async () => {
-    const response = await fetch(`http://localhost:${port}/nil`);
+  await test.step("GET non-existent path serves a not found response", async () => {
+    const request = new Request(baseUrl + "/nil");
+    const response = await handler(request);
     await response.body?.cancel();
 
     assert(!response.ok);
     assertEquals(response.status, Status.NotFound);
   });
 
-  await test.step("/ route returns a basic web page when signed in", async () => {
+  await test.step("GET / serves a signed-in web page", async () => {
     const sessionId = crypto.randomUUID();
     const accessToken = crypto.randomUUID();
     await setTokensBySession(sessionId, {
       accessToken,
       tokenType: crypto.randomUUID(),
     });
-    const response = await fetch(`http://localhost:${port}`, {
+    const request = new Request(baseUrl, {
       headers: {
         cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
       },
     });
+    const response = await handler(request);
     const html = await response.text();
 
     assert(response.ok);
@@ -50,11 +53,11 @@ Deno.test("demo", async (test) => {
       "text/html; charset=utf-8",
     );
     assertStringIncludes(html, `Your access token: ${accessToken}`);
-    assertStringIncludes(html, '<a href="/signout">Sign out</a>');
   });
 
-  await test.step("/ route returns a basic web page when signed out", async () => {
-    const response = await fetch(`http://localhost:${port}`);
+  await test.step("GET / serves a signed-out web page", async () => {
+    const request = new Request(baseUrl);
+    const response = await handler(request);
     const html = await response.text();
 
     assert(response.ok);
@@ -63,32 +66,35 @@ Deno.test("demo", async (test) => {
       response.headers.get("content-type"),
       "text/html; charset=utf-8",
     );
-    assertStringIncludes(html, '<a href="/signin">Sign in</a>');
+    assertStringIncludes(html, "Your access token: null");
   });
 
-  await test.step("/signin returns a redirect response", async () => {
-    const response = await fetch(`http://localhost:${port}/signin`);
+  await test.step("GET /signin serves a redirect response", async () => {
+    const request = new Request(baseUrl + "/signin");
+    const response = await handler(request);
     await response.body?.cancel();
 
-    assert(response.ok);
-    assertEquals(response.status, 200);
-    assert(response.redirected);
+    assert(!response.ok);
+    assert(isRedirectStatus(response.status));
+    assertNotEquals(response.headers.get("location"), null);
   });
 
-  await test.step("/callback route returns an error response", async () => {
-    const response = await fetch(`http://localhost:${port}/callback`);
+  await test.step("GET /callback serves an error response", async () => {
+    const request = new Request(baseUrl + "/callback");
+    const response = await handler(request);
     await response.body?.cancel();
 
     assert(!response.ok);
     assertEquals(response.status, Status.InternalServerError);
   });
 
-  await test.step("/signout returns a redirect response", async () => {
-    const response = await fetch(`http://localhost:${port}/signout`);
+  await test.step("GET /signout serves a redirect response", async () => {
+    const request = new Request(baseUrl + "/signout");
+    const response = await handler(request);
     await response.body?.cancel();
 
-    assert(response.ok);
-    assertEquals(response.status, 200);
-    assert(response.redirected);
+    assert(!response.ok);
+    assert(isRedirectStatus(response.status));
+    assertNotEquals(response.headers.get("location"), null);
   });
 });

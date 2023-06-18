@@ -4,6 +4,7 @@ export {
   assertEquals,
   assertNotEquals,
   assertRejects,
+  assertStringIncludes,
   assertThrows,
 } from "https://deno.land/std@0.191.0/testing/asserts.ts";
 export { walk } from "https://deno.land/std@0.191.0/fs/walk.ts";
