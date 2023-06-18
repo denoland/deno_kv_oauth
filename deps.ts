@@ -4,6 +4,7 @@ export {
   type RedirectStatus,
   Status,
 } from "https://deno.land/std@0.192.0/http/http_status.ts";
+export { delay } from "https://deno.land/std@0.192.0/async/delay.ts";
 export {
   type Cookie,
   deleteCookie,

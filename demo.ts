@@ -36,7 +36,7 @@ async function indexHandler(request: Request) {
   });
 }
 
-async function handler(request: Request): Promise<Response> {
+export async function handler(request: Request): Promise<Response> {
   if (request.method !== "GET") {
     return new Response(null, { status: Status.NotFound });
   }
@@ -50,8 +50,12 @@ async function handler(request: Request): Promise<Response> {
       return await signIn(request, oauth2Client);
     }
     case "/callback": {
-      const { response } = await handleCallback(request, oauth2Client);
-      return response;
+      try {
+        const { response } = await handleCallback(request, oauth2Client);
+        return response;
+      } catch {
+        return new Response(null, { status: Status.InternalServerError });
+      }
     }
     case "/signout": {
       return await signOut(request);
