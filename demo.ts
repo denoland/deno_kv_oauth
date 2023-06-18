@@ -14,7 +14,6 @@ loadSync({ export: true });
 const oauth2Client = createGitHubOAuth2Client();
 
 async function indexHandler(request: Request) {
-  console.log(request);
   const sessionId = await getSessionId(request);
   const isSignedIn = sessionId !== null;
   const accessToken = isSignedIn
