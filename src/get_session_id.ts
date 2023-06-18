@@ -5,7 +5,7 @@ import {
   getTokensBySession,
   isSecure,
   SITE_COOKIE_NAME,
-} from "./_core.ts";
+} from "./core.ts";
 
 /**
  * Gets the session ID for a given request. This is well-suited for checking whether the client is signed in by checking if nullish.

@@ -11,7 +11,7 @@ import {
   redirect,
   setTokensBySession,
   SITE_COOKIE_NAME,
-} from "./_core.ts";
+} from "./core.ts";
 
 /**
  * Handles the OAuth 2.0 callback request for a given OAuth 2.0 client, and then redirects the client to the given redirect URL.

@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "../dev_deps.ts";
-import { setTokensBySession, SITE_COOKIE_NAME } from "./_core.ts";
+import { setTokensBySession, SITE_COOKIE_NAME } from "./core.ts";
 import { getSessionId } from "./get_session_id.ts";
 
 Deno.test("getSessionId()", async (test) => {

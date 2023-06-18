@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { OAuth2Client, SECOND } from "../deps.ts";
-import { getTokensBySession, setTokensBySession } from "./_core.ts";
+import { getTokensBySession, setTokensBySession } from "./core.ts";
 
 /**
  * Gets the access token for a given OAuth 2.0 client and session. If null is returned, the client must sign in.

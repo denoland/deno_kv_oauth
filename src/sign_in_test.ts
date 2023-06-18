@@ -7,8 +7,8 @@ import {
   getSetCookies,
   Status,
 } from "../dev_deps.ts";
-import { getOAuthSession, OAUTH_COOKIE_NAME } from "./_core.ts";
-import { oauth2Client } from "./_test_utils.ts";
+import { getOAuthSession, OAUTH_COOKIE_NAME } from "./core.ts";
+import { oauth2Client } from "./test_utils.ts";
 
 Deno.test("signIn()", async (test) => {
   const request = new Request("http://my-site.com");

@@ -5,7 +5,7 @@ import {
   getTokensBySession,
   setTokensBySession,
   SITE_COOKIE_NAME,
-} from "./_core.ts";
+} from "./core.ts";
 
 Deno.test("signOut()", async (test) => {
   const sessionId = crypto.randomUUID();
