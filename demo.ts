@@ -72,10 +72,14 @@ async function indexHandler(request: Request) {
     ? await getSessionAccessToken(oauth2Client, sessionId)
     : null;
 
+  const accessTokenInnerText = accessToken !== null
+    ? `Your access token (copyable but blurred on-purpose): <span style="filter:blur(3px)">${accessToken}</span>`
+    : `Your access token: ${accessToken}`;
+
   const body = `
     <p>Provider: ${provider}</p>
     <p>Signed in: ${isSignedIn}</p>
-    <p>Your access token (copyable but blurred on-purpose): <span style="filter:blur(3px)">${accessToken}</span></p>
+    <p>${accessTokenInnerText}</p>
     <p>
       <a href="/signin">Sign in</a>
     </p>
