@@ -73,12 +73,12 @@ async function indexHandler(request: Request) {
     : null;
 
   const accessTokenInnerText = accessToken !== null
-    ? `Your access token (intentionally blurred but copyable): <span style="filter:blur(3px)">${accessToken}</span>`
-    : `Your access token: ${accessToken}`;
+    ? `<span style="filter:blur(3px)">${accessToken}</span> (intentionally blurred for security)`
+    : accessToken;
   const body = `
     <p>Provider: ${provider}</p>
     <p>Signed in: ${isSignedIn}</p>
-    <p>${accessTokenInnerText}</p>
+    <p>Your access token: ${accessTokenInnerText}</p>
     <p>
       <a href="/signin">Sign in</a>
     </p>
