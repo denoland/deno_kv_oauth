@@ -1,7 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import "https://deno.land/std@0.192.0/dotenv/load.ts";
-import { serve } from "https://deno.land/std@0.192.0/http/server.ts";
-import { Status } from "https://deno.land/std@0.192.0/http/http_status.ts";
+import { loadSync, serve, Status } from "./dev_deps.ts";
 import {
   createGitHubOAuth2Client,
   getSessionAccessToken,
@@ -9,11 +7,14 @@ import {
   handleCallback,
   signIn,
   signOut,
-} from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+} from "./mod.ts";
+
+loadSync({ export: true });
 
 const oauth2Client = createGitHubOAuth2Client();
 
 async function indexHandler(request: Request) {
+  console.log(request);
   const sessionId = await getSessionId(request);
   const isSignedIn = sessionId !== null;
   const accessToken = isSignedIn
@@ -55,7 +56,8 @@ export async function handler(request: Request): Promise<Response> {
       try {
         const { response } = await handleCallback(request, oauth2Client);
         return response;
-      } catch {
+      } catch (error) {
+        console.error(error);
         return new Response(null, { status: Status.InternalServerError });
       }
     }
