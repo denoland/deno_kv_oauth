@@ -36,15 +36,71 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
 
 ### Getting Started
 
-1. Download [demo.ts](demo.ts).
-1. Define your `client` object using one of the
-   [pre-configured OAuth 2.0 clients](#pre-configured-oauth2-clients) or a
-   [custom OAuth 2.0 client](#custom-oauth2-client).
-1. Run the script with the appropriate environment variables and permission
-   flags defined. E.g. for GitHub:
+1. Create your [pre-configured](#pre-configured-oauth-20-clients) or
+   [custom OAuth 2.0 client instance](#custom-oauth-20-client).
+
+   ```ts
+   // Pre-configured OAuth 2.0 client
+   import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   const oauth2Client = createGitHubOAuth2Client();
    ```
-   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net demo.ts
+
+1. Insert Deno KV OAuth's authentication flow functions into your authentication
+   routes.
+
+   ```ts
+   // Sign-in
+   import { signIn } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   async function handleSignIn(request: Request) {
+     return await signIn(request, oauth2Client);
+   }
    ```
+
+   ```ts
+   // Callback handling
+   import { handleCallback } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   async function handleOAuth2Callback(request: Request) {
+     return await handleCallback(request, oauth2Client);
+   }
+   ```
+
+   ```ts
+   // Sign-out
+   import { signOut } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   async function handleSignOut(request: Request) {
+     return await signOut(request);
+   }
+   ```
+
+1. Use Deno KV OAuth's helper functions where needed.
+
+   ```ts
+   // Protected route
+   import {
+     getSessionAccessToken,
+     getSessionId,
+   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   async function handleAccountPage(request: Request) {
+     const sessionId = await getSessionId(request);
+     if (sessionId === null) return new Response(null, { status: 404 });
+
+     const accessToken = await getSessionAccessToken(sessionId);
+     return Response.json({ accessToken });
+   }
+   ```
+
+1. Start your server.
+
+   ```bash
+   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   ```
+
+> Check a full implementation in the [demo source code](./demo.ts).
 
 ### API Reference
 
@@ -124,3 +180,6 @@ Check out these projects powered by Deno KV OAuth 2.0:
 
 > Do you have a project powered by Deno KV OAuth 2.0 that you'd like to share?
 > Please submit a pull request adding that project to this list.
+
+```
+```
