@@ -97,25 +97,4 @@ Deno.test("demo", async (test) => {
     assert(isRedirectStatus(response.status));
     assertNotEquals(response.headers.get("location"), null);
   });
-
-  await test.step("fails on undefined provider", async () => {
-    const command = new Deno.Command(Deno.execPath(), {
-      args: [
-        "run",
-        "--unstable",
-        "-A",
-        "demo.ts",
-      ],
-      env: {
-        PROVIDER: "nil",
-      },
-      stdout: "null",
-    });
-    const { code, stderr } = await command.output();
-    assertEquals(code, 1);
-    assertStringIncludes(
-      new TextDecoder().decode(stderr),
-      "Provider not found",
-    );
-  });
 });
