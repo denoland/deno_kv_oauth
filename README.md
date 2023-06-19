@@ -127,6 +127,7 @@ following providers:
 1. [Notion](https://deno.land/x/deno_kv_oauth/mod.ts?s=createNotionOAuth2Client)
 1. [Patreon](https://deno.land/x/deno_kv_oauth/mod.ts?s=createPatreonOAuth2Client)
 1. [Slack](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSlackOAuth2Client)
+1. [Spotify](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSpotifyOAuth2Client)
 1. [Twitter](https://deno.land/x/deno_kv_oauth/mod.ts?s=createTwitterOAuth2Client)
 
 Each function is typed so that their respective platform's requirements are met.
