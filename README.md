@@ -195,6 +195,3 @@ Check out these projects powered by Deno KV OAuth 2.0:
 
 > Do you have a project powered by Deno KV OAuth 2.0 that you'd like to share?
 > Please submit a pull request adding that project to this list.
-
-```
-```
