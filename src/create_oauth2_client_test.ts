@@ -13,6 +13,7 @@ import * as createOAuth2ClientFns from "./create_oauth2_client.ts";
   "Patreon",
   "Slack",
   "Twitter",
+  "Spotify",
 ].map((provider) => {
   const fnName = `create${provider}OAuth2Client`;
   Deno.test(`${fnName}() returns the correctly configured client`, () => {
