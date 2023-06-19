@@ -1,16 +1,12 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 
-// For providers that have OAuth 2.0 configuration requirements
-export type WithScope = { defaults: { scope: string | string[] } };
-export type WithRedirectUri = { redirectUri: string };
-
-export { createDiscordOAuth2Client } from "./providers/discord.ts";
-export { createDropboxOAuth2Client } from "./providers/dropbox.ts";
-export { createFacebookOAuth2Client } from "./providers/facebook.ts";
-export { createGitHubOAuth2Client } from "./providers/github.ts";
-export { createGitLabOAuth2Client } from "./providers/gitlab.ts";
-export { createGoogleOAuth2Client } from "./providers/google.ts";
-export { createNotionOAuth2Client } from "./providers/notion.ts";
-export { createPatreonOAuth2Client } from "./providers/patreon.ts";
-export { createSlackOAuth2Client } from "./providers/slack.ts";
-export { createTwitterOAuth2Client } from "./providers/twitter.ts";
+export * from "./providers/discord.ts";
+export * from "./providers/dropbox.ts";
+export * from "./providers/facebook.ts";
+export * from "./providers/github.ts";
+export * from "./providers/gitlab.ts";
+export * from "./providers/google.ts";
+export * from "./providers/notion.ts";
+export * from "./providers/patreon.ts";
+export * from "./providers/slack.ts";
+export * from "./providers/twitter.ts";
