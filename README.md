@@ -89,10 +89,12 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
 
    async function handleAccountPage(request: Request) {
      const sessionId = await getSessionId(request);
-     if (sessionId === null) return new Response(null, { status: 404 });
+     const isSignedIn = sessionId !== null;
+
+     if (!isSignedIn) return new Response(null, { status: 404 });
 
      const accessToken = await getSessionAccessToken(oauth2Client, sessionId);
-     return Response.json({ accessToken });
+     return Response.json({ isSignedIn, accessToken });
    }
    ```
 
@@ -102,7 +104,7 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
    GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
    ```
 
-> Check a full implementation in the [demo source code](./demo.ts).
+> Check out a full implementation in the [demo source code](./demo.ts).
 
 ### API Reference
 
