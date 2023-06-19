@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 
 import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
-import { WithScope } from "../create_oauth2_client.ts";
+import type { WithScope } from "../create_oauth2_client.ts";
 
 /**
  * Creates an OAuth 2.0 client with Slack as the provider.

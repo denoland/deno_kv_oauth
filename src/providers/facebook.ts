@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 
 import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
-import { WithRedirectUri, WithScope } from "../create_oauth2_client.ts";
+import type { WithRedirectUri, WithScope } from "../create_oauth2_client.ts";
 
 /**
  * Creates an OAuth 2.0 client with Facebook as the provider.
