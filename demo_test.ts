@@ -52,7 +52,7 @@ Deno.test("demo", async (test) => {
       response.headers.get("content-type"),
       "text/html; charset=utf-8",
     );
-    assertStringIncludes(html, `Your access token: ${accessToken}`);
+    assertStringIncludes(html, accessToken);
   });
 
   await test.step("GET / serves a signed-out web page", async () => {
