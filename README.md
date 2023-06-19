@@ -101,7 +101,8 @@ Check out the full documentation and API reference
    }
    ```
 
-1. Start your server.
+1. Start your server with the necessary
+   [environment variables](#environment-variables).
 
    ```bash
    GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
