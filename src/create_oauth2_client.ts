@@ -6,8 +6,8 @@ export type WithRedirectUri = { redirectUri: string };
 
 export { createDiscordOAuth2Client } from "./providers/discord.ts";
 export { createDropboxOAuth2Client } from "./providers/dropbox.ts";
-export { createGitHubOAuth2Client } from "./providers/github.ts";
 export { createFacebookOAuth2Client } from "./providers/facebook.ts";
+export { createGitHubOAuth2Client } from "./providers/github.ts";
 export { createGitLabOAuth2Client } from "./providers/gitlab.ts";
 export { createGoogleOAuth2Client } from "./providers/google.ts";
 export { createNotionOAuth2Client } from "./providers/notion.ts";
