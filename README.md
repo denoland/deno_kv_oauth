@@ -36,6 +36,8 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
 
 ### Getting Started
 
+1. Create your OAuth 2.0 application for your given provider.
+
 1. Create your [pre-configured](#pre-configured-oauth-20-clients) or
    [custom OAuth 2.0 client instance](#custom-oauth-20-client).
 
@@ -46,12 +48,17 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
    const oauth2Client = createGitHubOAuth2Client();
    ```
 
-1. Insert Deno KV OAuth's authentication flow functions into your authentication
-   routes.
+1. Using the OAuth 2.0 client instance, insert the authentication flow functions
+   into your authentication routes.
 
    ```ts
    // Sign-in
-   import { signIn } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   import {
+     createGitHubOAuth2Client,
+     signIn,
+   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   const oauth2Client = createGitHubOAuth2Client();
 
    async function handleSignIn(request: Request) {
      return await signIn(request, oauth2Client);
@@ -60,7 +67,12 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
 
    ```ts
    // Callback handling
-   import { handleCallback } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   import {
+     createGitHubOAuth2Client,
+     handleCallback,
+   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   const oauth2Client = createGitHubOAuth2Client();
 
    async function handleOAuth2Callback(request: Request) {
      return await handleCallback(request, oauth2Client);
@@ -81,15 +93,18 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
    ```ts
    // Protected route
    import {
+     createGitHubOAuth2Client,
      getSessionAccessToken,
      getSessionId,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   const oauth2Client = createGitHubOAuth2Client();
 
    async function handleAccountPage(request: Request) {
      const sessionId = await getSessionId(request);
      if (sessionId === null) return new Response(null, { status: 404 });
 
-     const accessToken = await getSessionAccessToken(sessionId);
+     const accessToken = await getSessionAccessToken(oauth2Client, sessionId);
      return Response.json({ accessToken });
    }
    ```
