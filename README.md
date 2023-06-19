@@ -34,37 +34,84 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
 
 ## Usage
 
-### Getting Started
-
-1. Download [demo.ts](demo.ts).
-1. Define your `client` object using one of the
-   [pre-configured OAuth 2.0 clients](#pre-configured-oauth2-clients) or a
-   [custom OAuth 2.0 client](#custom-oauth2-client).
-1. Run the script with the appropriate environment variables and permission
-   flags defined. E.g. for GitHub:
-   ```
-   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net demo.ts
-   ```
-
-### API Reference
-
 Check out the full documentation and API reference
 [here](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts).
 
-### Environment Variables
+### Getting Started
 
-- `KV_PATH` (optional) - defines the path that Deno KV uses. See
-  [the API reference](https://deno.land/api?s=Deno.openKv&unstable=) for further
-  details.
-- `${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` - required when
-  creating a pre-configured OAuth 2.0 client for a given provider. E.g. for
-  Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
-  `TWITTER_CLIENT_SECRET`. See
-  [the list below](#pre-configured-oauth-20-clients) for specifics.
+This example uses GitHub as the OAuth 2.0 provider. However, you can use any
+provider you like.
 
-> Note: reading environment variables requires the
-> `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
-> [the manual](https://deno.com/manual/basics/permissions) for further details.
+1. Create your OAuth 2.0 application for your given provider.
+
+1. Create your [pre-configured](#pre-configured-oauth-20-clients) or
+   [custom OAuth 2.0 client instance](#custom-oauth-20-client).
+
+   ```ts
+   // Pre-configured OAuth 2.0 client
+   import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   const oauth2Client = createGitHubOAuth2Client();
+   ```
+
+1. Using the OAuth 2.0 client instance, insert the authentication flow functions
+   into your authentication routes.
+
+   ```ts
+   // Sign-in, callback and sign-out handlers
+   import {
+     createGitHubOAuth2Client,
+     handleCallback,
+     signIn,
+     signOut,
+   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   const oauth2Client = createGitHubOAuth2Client();
+
+   async function handleSignIn(request: Request) {
+     return await signIn(request, oauth2Client);
+   }
+
+   async function handleOAuth2Callback(request: Request) {
+     return await handleCallback(request, oauth2Client);
+   }
+
+   async function handleSignOut(request: Request) {
+     return await signOut(request);
+   }
+   ```
+
+1. Use Deno KV OAuth's helper functions where needed.
+
+   ```ts
+   // Protected route
+   import {
+     createGitHubOAuth2Client,
+     getSessionAccessToken,
+     getSessionId,
+   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+
+   const oauth2Client = createGitHubOAuth2Client();
+
+   async function handleAccountPage(request: Request) {
+     const sessionId = await getSessionId(request);
+     const isSignedIn = sessionId !== null;
+
+     if (!isSignedIn) return new Response(null, { status: 404 });
+
+     const accessToken = await getSessionAccessToken(oauth2Client, sessionId);
+     return Response.json({ isSignedIn, accessToken });
+   }
+   ```
+
+1. Start your server with the necessary
+   [environment variables](#environment-variables).
+
+   ```bash
+   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   ```
+
+> Check out a full implementation in the [demo source code](./demo.ts).
 
 ### Pre-configured OAuth 2.0 Clients
 
@@ -107,6 +154,21 @@ const client = new OAuth2Client({
   redirectUri: "https://my-site.com",
 });
 ```
+
+### Environment Variables
+
+- `KV_PATH` (optional) - defines the path that Deno KV uses. See
+  [the API reference](https://deno.land/api?s=Deno.openKv&unstable=) for further
+  details.
+- `${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` - required when
+  creating a pre-configured OAuth 2.0 client for a given provider. E.g. for
+  Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
+  `TWITTER_CLIENT_SECRET`. See
+  [the list below](#pre-configured-oauth-20-clients) for specifics.
+
+> Note: reading environment variables requires the
+> `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
+> [the manual](https://deno.com/manual/basics/permissions) for further details.
 
 ## Contributing
 
