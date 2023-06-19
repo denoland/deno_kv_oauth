@@ -50,10 +50,6 @@ const createOAuth2ClientFn = {
   Twitter: createTwitterOAuth2Client,
 }[provider];
 
-if (createOAuth2ClientFn === undefined) {
-  throw new Error("Provider not found");
-}
-
 const additionalOAuth2ClientConfig: Partial<OAuth2ClientConfig> = {
   redirectUri: Deno.env.get("DENO_DEPLOYMENT_ID") ??
     "http://localhost:8000/callback",
