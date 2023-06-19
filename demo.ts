@@ -15,6 +15,7 @@ import {
   createNotionOAuth2Client,
   createPatreonOAuth2Client,
   createSlackOAuth2Client,
+  createSpotifyOAuth2Client,
   createTwitterOAuth2Client,
   getSessionAccessToken,
   getSessionId,
@@ -47,6 +48,7 @@ const createOAuth2ClientFn = {
   Notion: createNotionOAuth2Client,
   Patreon: createPatreonOAuth2Client,
   Slack: createSlackOAuth2Client,
+  Spotify: createSpotifyOAuth2Client,
   Twitter: createTwitterOAuth2Client,
 }[provider];
 
