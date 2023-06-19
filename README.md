@@ -52,10 +52,12 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
    into your authentication routes.
 
    ```ts
-   // Sign-in
+   // Sign-in, callback and sign-out handlers
    import {
      createGitHubOAuth2Client,
+     handleCallback,
      signIn,
+     signOut,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauth2Client = createGitHubOAuth2Client();
@@ -63,25 +65,10 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
    async function handleSignIn(request: Request) {
      return await signIn(request, oauth2Client);
    }
-   ```
-
-   ```ts
-   // Callback handling
-   import {
-     createGitHubOAuth2Client,
-     handleCallback,
-   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
-
-   const oauth2Client = createGitHubOAuth2Client();
 
    async function handleOAuth2Callback(request: Request) {
      return await handleCallback(request, oauth2Client);
    }
-   ```
-
-   ```ts
-   // Sign-out
-   import { signOut } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    async function handleSignOut(request: Request) {
      return await signOut(request);
