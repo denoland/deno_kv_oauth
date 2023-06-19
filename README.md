@@ -34,6 +34,9 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
 
 ## Usage
 
+Check out the full documentation and API reference
+[here](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts).
+
 ### Getting Started
 
 1. Create your OAuth 2.0 application for your given provider.
@@ -106,26 +109,6 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
 
 > Check out a full implementation in the [demo source code](./demo.ts).
 
-### API Reference
-
-Check out the full documentation and API reference
-[here](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts).
-
-### Environment Variables
-
-- `KV_PATH` (optional) - defines the path that Deno KV uses. See
-  [the API reference](https://deno.land/api?s=Deno.openKv&unstable=) for further
-  details.
-- `${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` - required when
-  creating a pre-configured OAuth 2.0 client for a given provider. E.g. for
-  Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
-  `TWITTER_CLIENT_SECRET`. See
-  [the list below](#pre-configured-oauth-20-clients) for specifics.
-
-> Note: reading environment variables requires the
-> `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
-> [the manual](https://deno.com/manual/basics/permissions) for further details.
-
 ### Pre-configured OAuth 2.0 Clients
 
 This module comes with a suite of pre-configured OAuth 2.0 clients for the
@@ -167,6 +150,21 @@ const client = new OAuth2Client({
   redirectUri: "https://my-site.com",
 });
 ```
+
+### Environment Variables
+
+- `KV_PATH` (optional) - defines the path that Deno KV uses. See
+  [the API reference](https://deno.land/api?s=Deno.openKv&unstable=) for further
+  details.
+- `${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` - required when
+  creating a pre-configured OAuth 2.0 client for a given provider. E.g. for
+  Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
+  `TWITTER_CLIENT_SECRET`. See
+  [the list below](#pre-configured-oauth-20-clients) for specifics.
+
+> Note: reading environment variables requires the
+> `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
+> [the manual](https://deno.com/manual/basics/permissions) for further details.
 
 ## Contributing
 
