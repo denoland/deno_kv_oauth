@@ -39,6 +39,9 @@ Check out the full documentation and API reference
 
 ### Getting Started
 
+This example uses GitHub as the OAuth 2.0 provider. However, you can use any
+provider you like.
+
 1. Create your OAuth 2.0 application for your given provider.
 
 1. Create your [pre-configured](#pre-configured-oauth-20-clients) or
