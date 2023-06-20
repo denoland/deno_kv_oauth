@@ -3,8 +3,10 @@ import { assert, assertEquals, Status, type Tokens } from "../dev_deps.ts";
 import {
   deleteOAuthSession,
   deleteStoredTokensBySession,
+  getCookieName,
   getOAuthSession,
   getTokensBySession,
+  isSecure,
   type OAuthSession,
   redirect,
   setOAuthSession,
@@ -12,6 +14,16 @@ import {
   toStoredTokens,
   toTokens,
 } from "./core.ts";
+
+Deno.test("isSecure() works correctly", () => {
+  assertEquals(isSecure("https://example.com"), true);
+  assertEquals(isSecure("http://example.com"), false);
+});
+
+Deno.test("getCookieName() works correctly", () => {
+  assertEquals(getCookieName("hello", true), "__Host-hello");
+  assertEquals(getCookieName("hello", false), "hello");
+});
 
 Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
   const id = crypto.randomUUID();
