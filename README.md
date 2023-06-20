@@ -170,10 +170,34 @@ const client = new OAuth2Client({
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
 > [the manual](https://deno.com/manual/basics/permissions) for further details.
 
+### Running the Demo
+
+Run `deno task demo` to start the demo application. The task uses environment
+variables defined in a `.env` file at the root of this folder.
+
+By default, the demo uses GitHub with a minimal scope. Use the `PROVIDER` and
+`SCOPE` environment variables, if you'd like to change this behavior. E.g. for
+Twitter
+
+```bash
+PROVIDER=Twitter SCOPE=users.read deno task demo
+```
+
 ## Contributing
 
 Before submitting a pull request, please run `deno task ok` and ensure all
 checks pass. This checks formatting, linting, types and runs tests.
+
+### Adding a Pre-configured OAuth 2.0 Client
+
+In the pull request, please do the following:
+
+1. Share a screenshot of the
+   [demo web page running on your local machine](#running-the-demo). This
+   confirms that the newly created OAuth 2.0 client is working correctly.
+1. Ensure the code example snippet is reproducible.
+1. Add the provider to the README's list of
+   [pre-configured OAuth 2.0 clients](#pre-configured-oauth-20-clients).
 
 ## In the Wild
 
