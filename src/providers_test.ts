@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "../dev_deps.ts";
-import * as createOAuth2ClientFns from "./create_oauth2_client.ts";
+import * as createOAuth2ClientFns from "./providers.ts";
 
 [
   "Discord",
