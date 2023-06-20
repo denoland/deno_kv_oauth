@@ -6,7 +6,7 @@ export const SITE_COOKIE_NAME = "site-session";
 
 // Determines whether the request URL is of a secure origin using the HTTPS protocol.
 export function isSecure(requestUrl: string) {
-  return requestUrl.startsWith("https");
+  return new URL(requestUrl).protocol === "https:";
 }
 
 // Dynamically prefixes the cookie name, depending on whether it's for a secure origin (HTTPS).
