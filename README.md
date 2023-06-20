@@ -177,7 +177,7 @@ variables defined in a `.env` file at the root of this folder.
 
 By default, the demo uses GitHub with a minimal scope. Use the `PROVIDER` and
 `SCOPE` environment variables, if you'd like to change this behavior. E.g. for
-Twitter
+Twitter:
 
 ```bash
 PROVIDER=Twitter SCOPE=users.read deno task demo
@@ -197,7 +197,8 @@ In the pull request, please do the following:
    confirms that the newly created OAuth 2.0 client is working correctly.
 1. Ensure the code example snippet is reproducible.
 1. Add the provider to the README's list of
-   [pre-configured OAuth 2.0 clients](#pre-configured-oauth-20-clients).
+   [pre-configured OAuth 2.0 clients](#pre-configured-oauth-20-clients), in
+   alphabetical order.
 
 ## In the Wild
 
