@@ -9,4 +9,5 @@ export * from "./providers/google.ts";
 export * from "./providers/notion.ts";
 export * from "./providers/patreon.ts";
 export * from "./providers/slack.ts";
+export * from "./providers/spotify.ts";
 export * from "./providers/twitter.ts";

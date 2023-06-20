@@ -15,6 +15,7 @@ import {
   createNotionOAuth2Client,
   createPatreonOAuth2Client,
   createSlackOAuth2Client,
+  createSpotifyOAuth2Client,
   createTwitterOAuth2Client,
   getSessionAccessToken,
   getSessionId,
@@ -47,6 +48,7 @@ const createOAuth2ClientFn = {
   Notion: createNotionOAuth2Client,
   Patreon: createPatreonOAuth2Client,
   Slack: createSlackOAuth2Client,
+  Spotify: createSpotifyOAuth2Client,
   Twitter: createTwitterOAuth2Client,
 }[provider];
 
@@ -55,8 +57,9 @@ if (createOAuth2ClientFn === undefined) {
 }
 
 const additionalOAuth2ClientConfig: Partial<OAuth2ClientConfig> = {
-  redirectUri: Deno.env.get("DENO_DEPLOYMENT_ID") ??
-    "http://localhost:8000/callback",
+  redirectUri: Deno.env.get("DENO_DEPLOYMENT_ID") === undefined
+    ? "http://localhost:8000/callback"
+    : undefined,
   defaults: {
     scope: Deno.env.get("SCOPE"),
   },
@@ -77,6 +80,7 @@ async function indexHandler(request: Request) {
     : accessToken;
   const body = `
     <p>Provider: ${provider}</p>
+    <p>Scope: ${oauth2Client.config.defaults?.scope}</p>
     <p>Signed in: ${isSignedIn}</p>
     <p>Your access token: ${accessTokenInnerText}</p>
     <p>

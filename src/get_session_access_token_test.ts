@@ -37,12 +37,26 @@ Deno.test("getSessionAccessToken()", async (test) => {
     );
   });
 
-  await test.step("attempts to return a fresh access token for expired session", async () => {
+  await test.step("rejects for an expired access token", async () => {
     const sessionId = crypto.randomUUID();
     const tokens: Tokens = {
       accessToken: crypto.randomUUID(),
       tokenType: "Bearer",
       expiresIn: 0,
+      refreshToken: crypto.randomUUID(),
+    };
+    await setTokensBySession(sessionId, tokens);
+    assertRejects(async () =>
+      await getSessionAccessToken(oauth2Client, sessionId)
+    );
+  });
+
+  await test.step("rejects if the OAuth provider hasn't issued the access token", async () => {
+    const sessionId = crypto.randomUUID();
+    const tokens: Tokens = {
+      accessToken: crypto.randomUUID(),
+      tokenType: "Bearer",
+      expiresIn: 60,
       refreshToken: crypto.randomUUID(),
     };
     await setTokensBySession(sessionId, tokens);

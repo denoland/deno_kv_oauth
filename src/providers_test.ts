@@ -12,6 +12,7 @@ import * as createOAuth2ClientFns from "./providers.ts";
   "Notion",
   "Patreon",
   "Slack",
+  "Spotify",
   "Twitter",
 ].map((provider) => {
   const fnName = `create${provider}OAuth2Client`;
