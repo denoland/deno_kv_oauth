@@ -57,8 +57,9 @@ if (createOAuth2ClientFn === undefined) {
 }
 
 const additionalOAuth2ClientConfig: Partial<OAuth2ClientConfig> = {
-  redirectUri: Deno.env.get("DENO_DEPLOYMENT_ID") ??
-    "http://localhost:8000/callback",
+  redirectUri: Deno.env.get("DENO_DEPLOYMENT_ID") === undefined
+    ? "http://localhost:8000/callback"
+    : undefined,
   defaults: {
     scope: Deno.env.get("SCOPE"),
   },
