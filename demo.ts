@@ -77,6 +77,7 @@ async function indexHandler(request: Request) {
     : accessToken;
   const body = `
     <p>Provider: ${provider}</p>
+    <p>Scope: ${oauth2Client.config.defaults?.scope}</p>
     <p>Signed in: ${isSignedIn}</p>
     <p>Your access token: ${accessTokenInnerText}</p>
     <p>
