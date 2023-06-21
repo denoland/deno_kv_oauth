@@ -55,7 +55,7 @@ provider you like.
 
    ```ts
    // Pre-configured OAuth 2.0 client
-   import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    const oauth2Client = createGitHubOAuth2Client();
    ```
@@ -70,7 +70,7 @@ provider you like.
      handleCallback,
      signIn,
      signOut,
-   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    const oauth2Client = createGitHubOAuth2Client();
 
@@ -95,7 +95,7 @@ provider you like.
      createGitHubOAuth2Client,
      getSessionAccessToken,
      getSessionId,
-   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    const oauth2Client = createGitHubOAuth2Client();
 
