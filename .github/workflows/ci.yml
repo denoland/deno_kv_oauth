@@ -22,7 +22,6 @@ jobs:
 
     steps:
       - name: Setup repo
-        if: matrix.os == 'ubuntu-22.04'
         uses: actions/checkout@v3
 
       - name: Setup Deno
@@ -31,6 +30,7 @@ jobs:
           deno-version: ${{ matrix.deno }}
       
       - name: Check typos
+        if: matrix.os == 'ubuntu-22.04'
         uses: crate-ci/typos@master
 
       - name: Check formatting, linting, types and run tests
