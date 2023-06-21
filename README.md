@@ -26,6 +26,12 @@ Minimal [OAuth 2.0](https://oauth.net/2/) powered by
   [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response)
   interfaces from the
   [Web API](https://developer.mozilla.org/en-US/docs/Web/API).
+- Works with
+  [std/http's `serve()`](https://deno.land/std@0.192.0/http/mod.ts?s=serve) and
+  [`Deno.serve()`](https://deno.land/api?s=Deno.serve&unstable=) native HTTP
+  servers, and web frameworks such as [Fresh](https://fresh.deno.dev/) and
+  [Oak](https://oakserver.github.io/oak/). See the [In the Wild](#in-the-wild)
+  section below for examples and demos.
 
 ## Live Demo
 
@@ -209,9 +215,12 @@ Check out these projects powered by Deno KV OAuth 2.0:
    template built on Fresh.
 1. [KV SketchBook](https://hashrock-kv-sketchbook.deno.dev/) - Dead simple
    sketchbook app.
+1. [Fresh + Deno KV OAuth demo](https://github.com/iuioiua/fresh-deno-kv-oauth-demo) -
+   A demo of Deno KV OAuth working in the
+   [Fresh web framework](https://fresh.deno.dev/).
 1. [Oak + Deno KV OAuth demo](https://dash.deno.com/playground/oak-deno-kv-oauth-demo) -
-   A demo of Deno KV OAuth working in
-   the[Oak web framework](https://deno.land/x/oak).
+   A demo of Deno KV OAuth working in the
+   [Oak web framework](https://oakserver.github.io/oak/).
 
 > Do you have a project powered by Deno KV OAuth 2.0 that you'd like to share?
 > Please submit a pull request adding that project to this list.
