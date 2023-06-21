@@ -45,15 +45,15 @@ Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
 });
 
 Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
-  const intialTokens: Tokens = {
+  const initialTokens: Tokens = {
     accessToken: crypto.randomUUID(),
     tokenType: crypto.randomUUID(),
     expiresIn: 42,
   };
-  const currentTokens = toTokens(toStoredTokens(intialTokens));
-  assertEquals(currentTokens.accessToken, intialTokens.accessToken);
-  assertEquals(currentTokens.tokenType, intialTokens.tokenType);
-  assert(currentTokens.expiresIn! < intialTokens.expiresIn!);
+  const currentTokens = toTokens(toStoredTokens(initialTokens));
+  assertEquals(currentTokens.accessToken, initialTokens.accessToken);
+  assertEquals(currentTokens.tokenType, initialTokens.tokenType);
+  assert(currentTokens.expiresIn! < initialTokens.expiresIn!);
 });
 
 Deno.test("(get/set/delete)TokensBySession() work interchangeably", async () => {
