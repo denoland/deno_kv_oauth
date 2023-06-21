@@ -4,7 +4,7 @@
 [![CI](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml/badge.svg)](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z)](https://codecov.io/gh/denoland/deno_kv_oauth)
 
-Minimal [OAuth 2.0](https://oauth.net/2/) powered by
+High-level [OAuth 2.0](https://oauth.net/2/) powered by
 [Deno KV](https://deno.com/kv).
 
 > Note: this project is in beta. API design and functionality are subject to
