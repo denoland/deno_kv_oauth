@@ -15,5 +15,5 @@ export {
   OAuth2Client,
   type OAuth2ClientConfig,
   type Tokens,
-} from "https://deno.land/x/oauth2_client@v1.0.0/mod.ts";
+} from "https://deno.land/x/oauth2_client@v1.0.1/mod.ts";
 export { SECOND } from "https://deno.land/std@0.192.0/datetime/constants.ts";
