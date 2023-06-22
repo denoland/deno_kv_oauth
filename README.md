@@ -101,7 +101,7 @@ provider you like.
 
    async function handleAccountPage(request: Request) {
      const sessionId = await getSessionId(request);
-     const isSignedIn = sessionId !== null;
+     const isSignedIn = sessionId !== undefined;
 
      if (!isSignedIn) return new Response(null, { status: 404 });
 

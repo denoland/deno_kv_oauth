@@ -6,7 +6,7 @@ import { getSessionId } from "./get_session_id.ts";
 Deno.test("getSessionId()", async (test) => {
   await test.step("returns null for invalid cookie", async () => {
     const request = new Request("http://example.com");
-    assertEquals(await getSessionId(request), null);
+    assertEquals(await getSessionId(request), undefined);
   });
 
   await test.step("returns null for non-existent session ID", async () => {
@@ -15,7 +15,7 @@ Deno.test("getSessionId()", async (test) => {
         cookie: `${SITE_COOKIE_NAME}=nil`,
       },
     });
-    assertEquals(await getSessionId(request), null);
+    assertEquals(await getSessionId(request), undefined);
   });
 
   await test.step("returns valid session ID", async () => {

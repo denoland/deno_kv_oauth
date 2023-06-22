@@ -22,7 +22,7 @@ import {
  *
  * export async function handler(request: Request) {
  *   const sessionId = await getSessionId(request);
- *   const isSignedIn = sessionId !== null;
+ *   const isSignedIn = sessionId !== undefined;
  *
  *   return Response.json({ sessionId, isSignedIn });
  * }
@@ -31,7 +31,7 @@ import {
 export async function getSessionId(request: Request) {
   const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
   const sessionId = getCookies(request.headers)[cookieName];
-  if (sessionId === undefined) return null;
+  if (sessionId === undefined) return undefined;
 
   // First, try with eventual consistency. If that returns null, try with strong consistency.
   if (
@@ -41,5 +41,5 @@ export async function getSessionId(request: Request) {
     return sessionId;
   }
 
-  return null;
+  return undefined;
 }
