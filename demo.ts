@@ -70,7 +70,7 @@ const oauth2Client = createOAuth2ClientFn(additionalOAuth2ClientConfig);
 
 async function indexHandler(request: Request) {
   const sessionId = await getSessionId(request);
-  const isSignedIn = sessionId !== null;
+  const isSignedIn = sessionId !== undefined;
   const accessToken = isSignedIn
     ? await getSessionAccessToken(oauth2Client, sessionId)
     : null;
