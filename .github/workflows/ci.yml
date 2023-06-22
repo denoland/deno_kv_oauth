@@ -28,6 +28,10 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: ${{ matrix.deno }}
+      
+      - name: Check typos
+        if: matrix.os == 'ubuntu-22.04'
+        uses: crate-ci/typos@master
 
       - name: Check formatting, linting, types and run tests
         run: deno task ok
