@@ -28,21 +28,23 @@ import type { WithRedirectUri, WithScope } from "./_types.ts";
  * @see {@link https://developer.okta.com/docs/reference/api/oidc}
  */
 export function createOktaOAuth2Client(
-    additionalOAuth2ClientConfig:
-        & Partial<OAuth2ClientConfig>
-        & WithRedirectUri
-        & WithScope,
+  additionalOAuth2ClientConfig:
+    & Partial<OAuth2ClientConfig>
+    & WithRedirectUri
+    & WithScope,
 ): OAuth2Client {
-    const domain = Deno.env.get("OKTA_DOMAIN");
-    const authorizationServerId = Deno.env.get("OKTA_AUTHORIZATION_SERVER_ID");
+  const domain = Deno.env.get("OKTA_DOMAIN");
+  const authorizationServerId = Deno.env.get("OKTA_AUTHORIZATION_SERVER_ID");
 
-    const baseURL = `https://${domain}/oauth2/${authorizationServerId ? `${authorizationServerId}` : ""}`;
+  const baseURL = `https://${domain}/oauth2/${
+    authorizationServerId ? `${authorizationServerId}` : ""
+  }`;
 
-    return new OAuth2Client({
-        clientId: Deno.env.get("OKTA_CLIENT_ID")!,
-        clientSecret: Deno.env.get("OKTA_CLIENT_SECRET")!,
-        authorizationEndpointUri: `${baseURL}/v1/authorize`,
-        tokenUri: `${baseURL}/v1/token`,
-        ...additionalOAuth2ClientConfig,
-    });
+  return new OAuth2Client({
+    clientId: Deno.env.get("OKTA_CLIENT_ID")!,
+    clientSecret: Deno.env.get("OKTA_CLIENT_SECRET")!,
+    authorizationEndpointUri: `${baseURL}/v1/authorize`,
+    tokenUri: `${baseURL}/v1/token`,
+    ...additionalOAuth2ClientConfig,
+  });
 }
