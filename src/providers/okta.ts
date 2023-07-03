@@ -34,11 +34,7 @@ export function createOktaOAuth2Client(
     & WithScope,
 ): OAuth2Client {
   const domain = Deno.env.get("OKTA_DOMAIN");
-  const authorizationServerId = Deno.env.get("OKTA_AUTHORIZATION_SERVER_ID");
-
-  const baseURL = `https://${domain}/oauth2/${
-    authorizationServerId ? `${authorizationServerId}` : ""
-  }`;
+  const baseURL = `https://${domain}/oauth2`;
 
   return new OAuth2Client({
     clientId: Deno.env.get("OKTA_CLIENT_ID")!,

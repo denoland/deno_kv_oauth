@@ -175,10 +175,6 @@ const client = new OAuth2Client({
   [the list below](#pre-configured-oauth-20-clients) for specifics.
 - `OKTA_DOMAIN` - required only when using the Okta provider to supply your
   given Okta domain.
-- `OKTA_AUTHORIZATION_SERVER_ID` (optional) - may be used to supply the optional
-  `${authorizationServerId}` in the base URL for the Okta provider, see
-  [Okta ref](https://developer.okta.com/docs/reference/api/oidc/#_2-okta-as-the-identity-platform-for-your-app-or-api)
-  for details.
 
 > Note: reading environment variables requires the
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
