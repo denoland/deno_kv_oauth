@@ -131,6 +131,7 @@ following providers:
 1. [GitLab](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitLabOAuth2Client)
 1. [Google](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGoogleOAuth2Client)
 1. [Notion](https://deno.land/x/deno_kv_oauth/mod.ts?s=createNotionOAuth2Client)
+1. [Okta](https://deno.land/x/deno_kv_oauth/mod.ts?s=createOktaOAuth2Client)
 1. [Patreon](https://deno.land/x/deno_kv_oauth/mod.ts?s=createPatreonOAuth2Client)
 1. [Slack](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSlackOAuth2Client)
 1. [Spotify](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSpotifyOAuth2Client)
@@ -172,6 +173,8 @@ const client = new OAuth2Client({
   Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
   `TWITTER_CLIENT_SECRET`. See
   [the list below](#pre-configured-oauth-20-clients) for specifics.
+- `OKTA_DOMAIN` - required only when using the Okta provider to supply your
+  given Okta domain.
 
 > Note: reading environment variables requires the
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
