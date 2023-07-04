@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { OAuth2Client, SECOND } from "../deps.ts";
+import { OAuth2Client, OAuth2ResponseError, SECOND, Tokens } from "../deps.ts";
 import { getTokensBySession, setTokensBySession } from "./core.ts";
 
 /**
@@ -33,14 +33,20 @@ export async function getSessionAccessToken(
     return tokens.accessToken;
   }
 
-  /**
-   * This is as far as automated testing can go.
-   *
-   * @todo Return `null` when the refresh token expires.
-   */
-  const newTokens = await oauth2Client.refreshToken.refresh(
-    tokens.refreshToken,
-  );
+  // This is as far as automated testing can go.
+  let newTokens: Tokens;
+  try {
+    newTokens = await oauth2Client.refreshToken.refresh(tokens.refreshToken);
+  } catch (error) {
+    if (
+      error instanceof OAuth2ResponseError && error.error === "invalid_grant"
+    ) {
+      // The refresh token is likely expired
+      return null;
+    }
+    throw error;
+  }
+
   await setTokensBySession(sessionId, newTokens);
 
   return newTokens.accessToken;
