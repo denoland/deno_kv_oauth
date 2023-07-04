@@ -10,6 +10,7 @@ import * as createOAuth2ClientFns from "./providers.ts";
   "GitLab",
   "Google",
   "Notion",
+  "Okta",
   "Patreon",
   "Slack",
   "Spotify",

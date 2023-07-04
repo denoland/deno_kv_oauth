@@ -7,6 +7,7 @@ export * from "./providers/github.ts";
 export * from "./providers/gitlab.ts";
 export * from "./providers/google.ts";
 export * from "./providers/notion.ts";
+export * from "./providers/okta.ts";
 export * from "./providers/patreon.ts";
 export * from "./providers/slack.ts";
 export * from "./providers/spotify.ts";
