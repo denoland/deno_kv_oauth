@@ -1,5 +1,3 @@
-# Deno KV OAuth (Beta)
-
 <div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" width="300" height="240" srcset="./logo-dark.svg">
@@ -20,6 +18,8 @@
 </a>
 
 </div>
+
+# Deno KV OAuth (Beta)
 
 ## Features
 
