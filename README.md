@@ -1,19 +1,25 @@
 # Deno KV OAuth
 
-<p align="center">
+<div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" width="300" height="240" srcset="./logo-dark.svg">
     <source media="(prefers-color-scheme: light)" width="300" height="240" srcset="./logo-light.svg">
     <img alt="Deno KV OAuth logo" width="300" height="240" src="./logo-light.svg">
   </picture>
-</p>
 
-[![Docs](https://doc.deno.land/badge.svg)](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts)
-[![CI](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml/badge.svg)](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z)](https://codecov.io/gh/denoland/deno_kv_oauth)
+<p>High-level OAuth 2.0 powered by <a href="https://deno.com/kv">Deno KV</a>.</p>
 
-High-level [OAuth 2.0](https://oauth.net/2/) powered by
-[Deno KV](https://deno.com/kv).
+<a href="https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts">
+    <img src="https://doc.deno.land/badge.svg" alt="Docs">
+  </a>
+  <a href="https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml">
+    <img src="https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml/badge.svg" alt="CI">
+  </a>
+  <a href="https://codecov.io/gh/denoland/deno_kv_oauth">
+    <img src="https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z" alt="codecov">
+  </a>
+
+</div>
 
 > Note: this project is in beta. API design and functionality are subject to
 > change.
