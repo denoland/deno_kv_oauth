@@ -19,6 +19,8 @@
     <img src="https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z" alt="codecov">
   </a>
 
+<br>
+
 </div>
 
 > Note: this project is in beta. API design and functionality are subject to
