@@ -2,9 +2,9 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" width="300" heigh="240" srcset="./logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" width="300" heigh="240" srcset="./logo-light.svg">
-    <img alt="Deno KV OAuth logo" width="300" heigh="240" src="./logo-light.svg">
+    <source media="(prefers-color-scheme: dark)" width="300" height="240" srcset="./logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" width="300" height="240" srcset="./logo-light.svg">
+    <img alt="Deno KV OAuth logo" width="300" height="240" src="./logo-light.svg">
   </picture>
 </p>
 
