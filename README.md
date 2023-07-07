@@ -229,7 +229,7 @@ Check out these projects powered by Deno KV OAuth 2.0:
    template built on Fresh.
 1. [KV SketchBook](https://hashrock-kv-sketchbook.deno.dev/) - Dead simple
    sketchbook app.
-1. [Fresh + Deno KV OAuth demo](https://github.com/iuioiua/fresh-deno-kv-oauth-demo) -
+1. [Fresh + Deno KV OAuth demo](https://github.com/denoland/fresh-deno-kv-oauth-demo) -
    A demo of Deno KV OAuth working in the
    [Fresh web framework](https://fresh.deno.dev/).
 1. [Oak + Deno KV OAuth demo](https://dash.deno.com/playground/oak-deno-kv-oauth-demo) -
