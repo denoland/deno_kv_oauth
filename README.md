@@ -1,9 +1,5 @@
 # Deno KV OAuth
 
-[![Docs](https://doc.deno.land/badge.svg)](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts)
-[![CI](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml/badge.svg)](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z)](https://codecov.io/gh/denoland/deno_kv_oauth)
-
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" width="300" heigh="240" srcset="./logo-dark.svg">
@@ -11,6 +7,10 @@
     <img alt="Deno KV OAuth logo" width="300" heigh="240" src="./logo-light.svg">
   </picture>
 </p>
+
+[![Docs](https://doc.deno.land/badge.svg)](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts)
+[![CI](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml/badge.svg)](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z)](https://codecov.io/gh/denoland/deno_kv_oauth)
 
 High-level [OAuth 2.0](https://oauth.net/2/) powered by
 [Deno KV](https://deno.com/kv).
