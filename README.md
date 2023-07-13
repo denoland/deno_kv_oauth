@@ -235,6 +235,9 @@ Check out these projects powered by Deno KV OAuth 2.0:
 1. [Oak + Deno KV OAuth demo](https://dash.deno.com/playground/oak-deno-kv-oauth-demo) -
    A demo of Deno KV OAuth working in the
    [Oak web framework](https://oakserver.github.io/oak/).
+1. [Ultra + Deno KV OAuth demo](https://github.com/mbhrznr/ultra-deno-kv-oauth-demo) -
+   A demo of Deno KV OAuth working in the
+   [Ultra web framework](https://ultrajs.dev/).
 
 > Do you have a project powered by Deno KV OAuth 2.0 that you'd like to share?
 > Please submit a pull request adding that project to this list.
