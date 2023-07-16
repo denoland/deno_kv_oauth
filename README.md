@@ -185,8 +185,8 @@ const client = new OAuth2Client({
   Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
   `TWITTER_CLIENT_SECRET`. See
   [the list below](#pre-configured-oauth-20-clients) for specifics.
-- `OKTA_DOMAIN & AUTH0_DOMAIN` - required only when using the Okta or Auth0
-  provider to supply your given Okta or Auth0 domain.
+- `OKTA_DOMAIN` or `AUTH0_DOMAIN` - required only when using the Okta or Auth0
+  provider to supply your own given domain.
 
 > Note: reading environment variables requires the
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
