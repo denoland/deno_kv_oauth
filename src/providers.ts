@@ -1,5 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 
+export * from "./providers/auth0.ts";
 export * from "./providers/discord.ts";
 export * from "./providers/dropbox.ts";
 export * from "./providers/facebook.ts";

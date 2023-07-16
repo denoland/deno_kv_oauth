@@ -3,6 +3,7 @@ import { assertEquals } from "../dev_deps.ts";
 import * as createOAuth2ClientFns from "./providers.ts";
 
 [
+  "Auth0",
   "Discord",
   "Dropbox",
   "Facebook",
