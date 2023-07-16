@@ -135,6 +135,7 @@ provider you like.
 This module comes with a suite of pre-configured OAuth 2.0 clients for the
 following providers:
 
+1. [Auth0](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAuth0OAuth2Client)
 1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuth2Client)
 1. [Dropbox](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDropboxOAuth2Client)
 1. [Facebook](https://deno.land/x/deno_kv_oauth/mod.ts?s=createFacebookOAuth2Client)
@@ -184,8 +185,8 @@ const client = new OAuth2Client({
   Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
   `TWITTER_CLIENT_SECRET`. See
   [the list below](#pre-configured-oauth-20-clients) for specifics.
-- `OKTA_DOMAIN` - required only when using the Okta provider to supply your
-  given Okta domain.
+- `OKTA_DOMAIN` or `AUTH0_DOMAIN` - required only when using the Okta or Auth0
+  provider to supply your own given domain.
 
 > Note: reading environment variables requires the
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See

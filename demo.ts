@@ -6,6 +6,7 @@ import {
   Status,
 } from "./dev_deps.ts";
 import {
+  createAuth0OAuth2Client,
   createDiscordOAuth2Client,
   createDropboxOAuth2Client,
   createFacebookOAuth2Client,
@@ -40,6 +41,7 @@ loadSync({ export: true });
  */
 const provider = Deno.env.get("PROVIDER") ?? "GitHub";
 const createOAuth2ClientFn = {
+  Auth0: createAuth0OAuth2Client,
   Discord: createDiscordOAuth2Client,
   Dropbox: createDropboxOAuth2Client,
   Facebook: createFacebookOAuth2Client,
