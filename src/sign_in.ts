@@ -1,12 +1,12 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { type OAuth2Client, setCookie } from "../deps.ts";
 import {
-  COOKIE_BASE,
-  getCookieName,
-  isSecure,
-  OAUTH_COOKIE_NAME,
-  redirect,
-  setOAuthSession,
+    COOKIE_BASE,
+    getCookieName,
+    isSecure,
+    OAUTH_COOKIE_NAME,
+    redirect,
+    setOAuthSession,
 } from "./core.ts";
 
 /**
@@ -31,32 +31,37 @@ import {
  * ```
  */
 export async function signIn(
-  request: Request,
-  oauth2Client: OAuth2Client,
+    request: Request,
+    oauth2Client: OAuth2Client,
+    options?: { urlParams?: Record<string, string> }
 ): Promise<Response> {
-  const state = crypto.randomUUID();
-  const { uri, codeVerifier } = await oauth2Client.code
-    .getAuthorizationUri({ state });
+    const state = crypto.randomUUID();
+    const { uri, codeVerifier } = await oauth2Client.code.getAuthorizationUri({
+        state,
+    });
 
-  const oauthSessionId = crypto.randomUUID();
-  await setOAuthSession(oauthSessionId, { state, codeVerifier });
+    if (options?.urlParams) {
+        Object.entries(options.urlParams).forEach(([key, value]) =>
+            uri.searchParams.append(key, value)
+        );
+    }
 
-  const response = redirect(uri.toString());
-  setCookie(
-    response.headers,
-    {
-      ...COOKIE_BASE,
-      name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
-      value: oauthSessionId,
-      secure: isSecure(request.url),
-      /**
-       * A maximum authorization code lifetime of 10 minutes is recommended.
-       * This cookie lifetime matches that value.
-       *
-       * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
-       */
-      maxAge: 10 * 60,
-    },
-  );
-  return response;
+    const oauthSessionId = crypto.randomUUID();
+    await setOAuthSession(oauthSessionId, { state, codeVerifier });
+
+    const response = redirect(uri.toString());
+    setCookie(response.headers, {
+        ...COOKIE_BASE,
+        name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
+        value: oauthSessionId,
+        secure: isSecure(request.url),
+        /**
+         * A maximum authorization code lifetime of 10 minutes is recommended.
+         * This cookie lifetime matches that value.
+         *
+         * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
+         */
+        maxAge: 10 * 60,
+    });
+    return response;
 }
