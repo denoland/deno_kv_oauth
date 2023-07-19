@@ -1,10 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import {
-  loadSync,
-  type OAuth2ClientConfig,
-  serve,
-  Status,
-} from "./dev_deps.ts";
+import { loadSync, type OAuth2ClientConfig, Status } from "./dev_deps.ts";
 import {
   createAuth0OAuth2Client,
   createDiscordOAuth2Client,
@@ -133,5 +128,5 @@ export async function handler(request: Request): Promise<Response> {
 }
 
 if (import.meta.main) {
-  await serve(handler);
+  Deno.serve(handler);
 }
