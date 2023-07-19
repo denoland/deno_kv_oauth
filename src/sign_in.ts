@@ -36,15 +36,10 @@ export async function signIn(
     options?: { urlParams?: Record<string, string> }
 ): Promise<Response> {
     const state = crypto.randomUUID();
-    const { uri, codeVerifier } = await oauth2Client.code.getAuthorizationUri({
+    const { uri, codeVerifier } = await getAuthorizationUri(oauth2Client, {
         state,
+        ...options,
     });
-
-    if (options?.urlParams) {
-        Object.entries(options.urlParams).forEach(([key, value]) =>
-            uri.searchParams.append(key, value)
-        );
-    }
 
     const oauthSessionId = crypto.randomUUID();
     await setOAuthSession(oauthSessionId, { state, codeVerifier });
@@ -64,4 +59,24 @@ export async function signIn(
         maxAge: 10 * 60,
     });
     return response;
+}
+
+/**
+ * Handles additional paramaters that will be appended to the authorization uri
+ */
+export async function getAuthorizationUri(
+    oauth2Client: OAuth2Client,
+    { urlParams, state }: { urlParams?: Record<string, string>; state: string }
+) {
+    const { uri, ...rest } = await oauth2Client.code.getAuthorizationUri({
+        state,
+    });
+
+    if (urlParams) {
+        Object.entries(urlParams).forEach(([key, value]) =>
+            uri.searchParams.append(key, value)
+        );
+    }
+
+    return { uri, ...rest };
 }
