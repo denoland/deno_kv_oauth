@@ -62,7 +62,7 @@ export async function signIn(
 }
 
 /**
- * Handles additional paramaters that will be appended to the authorization uri
+ * Handles additional parameters that will be appended to the authorization uri
  */
 export async function getAuthorizationUri(
   oauth2Client: OAuth2Client,
