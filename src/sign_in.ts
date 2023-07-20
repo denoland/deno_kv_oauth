@@ -33,30 +33,37 @@ import {
 export async function signIn(
   request: Request,
   oauth2Client: OAuth2Client,
+  options?: {
+    /** These parameters will be appended to the authorization URI, if defined. */
+    urlParams?: Record<string, string>;
+  },
 ): Promise<Response> {
   const state = crypto.randomUUID();
   const { uri, codeVerifier } = await oauth2Client.code
     .getAuthorizationUri({ state });
 
+  if (options?.urlParams) {
+    Object.entries(options.urlParams).forEach(([key, value]) =>
+      uri.searchParams.append(key, value)
+    );
+  }
+
   const oauthSessionId = crypto.randomUUID();
   await setOAuthSession(oauthSessionId, { state, codeVerifier });
 
   const response = redirect(uri.toString());
-  setCookie(
-    response.headers,
-    {
-      ...COOKIE_BASE,
-      name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
-      value: oauthSessionId,
-      secure: isSecure(request.url),
-      /**
-       * A maximum authorization code lifetime of 10 minutes is recommended.
-       * This cookie lifetime matches that value.
-       *
-       * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
-       */
-      maxAge: 10 * 60,
-    },
-  );
+  setCookie(response.headers, {
+    ...COOKIE_BASE,
+    name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
+    value: oauthSessionId,
+    secure: isSecure(request.url),
+    /**
+     * A maximum authorization code lifetime of 10 minutes is recommended.
+     * This cookie lifetime matches that value.
+     *
+     * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
+     */
+    maxAge: 10 * 60,
+  });
   return response;
 }

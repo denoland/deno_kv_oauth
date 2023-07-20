@@ -32,10 +32,24 @@ Deno.test("signIn()", async (test) => {
   await test.step("correctly sets the OAuth 2.0 session entry in KV", async () => {
     const oauthSessionId = setCookie.value;
     const oauthSession = await getOAuthSession(oauthSessionId);
-    const state = new URL(response.headers.get("location")!).searchParams.get(
-      "state",
-    );
+    const state = new URL(
+      response.headers.get("location")!,
+    ).searchParams.get("state");
     assert(oauthSession);
-    assertEquals(oauthSession.state, state);
+    assertEquals(oauthSession?.state, state);
+  });
+
+  await test.step("returns a redirect response with URL params", async () => {
+    const responseWithUrlParams = await signIn(request, oauth2Client, {
+      urlParams: { foo: "bar" },
+    });
+
+    const location = responseWithUrlParams.headers.get("location");
+    assert(location !== null);
+
+    const url = new URL(location);
+    assertEquals(responseWithUrlParams.body, null);
+    assertEquals(url.searchParams.get("foo"), "bar");
+    assertEquals(responseWithUrlParams.status, Status.Found);
   });
 });
