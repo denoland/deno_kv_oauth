@@ -156,10 +156,3 @@ export function redirect(location: string) {
     status: Status.Found,
   });
 }
-
-/** @todo Replace this function with a single-file export if https://github.com/denoland/deno_std/pull/3445 lands. */
-export function assert(cond: unknown, message: string): asserts cond {
-  if (!cond) {
-    throw new Error(message);
-  }
-}
