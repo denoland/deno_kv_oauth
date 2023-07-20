@@ -34,6 +34,7 @@ export async function signIn(
   request: Request,
   oauth2Client: OAuth2Client,
   options?: {
+    /** These values will be appended to the authorization URI as parameters, if defined. */
     urlParams?: Record<string, string>;
   },
 ): Promise<Response> {
