@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { getAuthorizationUri, signIn } from "./sign_in.ts";
+import { signIn } from "./sign_in.ts";
 import {
   assert,
   assertEquals,
@@ -38,16 +38,18 @@ Deno.test("signIn()", async (test) => {
     assert(oauthSession);
     assertEquals(oauthSession?.state, state);
   });
-});
 
-Deno.test("withOptions()", async (test) => {
-  const state = crypto.randomUUID();
-  const { uri } = await getAuthorizationUri(oauth2Client, {
-    state,
-    urlParams: { foo: "bar" },
-  });
+  await test.step("returns a redirect response with URL params", async () => {
+    const responseWithUrlParams = await signIn(request, oauth2Client, {
+      urlParams: { foo: "bar" },
+    });
 
-  await test.step("correctly add additional params to the authorization url", () => {
-    assertEquals(uri.searchParams.get("foo"), "bar");
+    const location = responseWithUrlParams.headers.get("location");
+    assert(location !== null);
+
+    const url = new URL(location);
+    assertEquals(responseWithUrlParams.body, null);
+    assertEquals(url.searchParams.get("foo"), "bar");
+    assertEquals(responseWithUrlParams.status, Status.Found);
   });
 });
