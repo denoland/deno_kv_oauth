@@ -111,7 +111,7 @@ provider you like.
    const oauth2Client = createGitHubOAuth2Client();
 
    async function handleAccountPage(request: Request) {
-     const sessionId = await getSessionId(request);
+     const sessionId = getSessionId(request);
      const isSignedIn = sessionId !== undefined;
 
      if (!isSignedIn) return new Response(null, { status: 404 });
