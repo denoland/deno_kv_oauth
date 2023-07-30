@@ -15,9 +15,9 @@ import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./core.ts";
  *
  * export function handler(request: Request) {
  *   const sessionId = getSessionId(request);
- *   const isSignedIn = sessionId !== undefined;
+ *   const hasSessionIdCookie = sessionId !== undefined;
  *
- *   return Response.json({ sessionId, isSignedIn });
+ *   return Response.json({ sessionId, hasSessionIdCookie });
  * }
  * ```
  */

@@ -69,8 +69,8 @@ const oauth2Client = createOAuth2ClientFn(additionalOAuth2ClientConfig);
 
 async function indexHandler(request: Request) {
   const sessionId = getSessionId(request);
-  const isSignedIn = sessionId !== undefined;
-  const accessToken = isSignedIn
+  const hasSessionIdCookie = sessionId !== undefined;
+  const accessToken = hasSessionIdCookie
     ? await getSessionAccessToken(oauth2Client, sessionId)
     : null;
 
@@ -80,7 +80,7 @@ async function indexHandler(request: Request) {
   const body = `
     <p>Provider: ${provider}</p>
     <p>Scope: ${oauth2Client.config.defaults?.scope}</p>
-    <p>Signed in: ${isSignedIn}</p>
+    <p>Signed in: ${hasSessionIdCookie}</p>
     <p>Your access token: ${accessTokenInnerText}</p>
     <p>
       <a href="/signin">Sign in</a>
