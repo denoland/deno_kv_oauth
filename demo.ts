@@ -68,7 +68,7 @@ const additionalOAuth2ClientConfig: Partial<OAuth2ClientConfig> = {
 const oauth2Client = createOAuth2ClientFn(additionalOAuth2ClientConfig);
 
 async function indexHandler(request: Request) {
-  const sessionId = await getSessionId(request);
+  const sessionId = getSessionId(request);
   const isSignedIn = sessionId !== undefined;
   const accessToken = isSignedIn
     ? await getSessionAccessToken(oauth2Client, sessionId)
