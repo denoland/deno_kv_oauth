@@ -23,7 +23,7 @@ export async function getSessionAccessToken(
   oauth2Client: OAuth2Client,
   sessionId: string,
 ) {
-  // First, try with eventual consistency. If that returns undefined, try with strong consistency.
+  // First, try with eventual consistency. If that returns null, try with strong consistency.
   const tokens = await getTokensBySession(sessionId, "eventual") ||
     await getTokensBySession(sessionId);
   if (tokens === null) return null;
