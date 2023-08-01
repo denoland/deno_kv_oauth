@@ -5,7 +5,9 @@ import {
   getOAuthSession,
   OAUTH_COOKIE_NAME,
   OAuthSession,
+  SessionKey,
   setOAuthSession,
+  stringifySessionKeyCookie,
 } from "./core.ts";
 import { oauth2Client } from "./test_utils.ts";
 
@@ -23,16 +25,20 @@ Deno.test("handleCallback()", async (test) => {
   });
 
   await test.step("deletes the OAuth 2.0 session KV entry", async () => {
-    const oauthSessionId = crypto.randomUUID();
+    const oauthSessionKey: SessionKey = [Date.now(), crypto.randomUUID()];
     const oauthSession: OAuthSession = {
       state: crypto.randomUUID(),
       codeVerifier: crypto.randomUUID(),
     };
-    await setOAuthSession(oauthSessionId, oauthSession);
+    await setOAuthSession(oauthSessionKey, oauthSession);
     const request = new Request("http://example.com", {
-      headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
+      headers: {
+        cookie: `${OAUTH_COOKIE_NAME}=${
+          stringifySessionKeyCookie(oauthSessionKey)
+        }`,
+      },
     });
     await assertRejects(() => handleCallback(request, oauth2Client));
-    await assertEquals(await getOAuthSession(oauthSessionId), null);
+    await assertEquals(await getOAuthSession(oauthSessionKey), null);
   });
 });

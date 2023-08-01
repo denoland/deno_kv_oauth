@@ -7,7 +7,12 @@ import {
   getSetCookies,
   Status,
 } from "../dev_deps.ts";
-import { getOAuthSession, OAUTH_COOKIE_NAME } from "./core.ts";
+import {
+  assertIsSessionKey,
+  getOAuthSession,
+  OAUTH_COOKIE_NAME,
+  parseJsonCookie,
+} from "./core.ts";
 import { oauth2Client } from "./test_utils.ts";
 
 Deno.test("signIn()", async (test) => {
@@ -30,8 +35,9 @@ Deno.test("signIn()", async (test) => {
   });
 
   await test.step("correctly sets the OAuth 2.0 session entry in KV", async () => {
-    const oauthSessionId = setCookie.value;
-    const oauthSession = await getOAuthSession(oauthSessionId);
+    const oauthSessionKey = parseJsonCookie(setCookie.value);
+    assertIsSessionKey(oauthSessionKey);
+    const oauthSession = await getOAuthSession(oauthSessionKey);
     const state = new URL(
       response.headers.get("location")!,
     ).searchParams.get("state");

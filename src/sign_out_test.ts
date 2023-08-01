@@ -3,21 +3,23 @@ import { assertEquals, Status, type Tokens } from "../dev_deps.ts";
 import { signOut } from "./sign_out.ts";
 import {
   getTokensBySession,
+  SessionKey,
   setTokensBySession,
   SITE_COOKIE_NAME,
+  stringifySessionKeyCookie,
 } from "./core.ts";
 
 Deno.test("signOut()", async (test) => {
-  const sessionId = crypto.randomUUID();
+  const sessionKey: SessionKey = [Date.now(), crypto.randomUUID()];
   const tokens: Tokens = {
     accessToken: crypto.randomUUID(),
     tokenType: crypto.randomUUID(),
   };
-  await setTokensBySession(sessionId, tokens);
+  await setTokensBySession(sessionKey, tokens);
   const redirectUrl = "/why-hello-there";
   const request = new Request("http://example.com", {
     headers: {
-      cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
+      cookie: `${SITE_COOKIE_NAME}=${stringifySessionKeyCookie(sessionKey)}`,
     },
   });
   const response = await signOut(request, redirectUrl);
@@ -36,6 +38,6 @@ Deno.test("signOut()", async (test) => {
   });
 
   await test.step("deletes the tokens entry in KV", async () => {
-    assertEquals(await getTokensBySession(sessionId), null);
+    assertEquals(await getTokensBySession(sessionKey), null);
   });
 });

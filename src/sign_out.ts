@@ -7,13 +7,13 @@ import {
   redirect,
   SITE_COOKIE_NAME,
 } from "./core.ts";
-import { getSessionId } from "./get_session_id.ts";
+import { getSessionKey } from "./get_session_key.ts";
 
 /**
  * Handles the sign-out process, and then redirects the client to the given redirect URL.
  *
  * It does this by:
- * 1. Getting the OAuth 2.0 session ID from the cookie in the given request. If no OAuth 2.0 session cookie is found, a response that redirects the client to the given redirect URL is returned.
+ * 1. Getting the OAuth 2.0 session key from the cookie in the given request. If no OAuth 2.0 session cookie is found, a response that redirects the client to the given redirect URL is returned.
  * 2. Deleting the stored OAuth 2.0 tokens from KV.
  * 3. Returning a response that invalidates the client's session cookie and redirects the client to the given redirect URL.
  *
@@ -29,10 +29,10 @@ import { getSessionId } from "./get_session_id.ts";
  * ```
  */
 export async function signOut(request: Request, redirectUrl = "/") {
-  const sessionId = getSessionId(request);
-  if (sessionId === undefined) return redirect(redirectUrl);
+  const sessionKey = getSessionKey(request);
+  if (sessionKey === undefined) return redirect(redirectUrl);
 
-  await deleteStoredTokensBySession(sessionId);
+  await deleteStoredTokensBySession(sessionKey);
 
   const response = redirect(redirectUrl);
   const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));

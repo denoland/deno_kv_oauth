@@ -105,19 +105,19 @@ provider you like.
    import {
      createGitHubOAuth2Client,
      getSessionAccessToken,
-     getSessionId,
+     getSessionKey,
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    const oauth2Client = createGitHubOAuth2Client();
 
    async function handleAccountPage(request: Request) {
-     const sessionId = getSessionId(request);
-     const isSignedIn = sessionId !== undefined;
+     const sessionKey = getSessionKey(request);
+     const hasSessionKeyCookie = sessionKey !== undefined;
 
-     if (!isSignedIn) return new Response(null, { status: 404 });
+     if (!hasSessionKeyCookie) return new Response(null, { status: 404 });
 
-     const accessToken = await getSessionAccessToken(oauth2Client, sessionId);
-     return Response.json({ isSignedIn, accessToken });
+     const accessToken = await getSessionAccessToken(oauth2Client, sessionKey);
+     return Response.json({ hasSessionKeyCookie, accessToken });
    }
    ```
 

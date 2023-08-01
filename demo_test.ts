@@ -8,7 +8,12 @@ import {
   isRedirectStatus,
 } from "./dev_deps.ts";
 import { Status } from "./deps.ts";
-import { setTokensBySession, SITE_COOKIE_NAME } from "./src/core.ts";
+import {
+  SessionKey,
+  setTokensBySession,
+  SITE_COOKIE_NAME,
+  stringifySessionKeyCookie,
+} from "./src/core.ts";
 
 const baseUrl = "http://localhost";
 
@@ -32,15 +37,15 @@ Deno.test("demo", async (test) => {
   });
 
   await test.step("GET / serves a signed-in web page", async () => {
-    const sessionId = crypto.randomUUID();
+    const sessionKey: SessionKey = [Date.now(), crypto.randomUUID()];
     const accessToken = crypto.randomUUID();
-    await setTokensBySession(sessionId, {
+    await setTokensBySession(sessionKey, {
       accessToken,
       tokenType: crypto.randomUUID(),
     });
     const request = new Request(baseUrl, {
       headers: {
-        cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
+        cookie: `${SITE_COOKIE_NAME}=${stringifySessionKeyCookie(sessionKey)}`,
       },
     });
     const response = await handler(request);

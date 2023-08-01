@@ -15,7 +15,7 @@ import {
   createSpotifyOAuth2Client,
   createTwitterOAuth2Client,
   getSessionAccessToken,
-  getSessionId,
+  getSessionKey,
   handleCallback,
   signIn,
   signOut,
@@ -68,10 +68,10 @@ const additionalOAuth2ClientConfig: Partial<OAuth2ClientConfig> = {
 const oauth2Client = createOAuth2ClientFn(additionalOAuth2ClientConfig);
 
 async function indexHandler(request: Request) {
-  const sessionId = getSessionId(request);
-  const hasSessionIdCookie = sessionId !== undefined;
-  const accessToken = hasSessionIdCookie
-    ? await getSessionAccessToken(oauth2Client, sessionId)
+  const sessionKey = getSessionKey(request);
+  const hasSessionKeyCookie = sessionKey !== undefined;
+  const accessToken = hasSessionKeyCookie
+    ? await getSessionAccessToken(oauth2Client, sessionKey)
     : null;
 
   const accessTokenInnerText = accessToken !== null
@@ -80,7 +80,7 @@ async function indexHandler(request: Request) {
   const body = `
     <p>Provider: ${provider}</p>
     <p>Scope: ${oauth2Client.config.defaults?.scope}</p>
-    <p>Signed in: ${hasSessionIdCookie}</p>
+    <p>Signed in: ${hasSessionKeyCookie}</p>
     <p>Your access token: ${accessTokenInnerText}</p>
     <p>
       <a href="/signin">Sign in</a>

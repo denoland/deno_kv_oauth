@@ -9,6 +9,7 @@ import {
   isSecure,
   type OAuthSession,
   redirect,
+  SessionKey,
   setOAuthSession,
   setTokensBySession,
   toStoredTokens,
@@ -26,22 +27,22 @@ Deno.test("getCookieName() works correctly", () => {
 });
 
 Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
-  const id = crypto.randomUUID();
+  const key: SessionKey = [Date.now(), crypto.randomUUID()];
 
   // OAuth 2.0 session doesn't yet exist
-  assertEquals(await getOAuthSession(id), null);
+  assertEquals(await getOAuthSession(key), null);
 
   const oauthSession: OAuthSession = {
     state: crypto.randomUUID(),
     codeVerifier: crypto.randomUUID(),
   };
-  await setOAuthSession(id, oauthSession);
+  await setOAuthSession(key, oauthSession);
 
-  assertEquals(await getOAuthSession(id), oauthSession);
+  assertEquals(await getOAuthSession(key), oauthSession);
 
-  await deleteOAuthSession(id);
+  await deleteOAuthSession(key);
 
-  assertEquals(await getOAuthSession(id), null);
+  assertEquals(await getOAuthSession(key), null);
 });
 
 Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
@@ -57,22 +58,22 @@ Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
 });
 
 Deno.test("(get/set/delete)TokensBySession() work interchangeably", async () => {
-  const sessionId = crypto.randomUUID();
+  const key: SessionKey = [Date.now(), crypto.randomUUID()];
 
   // Tokens don't yet exist
-  assertEquals(await getTokensBySession(sessionId), null);
+  assertEquals(await getTokensBySession(key), null);
 
   const tokens: Tokens = {
     accessToken: crypto.randomUUID(),
     tokenType: crypto.randomUUID(),
   };
-  await setTokensBySession(sessionId, tokens);
+  await setTokensBySession(key, tokens);
 
-  assertEquals(await getTokensBySession(sessionId), tokens);
+  assertEquals(await getTokensBySession(key), tokens);
 
-  await deleteStoredTokensBySession(sessionId);
+  await deleteStoredTokensBySession(key);
 
-  assertEquals(await getTokensBySession(sessionId), null);
+  assertEquals(await getTokensBySession(key), null);
 });
 
 Deno.test("redirect() returns a redirect response", () => {
