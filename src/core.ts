@@ -89,6 +89,14 @@ export async function deleteOAuthSession(key: SessionKey) {
   await kv.delete([OAUTH_SESSION_PREFIX, ...key]);
 }
 
+// Lists OAuth 2.0 session entries up until the current time.
+export function listExpiredOAuthSessions() {
+  return kv.list<OAuthSession>({
+    prefix: [OAUTH_SESSION_PREFIX],
+    end: [OAUTH_SESSION_PREFIX, Date.now()],
+  });
+}
+
 // Tokens by session
 const STORED_TOKENS_BY_SESSION_PREFIX = "stored_tokens_by_session";
 
@@ -159,6 +167,14 @@ export async function setTokensBySession(
 // Deletes the token for the given session key.
 export async function deleteStoredTokensBySession(key: SessionKey) {
   await kv.delete([STORED_TOKENS_BY_SESSION_PREFIX, ...key]);
+}
+
+// Lists tokens entries up until the current time.
+export function listExpiredTokens() {
+  return kv.list<StoredTokens>({
+    prefix: [STORED_TOKENS_BY_SESSION_PREFIX],
+    end: [STORED_TOKENS_BY_SESSION_PREFIX, Date.now()],
+  });
 }
 
 /**

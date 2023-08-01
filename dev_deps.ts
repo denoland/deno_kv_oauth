@@ -1,6 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 export {
   assert,
+  assertArrayIncludes,
   assertEquals,
   assertNotEquals,
   assertRejects,
@@ -10,4 +11,5 @@ export {
 export { walk } from "https://deno.land/std@0.196.0/fs/walk.ts";
 export { globToRegExp } from "https://deno.land/std@0.196.0/path/glob.ts";
 export { loadSync } from "https://deno.land/std@0.196.0/dotenv/mod.ts";
+export { delay } from "https://deno.land/std@0.196.0/async/delay.ts";
 export * from "./deps.ts";

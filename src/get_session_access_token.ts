@@ -11,7 +11,7 @@ import { getTokensBySession, SessionKey, setTokensBySession } from "./core.ts";
  *
  * @param getSessionKey Get the client's session key using {@linkcode getSessionKey}.
  *
- * @example.
+ * @example
  * ```ts
  * import { getSessionAccessToken, createGitHubOAuth2Client, getSessionKey } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *

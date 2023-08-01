@@ -295,6 +295,7 @@
     "https://deno.land/std@0.196.0/assert/mod.ts": "08d55a652c22c5da0215054b21085cec25a5da47ce4a6f9de7d9ad36df35bdee",
     "https://deno.land/std@0.196.0/assert/unimplemented.ts": "d56fbeecb1f108331a380f72e3e010a1f161baa6956fd0f7cf3e095ae1a4c75a",
     "https://deno.land/std@0.196.0/assert/unreachable.ts": "4600dc0baf7d9c15a7f7d234f00c23bca8f3eba8b140286aaca7aa998cf9a536",
+    "https://deno.land/std@0.196.0/async/delay.ts": "a6142eb44cdd856b645086af2b811b1fcce08ec06bb7d50969e6a872ee9b8659",
     "https://deno.land/std@0.196.0/collections/filter_values.ts": "16e1fc456a7969e770ec5b89edf5ac97b295ca534b47c1a83f061b409aad7814",
     "https://deno.land/std@0.196.0/collections/without_all.ts": "1e3cccb1ed0659455b473c0766d9414b7710d8cef48862c899f445178f66b779",
     "https://deno.land/std@0.196.0/datetime/constants.ts": "b63a6b702e06fa028fb2ffa25e0cf775e3b21cf7f38e53a6f219e9641894dfbb",
