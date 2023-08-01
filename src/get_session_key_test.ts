@@ -8,8 +8,17 @@ import {
 import { getSessionKey } from "./get_session_key.ts";
 
 Deno.test("getSessionKey()", async (test) => {
-  await test.step("returns undefined when cookie is not defined", () => {
+  await test.step("returns undefined if cookie is not defined", () => {
     const request = new Request("http://example.com");
+    assertEquals(getSessionKey(request), undefined);
+  });
+
+  await test.step("returns undefined if cookie is not valid JSON", () => {
+    const request = new Request("http://example.com", {
+      headers: {
+        cookie: `${SITE_COOKIE_NAME}=["Hello", 3.14, true,]`,
+      },
+    });
     assertEquals(getSessionKey(request), undefined);
   });
 
