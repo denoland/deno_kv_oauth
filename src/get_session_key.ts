@@ -32,8 +32,8 @@ export function getSessionKey(request: Request) {
   const sessionKeyRaw = getCookies(request.headers)[cookieName];
   if (sessionKeyRaw === undefined) return undefined;
 
-  const sessionKey = parseJsonCookie(sessionKeyRaw);
   try {
+    const sessionKey = parseJsonCookie(sessionKeyRaw);
     assertIsSessionKey(sessionKey);
     return sessionKey;
   } catch {
