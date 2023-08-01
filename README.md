@@ -128,6 +128,16 @@ provider you like.
    GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
    ```
 
+1. Clean-up expired KV entries as part of a cron job, if possible.
+
+   ```ts
+   import { cleanupExpiredEntries } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+
+   async function cronJob() {
+     await cleanupExpiredEntries();
+   }
+   ```
+
 > Check out a full implementation in the [demo source code](./demo.ts).
 
 ### Pre-configured OAuth 2.0 Clients

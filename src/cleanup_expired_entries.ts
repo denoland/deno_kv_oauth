@@ -12,6 +12,8 @@ import {
  *
  * Expired entries are defined as those whose expiry timestamps lie between the epoch and now.
  *
+ * It is recommended to run this function regularly as a cron job, if possible.
+ *
  * It does this by:
  * 1. Listing expired OAuth 2.0 session entries and asynchronously deleting them.
  * 2. Listing expired tokens entries and asynchronously deleting them.
