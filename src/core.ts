@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { type Cookie, SECOND, Status, type Tokens } from "../deps.ts";
+import { type Cookie, SECOND, Status, type Tokens, ulid } from "../deps.ts";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
@@ -21,7 +21,7 @@ export const COOKIE_BASE = {
   // 90 days
   maxAge: 7776000,
   sameSite: "Lax",
-} as Partial<Cookie>;
+} as Required<Pick<Cookie, "path" | "httpOnly" | "maxAge" | "sameSite">>;
 
 const KV_PATH_KEY = "KV_PATH";
 let path = undefined;
@@ -66,6 +66,14 @@ export async function setOAuthSession(
 // Deletes the OAuth 2.0 session object for the given OAuth 2.0 session ID.
 export async function deleteOAuthSession(oauthSessionId: string) {
   await kv.delete([OAUTH_SESSION_PREFIX, oauthSessionId]);
+}
+
+// Lists OAuth 2.0 session entries up until the current time.
+export function listExpiredOAuthSessions() {
+  return kv.list<OAuthSession>({
+    prefix: [OAUTH_SESSION_PREFIX],
+    end: [OAUTH_SESSION_PREFIX, ulid()],
+  });
 }
 
 // Tokens by session
@@ -139,6 +147,14 @@ export async function setTokensBySession(
 // Deletes the token for the given session ID.
 export async function deleteStoredTokensBySession(sessionId: string) {
   await kv.delete([STORED_TOKENS_BY_SESSION_PREFIX, sessionId]);
+}
+
+// Lists tokens entries up until the current time.
+export function listExpiredTokens() {
+  return kv.list<Tokens>({
+    prefix: [STORED_TOKENS_BY_SESSION_PREFIX],
+    end: [STORED_TOKENS_BY_SESSION_PREFIX, ulid()],
+  });
 }
 
 /**

@@ -1,5 +1,12 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, getCookies, type OAuth2Client, setCookie } from "../deps.ts";
+import {
+  assert,
+  getCookies,
+  type OAuth2Client,
+  SECOND,
+  setCookie,
+  ulid,
+} from "../deps.ts";
 import {
   COOKIE_BASE,
   deleteOAuthSession,
@@ -66,7 +73,8 @@ export async function handleCallback(
     oauthSession,
   );
 
-  const sessionId = crypto.randomUUID();
+  // Encode the cookie expiry timestamp in the session ID via the ULID seed time.
+  const sessionId = ulid(Date.now() + (COOKIE_BASE.maxAge * SECOND));
   await setTokensBySession(sessionId, tokens);
 
   const response = redirect(redirectUrl);

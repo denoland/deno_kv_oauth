@@ -23,8 +23,10 @@
 
 ## Features
 
-- Uses [oauth2_client](https://deno.land/x/oauth2_client@v1.0.0) for OAuth 2.0
-  workflows and [Deno KV](https://deno.com/kv) for persistent session storage.
+- Uses [Deno KV](https://deno.com/kv) for persistent session storage,
+  [x/oauth2_client](https://deno.land/x/oauth2_client) for OAuth 2.0 workflows
+  and [x/ulid](https://deno.land/x/ulid) for lexicographically sortable KV entry
+  key generation.
 - Automatically handles the authorization code flow with
   [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/),
   access token refresh, and client redirection.
@@ -112,12 +114,12 @@ provider you like.
 
    async function handleAccountPage(request: Request) {
      const sessionId = getSessionId(request);
-     const isSignedIn = sessionId !== undefined;
+     const hasSessionIdCookie = sessionId !== undefined;
 
-     if (!isSignedIn) return new Response(null, { status: 404 });
+     if (!hasSessionIdCookie) return new Response(null, { status: 404 });
 
      const accessToken = await getSessionAccessToken(oauth2Client, sessionId);
-     return Response.json({ isSignedIn, accessToken });
+     return Response.json({ hasSessionIdCookie, accessToken });
    }
    ```
 
@@ -126,6 +128,16 @@ provider you like.
 
    ```bash
    GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   ```
+
+1. Clean-up expired KV entries as part of a cron job, if possible.
+
+   ```ts
+   import { cleanExpiredEntries } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+
+   async function cronJob() {
+     await cleanExpiredEntries();
+   }
    ```
 
 > Check out a full implementation in the [demo source code](./demo.ts).

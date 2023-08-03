@@ -421,6 +421,8 @@
     "https://deno.land/x/oauth2_client@v1.0.2/src/pkce.ts": "d286a087cc8ef985b71a2bf391e9e9d86a78ac6d93e30c46e73006171aed0986",
     "https://deno.land/x/oauth2_client@v1.0.2/src/refresh_token_grant.ts": "22cb1598e48fb037b4111a446573f7b48a3b361b58de58af17ba097221b12b54",
     "https://deno.land/x/oauth2_client@v1.0.2/src/resource_owner_password_credentials.ts": "bd3df99d32eeebffb411c4a2d3c3d057395515fb41690a8d91460dd74b9bf466",
-    "https://deno.land/x/oauth2_client@v1.0.2/src/types.ts": "3327c2e81bc483e91843fb103595dd304393c3ac2a530d1c89200b6a5cf75e13"
+    "https://deno.land/x/oauth2_client@v1.0.2/src/types.ts": "3327c2e81bc483e91843fb103595dd304393c3ac2a530d1c89200b6a5cf75e13",
+    "https://deno.land/x/ulid@v0.2.0/mod.ts": "2a5639be4b383b2e8633af51a50815904720b694a8679828057be78ea47095e1",
+    "https://deno.land/x/ulid@v0.2.1/mod.ts": "2a5639be4b383b2e8633af51a50815904720b694a8679828057be78ea47095e1"
   }
 }
