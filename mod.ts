@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 export * from "./src/providers.ts";
-export * from "./src/clean_expired_entries.ts";
+export * from "./src/clean_kv.ts";
 export * from "./src/get_session_access_token.ts";
 export * from "./src/handle_callback.ts";
 export * from "./src/get_session_id.ts";

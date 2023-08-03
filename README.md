@@ -133,10 +133,10 @@ provider you like.
 1. Clean-up expired KV entries as part of a cron job, if possible.
 
    ```ts
-   import { cleanExpiredEntries } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   import { cleanKv } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    async function cronJob() {
-     await cleanExpiredEntries();
+     await cleanKv();
    }
    ```
 
@@ -233,8 +233,6 @@ In the pull request, please do the following:
 1. Add the provider to the README's list of
    [pre-configured OAuth 2.0 clients](#pre-configured-oauth-20-clients), in
    alphabetical order.
-
-## In the Wild
 
 Check out these projects powered by Deno KV OAuth 2.0:
 

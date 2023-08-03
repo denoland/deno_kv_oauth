@@ -20,21 +20,19 @@ import {
  *
  * @example
  * ```ts
- * import { cleanExpiredEntries } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { cleanKv } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * await cleanExpiredEntries();
+ * await cleanKv();
  * ```
  */
-export async function cleanExpiredEntries() {
+export async function cleanKv() {
   const expiredOAuthSessionsIter = listExpiredOAuthSessions();
   const expiredTokensIter = listExpiredTokens();
   const promises = [];
   for await (const { key } of expiredOAuthSessionsIter) {
-    console.log(key);
     promises.push(deleteOAuthSession(key[1] as string));
   }
   for await (const { key } of expiredTokensIter) {
-    console.log(key);
     promises.push(deleteStoredTokensBySession(key[1] as string));
   }
   await Promise.all(promises);
