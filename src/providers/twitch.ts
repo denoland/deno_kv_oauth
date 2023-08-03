@@ -43,7 +43,9 @@ export function createTwitchOAuth2Client(
     ...additionalOAuth2ClientConfig,
     defaults: {
       requestOptions: {
+        ...additionalOAuth2ClientConfig.defaults.requestOptions,
         urlParams: {
+          ...additionalOAuth2ClientConfig.defaults.requestOptions?.urlParams,
           client_id: clientId,
           client_secret: clientSecret,
         },
