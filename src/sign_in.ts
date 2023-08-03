@@ -67,7 +67,6 @@ export async function signIn(
     name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
     value: oauthSessionId,
     secure: isSecure(request.url),
-
     maxAge,
   });
   return response;
