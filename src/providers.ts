@@ -12,4 +12,5 @@ export * from "./providers/okta.ts";
 export * from "./providers/patreon.ts";
 export * from "./providers/slack.ts";
 export * from "./providers/spotify.ts";
+export * from "./providers/twitch.ts";
 export * from "./providers/twitter.ts";

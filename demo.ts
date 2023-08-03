@@ -13,6 +13,7 @@ import {
   createPatreonOAuth2Client,
   createSlackOAuth2Client,
   createSpotifyOAuth2Client,
+  createTwitchOAuth2Client,
   createTwitterOAuth2Client,
   getSessionAccessToken,
   getSessionId,
@@ -48,6 +49,7 @@ const createOAuth2ClientFn = {
   Patreon: createPatreonOAuth2Client,
   Slack: createSlackOAuth2Client,
   Spotify: createSpotifyOAuth2Client,
+  Twitch: createTwitchOAuth2Client,
   Twitter: createTwitterOAuth2Client,
 }[provider];
 
