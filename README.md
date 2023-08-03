@@ -234,6 +234,8 @@ In the pull request, please do the following:
    [pre-configured OAuth 2.0 clients](#pre-configured-oauth-20-clients), in
    alphabetical order.
 
+## In the Wild
+
 Check out these projects powered by Deno KV OAuth 2.0:
 
 1. [Deno SaaSKit / Deno Hunt](https://saaskit.deno.dev/) - A modern SaaS
