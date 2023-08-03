@@ -32,11 +32,23 @@ export function createTwitchOAuth2Client(
     & WithRedirectUri
     & WithScope,
 ): OAuth2Client {
+  const clientId = Deno.env.get("TWITCH_CLIENT_ID")!;
+  const clientSecret = Deno.env.get("TWITCH_CLIENT_SECRET")!;
+
   return new OAuth2Client({
-    clientId: Deno.env.get("TWITCH_CLIENT_ID")!,
-    clientSecret: Deno.env.get("TWITCH_CLIENT_SECRET")!,
+    clientId,
+    clientSecret,
     authorizationEndpointUri: "https://id.twitch.tv/oauth2/authorize",
     tokenUri: "https://id.twitch.tv/oauth2/token",
     ...additionalOAuth2ClientConfig,
+    defaults: {
+      requestOptions: {
+        urlParams: {
+          client_id: clientId,
+          client_secret: clientSecret,
+        },
+      },
+      ...additionalOAuth2ClientConfig.defaults,
+    },
   });
 }
