@@ -42,6 +42,7 @@ export function createTwitchOAuth2Client(
     tokenUri: "https://id.twitch.tv/oauth2/token",
     ...additionalOAuth2ClientConfig,
     defaults: {
+      ...additionalOAuth2ClientConfig.defaults,
       requestOptions: {
         ...additionalOAuth2ClientConfig.defaults.requestOptions,
         urlParams: {
@@ -50,7 +51,6 @@ export function createTwitchOAuth2Client(
           client_secret: clientSecret,
         },
       },
-      ...additionalOAuth2ClientConfig.defaults,
     },
   });
 }
