@@ -133,10 +133,10 @@ provider you like.
 1. Clean-up expired KV entries as part of a cron job, if possible.
 
    ```ts
-   import { cleanKv } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   import { cleanExpired } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    async function cronJob() {
-     await cleanKv();
+     await cleanExpired();
    }
    ```
 

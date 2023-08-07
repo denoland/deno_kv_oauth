@@ -20,12 +20,12 @@ import {
  *
  * @example
  * ```ts
- * import { cleanKv } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { cleanExpired } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * await cleanKv();
+ * await cleanExpired();
  * ```
  */
-export async function cleanKv() {
+export async function cleanExpired() {
   const expiredOAuthSessionsIter = listExpiredOAuthSessions();
   const expiredTokensIter = listExpiredTokens();
   const promises = [];

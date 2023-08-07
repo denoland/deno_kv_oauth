@@ -5,7 +5,7 @@ import {
   setOAuthSession,
   setTokensBySession,
 } from "./core.ts";
-import { cleanKv } from "./clean_kv.ts";
+import { cleanExpired } from "./clean_expired.ts";
 import { assertEquals, assertNotEquals, SECOND, ulid } from "../dev_deps.ts";
 import { genOAuthSession, genTokens } from "./test_utils.ts";
 
@@ -26,7 +26,7 @@ Deno.test("cleanupExpiredEntries()", async () => {
   assertNotEquals(await getOAuthSession(validOAuthSessionKey), null);
   assertNotEquals(await getTokensBySession(validTokensKey), null);
 
-  await cleanKv();
+  await cleanExpired();
 
   assertEquals(await getOAuthSession(expiredOAuthSessionKey), null);
   assertEquals(await getTokensBySession(expiredTokensKey), null);
