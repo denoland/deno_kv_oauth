@@ -21,7 +21,7 @@ export const COOKIE_BASE = {
   // 90 days
   maxAge: 7776000,
   sameSite: "Lax",
-} as Partial<Cookie>;
+} as Required<Pick<Cookie, "path" | "httpOnly" | "maxAge" | "sameSite">>;
 
 const KV_PATH_KEY = "KV_PATH";
 let path = undefined;
