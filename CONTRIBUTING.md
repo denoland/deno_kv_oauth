@@ -10,9 +10,9 @@ checks pass. This checks formatting, linting, types and runs tests.
 In the pull request, please do the following:
 
 1. Share a screenshot of the
-   [demo web page running on your local machine](#running-the-demo). This
-   confirms that the newly created OAuth 2.0 client is working correctly.
+   [demo web page running on your local machine](README.md#running-the-demo).
+   This confirms that the newly created OAuth 2.0 client is working correctly.
 1. Ensure the code example snippet is reproducible.
 1. Add the provider to the README's list of
-   [pre-configured OAuth 2.0 clients](#pre-configured-oauth-20-clients), in
-   alphabetical order.
+   [pre-configured OAuth 2.0 clients](README.md#pre-configured-oauth-20-clients),
+   in alphabetical order.
