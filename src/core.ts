@@ -55,6 +55,11 @@ export async function getOAuthSession(oauthSessionId: string) {
   return result.value;
 }
 
+// Lists all OAuth 2.0 session entries.
+export function listOAuthSessions() {
+  return kv.list<OAuthSession>({ prefix: [OAUTH_SESSION_PREFIX] });
+}
+
 // Stores the OAuth 2.0 session object for the given OAuth 2.0 session ID.
 export async function setOAuthSession(
   oauthSessionId: string,
@@ -122,6 +127,11 @@ export async function getTokensBySession(
     sessionId,
   ], { consistency });
   return result.value !== null ? toTokens(result.value) : null;
+}
+
+// Lists all tokens entries.
+export function listTokens() {
+  return kv.list<Tokens>({ prefix: [STORED_TOKENS_BY_SESSION_PREFIX] });
 }
 
 /**
