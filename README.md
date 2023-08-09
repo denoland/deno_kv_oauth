@@ -110,14 +110,33 @@ provider you like.
 
    const oauth2Client = createGitHubOAuth2Client();
 
+   async function getGitHubUser(accessToken: string): Promise<any> {
+     const response = await fetch("https://api.github.com/user", {
+       headers: { authorization: `Bearer ${accessToken}` },
+     });
+     if (!response.ok) {
+       const { message } = await response.json();
+       throw new Error(message);
+     }
+     return await response.json();
+   }
+
    async function handleAccountPage(request: Request) {
      const sessionId = getSessionId(request);
-     const isSignedIn = sessionId !== undefined;
+     const hasSessionIdCookie = sessionId !== undefined;
 
-     if (!isSignedIn) return new Response(null, { status: 404 });
+     if (!hasSessionIdCookie) return new Response(null, { status: 404 });
 
      const accessToken = await getSessionAccessToken(oauth2Client, sessionId);
-     return Response.json({ isSignedIn, accessToken });
+     if (accessToken === null) return new Response(null, { status: 400 });
+
+     try {
+       const githubUser = await getGitHubUser(accessToken);
+       return Response.json(githubUser);
+     } catch (error) {
+       console.error(error);
+       return Response.error();
+     }
    }
    ```
 
