@@ -1,18 +1,11 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getCookies } from "../deps.ts";
-import {
-  getCookieName,
-  getTokensBySession,
-  isSecure,
-  SITE_COOKIE_NAME,
-} from "./core.ts";
+import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./core.ts";
 
 /**
- * Gets the session ID for a given request. This is well-suited for checking whether the client is signed in by checking if nullish.
+ * Gets the session ID for a given request. This is well-suited for checking whether the client is signed in by checking if undefined.
  *
- * It does this by:
- * 1. Getting the session ID from the cookie in the given request. If the request has no cookie, null is returned.
- * 2. Getting the OAuth 2.0 session object using the session ID from KV. If the OAuth 2.0 token doesn't exist, null is returned.
+ * It does this by getting the session ID from the cookie in the given request. If the request has no cookie, undefined is returned.
  *
  * @param request The HTTP request from the client.
  *
@@ -20,26 +13,15 @@ import {
  * ```ts
  * import { getSessionId } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * export async function handler(request: Request) {
- *   const sessionId = await getSessionId(request);
- *   const isSignedIn = sessionId !== undefined;
+ * export function handler(request: Request) {
+ *   const sessionId = getSessionId(request);
+ *   const hasSessionIdCookie = sessionId !== undefined;
  *
- *   return Response.json({ sessionId, isSignedIn });
+ *   return Response.json({ sessionId, hasSessionIdCookie });
  * }
  * ```
  */
-export async function getSessionId(request: Request) {
+export function getSessionId(request: Request) {
   const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
-  const sessionId = getCookies(request.headers)[cookieName];
-  if (sessionId === undefined) return undefined;
-
-  // First, try with eventual consistency. If that returns null, try with strong consistency.
-  if (
-    await getTokensBySession(sessionId, "eventual") ||
-    await getTokensBySession(sessionId)
-  ) {
-    return sessionId;
-  }
-
-  return undefined;
+  return getCookies(request.headers)[cookieName] as string | undefined;
 }

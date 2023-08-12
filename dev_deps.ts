@@ -6,8 +6,8 @@ export {
   assertRejects,
   assertStringIncludes,
   assertThrows,
-} from "https://deno.land/std@0.194.0/testing/asserts.ts";
-export { walk } from "https://deno.land/std@0.194.0/fs/walk.ts";
-export { globToRegExp } from "https://deno.land/std@0.194.0/path/glob.ts";
-export { loadSync } from "https://deno.land/std@0.194.0/dotenv/mod.ts";
+} from "https://deno.land/std@0.197.0/assert/mod.ts";
+export { walk } from "https://deno.land/std@0.197.0/fs/walk.ts";
+export { globToRegExp } from "https://deno.land/std@0.197.0/path/glob.ts";
+export { loadSync } from "https://deno.land/std@0.197.0/dotenv/mod.ts";
 export * from "./deps.ts";

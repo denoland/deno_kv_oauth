@@ -1,7 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { getCookies, type OAuth2Client, setCookie } from "../deps.ts";
+import { assert, getCookies, type OAuth2Client, setCookie } from "../deps.ts";
 import {
-  assert,
   COOKIE_BASE,
   deleteOAuthSession,
   getCookieName,

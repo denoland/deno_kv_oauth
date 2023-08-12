@@ -21,7 +21,7 @@ export const COOKIE_BASE = {
   // 90 days
   maxAge: 7776000,
   sameSite: "Lax",
-} as Partial<Cookie>;
+} as Required<Pick<Cookie, "path" | "httpOnly" | "maxAge" | "sameSite">>;
 
 const KV_PATH_KEY = "KV_PATH";
 let path = undefined;
@@ -53,6 +53,11 @@ export async function getOAuthSession(oauthSessionId: string) {
     oauthSessionId,
   ]);
   return result.value;
+}
+
+// Lists all OAuth 2.0 session entries.
+export function listOAuthSessions() {
+  return kv.list<OAuthSession>({ prefix: [OAUTH_SESSION_PREFIX] });
 }
 
 // Stores the OAuth 2.0 session object for the given OAuth 2.0 session ID.
@@ -124,6 +129,11 @@ export async function getTokensBySession(
   return result.value !== null ? toTokens(result.value) : null;
 }
 
+// Lists all tokens entries.
+export function listTokens() {
+  return kv.list<Tokens>({ prefix: [STORED_TOKENS_BY_SESSION_PREFIX] });
+}
+
 /**
  * Stores the token for the given session ID.
  * Before storage, the token is converted to a stored token using {@linkcode toStoredTokens}.
@@ -155,11 +165,4 @@ export function redirect(location: string) {
     },
     status: Status.Found,
   });
-}
-
-/** @todo Replace this function with a single-file export if https://github.com/denoland/deno_std/pull/3445 lands. */
-export function assert(cond: unknown, message: string): asserts cond {
-  if (!cond) {
-    throw new Error(message);
-  }
 }

@@ -110,14 +110,33 @@ provider you like.
 
    const oauth2Client = createGitHubOAuth2Client();
 
-   async function handleAccountPage(request: Request) {
-     const sessionId = await getSessionId(request);
-     const isSignedIn = sessionId !== undefined;
+   async function getGitHubUser(accessToken: string): Promise<any> {
+     const response = await fetch("https://api.github.com/user", {
+       headers: { authorization: `Bearer ${accessToken}` },
+     });
+     if (!response.ok) {
+       const { message } = await response.json();
+       throw new Error(message);
+     }
+     return await response.json();
+   }
 
-     if (!isSignedIn) return new Response(null, { status: 404 });
+   async function handleAccountPage(request: Request) {
+     const sessionId = getSessionId(request);
+     const hasSessionIdCookie = sessionId !== undefined;
+
+     if (!hasSessionIdCookie) return new Response(null, { status: 404 });
 
      const accessToken = await getSessionAccessToken(oauth2Client, sessionId);
-     return Response.json({ isSignedIn, accessToken });
+     if (accessToken === null) return new Response(null, { status: 400 });
+
+     try {
+       const githubUser = await getGitHubUser(accessToken);
+       return Response.json(githubUser);
+     } catch (error) {
+       console.error(error);
+       return Response.error();
+     }
    }
    ```
 
@@ -129,6 +148,14 @@ provider you like.
    ```
 
 > Check out a full implementation in the [demo source code](./demo.ts).
+
+1. When needed, you can delete all KV-stored OAuth 2.0 sessions and tokens.
+
+   ```ts
+   import { clearOAuthSessionsAndTokens } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+
+   await clearOAuthSessionsAndTokens();
+   ```
 
 ### Pre-configured OAuth 2.0 Clients
 
@@ -205,22 +232,15 @@ Twitter:
 PROVIDER=Twitter SCOPE=users.read deno task demo
 ```
 
-## Contributing
+## Known Issues
 
-Before submitting a pull request, please run `deno task ok` and ensure all
-checks pass. This checks formatting, linting, types and runs tests.
+### Twitch Incompatibility
 
-### Adding a Pre-configured OAuth 2.0 Client
-
-In the pull request, please do the following:
-
-1. Share a screenshot of the
-   [demo web page running on your local machine](#running-the-demo). This
-   confirms that the newly created OAuth 2.0 client is working correctly.
-1. Ensure the code example snippet is reproducible.
-1. Add the provider to the README's list of
-   [pre-configured OAuth 2.0 clients](#pre-configured-oauth-20-clients), in
-   alphabetical order.
+This module is incompatible with [Twitch](https://www.twitch.tv/) as an OAuth
+2.0 provider, as the platform
+[doesn't support PKCE](https://twitch.uservoice.com/forums/310213-developers/suggestions/39785686-add-pkce-support-to-the-oauth2-0-authorization-cod).
+[PKCE](https://oauth.net/2/pkce/) is a requirement for all OAuth 2.0 providers
+for this module.
 
 ## In the Wild
 
@@ -239,6 +259,13 @@ Check out these projects powered by Deno KV OAuth 2.0:
 1. [Ultra + Deno KV OAuth demo](https://github.com/mbhrznr/ultra-deno-kv-oauth-demo) -
    A demo of Deno KV OAuth working in the
    [Ultra web framework](https://ultrajs.dev/).
+1. [Hono + Deno KV OAuth demo](https://hono-deno-kv-oauth.deno.dev/) -
+   A demo of Deno KV OAuth working in the
+   [Hono web framework](https://hono.dev/).
+1. [Cheetah + Deno KV OAuth demo](https://cheetah-deno-kv-oauth.deno.dev/) -
+   A demo of Deno KV OAuth working in the
+   [Cheetah web framework](https://cheetah.mod.land/).
+1. [Paquet](https://paquet.app) - A web app shop
 
 > Do you have a project powered by Deno KV OAuth 2.0 that you'd like to share?
 > Please submit a pull request adding that project to this list.
