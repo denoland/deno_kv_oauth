@@ -1,5 +1,11 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { OAuth2Client, OAuth2ResponseError, SECOND, Tokens } from "../deps.ts";
+import {
+  OAuth2Client,
+  OAuth2ResponseError,
+  OIDCClient,
+  SECOND,
+  Tokens,
+} from "../deps.ts";
 import { getTokensBySession, setTokensBySession } from "./core.ts";
 
 /**
@@ -20,7 +26,7 @@ import { getTokensBySession, setTokensBySession } from "./core.ts";
  * ```
  */
 export async function getSessionAccessToken(
-  oauth2Client: OAuth2Client,
+  oauth2Client: OAuth2Client | OIDCClient,
   sessionId: string,
 ) {
   // First, try with eventual consistency. If that returns null, try with strong consistency.

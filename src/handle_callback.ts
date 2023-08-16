@@ -1,5 +1,11 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, getCookies, type OAuth2Client, setCookie } from "../deps.ts";
+import {
+  assert,
+  getCookies,
+  type OAuth2Client,
+  OIDCClient,
+  setCookie,
+} from "../deps.ts";
 import {
   COOKIE_BASE,
   deleteOAuthSession,
@@ -46,7 +52,7 @@ import {
  */
 export async function handleCallback(
   request: Request,
-  oauth2Client: OAuth2Client,
+  oauth2Client: OAuth2Client | OIDCClient,
   redirectUrl = "/",
 ) {
   const oauthCookieName = getCookieName(

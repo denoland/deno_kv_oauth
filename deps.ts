@@ -17,5 +17,8 @@ export {
   type OAuth2ClientConfig,
   OAuth2ResponseError,
   type Tokens,
-} from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
+} from "https://raw.githubusercontent.com/cmd-johnson/deno-oauth2-client/feature/oidc/mod.ts";
+export {
+  OIDCClient,
+} from "https://raw.githubusercontent.com/cmd-johnson/deno-oauth2-client/feature/oidc/oidc.ts";
 export { SECOND } from "https://deno.land/std@0.198.0/datetime/constants.ts";

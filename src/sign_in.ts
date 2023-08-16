@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { type OAuth2Client, setCookie } from "../deps.ts";
+import { type OAuth2Client, OIDCClient, setCookie } from "../deps.ts";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -32,7 +32,7 @@ import {
  */
 export async function signIn(
   request: Request,
-  oauth2Client: OAuth2Client,
+  oauth2Client: OAuth2Client | OIDCClient,
   options?: {
     /** These parameters will be appended to the authorization URI, if defined. */
     urlParams?: Record<string, string>;
