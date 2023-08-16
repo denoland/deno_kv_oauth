@@ -259,6 +259,12 @@ Check out these projects powered by Deno KV OAuth 2.0:
 1. [Ultra + Deno KV OAuth demo](https://github.com/mbhrznr/ultra-deno-kv-oauth-demo) -
    A demo of Deno KV OAuth working in the
    [Ultra web framework](https://ultrajs.dev/).
+1. [Hono + Deno KV OAuth demo](https://dash.deno.com/playground/hono-deno-kv-oauth) -
+   A demo of Deno KV OAuth working in the
+   [Hono web framework](https://hono.dev/).
+1. [Cheetah + Deno KV OAuth demo](https://dash.deno.com/playground/cheetah-deno-kv-oauth) -
+   A demo of Deno KV OAuth working in the
+   [Cheetah web framework](https://cheetah.mod.land/).
 1. [Paquet](https://paquet.app) - A web app shop
 
 > Do you have a project powered by Deno KV OAuth 2.0 that you'd like to share?
