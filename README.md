@@ -127,7 +127,7 @@ provider you like.
 
      if (!hasSessionIdCookie) return new Response(null, { status: 404 });
 
-     const accessToken = await getSessionAccessToken(oauth2Client, sessionId);
+     const accessToken = await getSessionAccessToken(sessionId);
      if (accessToken === null) return new Response(null, { status: 400 });
 
      try {

@@ -71,7 +71,7 @@ async function indexHandler(request: Request) {
   const sessionId = getSessionId(request);
   const hasSessionIdCookie = sessionId !== undefined;
   const accessToken = hasSessionIdCookie
-    ? await getSessionAccessToken(oauth2Client, sessionId)
+    ? await getSessionAccessToken(sessionId)
     : null;
 
   const accessTokenInnerText = accessToken !== null

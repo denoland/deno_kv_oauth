@@ -47,11 +47,8 @@ export interface OAuthSession {
 const OAUTH_SESSION_PREFIX = "oauth_sessions";
 
 // Retrieves the OAuth 2.0 session object for the given OAuth 2.0 session ID.
-export async function getOAuthSession(oauthSessionId: string) {
-  const result = await kv.get<OAuthSession>([
-    OAUTH_SESSION_PREFIX,
-    oauthSessionId,
-  ]);
+export async function getOAuthSession(id: string) {
+  const result = await kv.get<OAuthSession>([OAUTH_SESSION_PREFIX, id]);
   return result.value;
 }
 
@@ -62,93 +59,61 @@ export function listOAuthSessions() {
 
 // Stores the OAuth 2.0 session object for the given OAuth 2.0 session ID.
 export async function setOAuthSession(
-  oauthSessionId: string,
-  oauthSession: OAuthSession,
+  id: string,
+  value: OAuthSession,
+  expireIn?: number,
 ) {
-  await kv.set([OAUTH_SESSION_PREFIX, oauthSessionId], oauthSession);
+  await kv.set([OAUTH_SESSION_PREFIX, id], value, { expireIn });
 }
 
 // Deletes the OAuth 2.0 session object for the given OAuth 2.0 session ID.
-export async function deleteOAuthSession(oauthSessionId: string) {
-  await kv.delete([OAUTH_SESSION_PREFIX, oauthSessionId]);
+export async function deleteOAuthSession(id: string) {
+  await kv.delete([OAUTH_SESSION_PREFIX, id]);
 }
 
-// Tokens by session
-const STORED_TOKENS_BY_SESSION_PREFIX = "stored_tokens_by_session";
+// Legacy stored tokens
+const LEGACY_TOKENS_PREFIX = "stored_tokens_by_session";
 
-// Token which has an expiry that's time-absolute, instead of time-relative.
-interface StoredTokens extends Omit<Tokens, "expiresIn"> {
-  expiresAt?: Date;
+// Lists all legacy tokens entries.
+export function listLegacyTokens() {
+  return kv.list({ prefix: [LEGACY_TOKENS_PREFIX] });
 }
 
-/**
- * Converts a normal token, with a time-relative expiry, to a stored token, with a time-absolute expiry.
- * This is done by replacing the normal token's `expiresIn` property with an `expiresAt` property.
- *
- * Note: this is exported for testing purposes only.
- */
-export function toStoredTokens(tokens: Tokens): StoredTokens {
-  if (tokens.expiresIn === undefined) return tokens;
-
-  const expiresAt = new Date(Date.now() + (tokens.expiresIn * SECOND));
-
-  const storedTokens = { ...tokens };
-  delete storedTokens.expiresIn;
-  return { ...storedTokens, expiresAt };
+export async function deleteLegacyTokens(sessionId: string) {
+  await kv.delete([LEGACY_TOKENS_PREFIX, sessionId]);
 }
 
-/**
- * Converts a stored token, with a time-absolute expiry, to a normal token, with a time-relative expiry.
- * This is done by replacing the stored token's `expiresAt` property with an `expiresIn` property.
- *
- * Note: this is exported for testing purposes only.
- */
-export function toTokens(storedTokens: StoredTokens): Tokens {
-  if (storedTokens.expiresAt === undefined) return storedTokens;
+// Tokens
+const TOKENS_PREFIX = "tokens";
 
-  const expiresIn =
-    (Date.now() - Date.parse(storedTokens.expiresAt.toString())) / SECOND;
-
-  const tokens = { ...storedTokens };
-  delete tokens.expiresAt;
-  return { ...tokens, expiresIn };
-}
-
-/**
- * Retrieves the token for the given session ID.
- * Before retrieval, the stored token is converted to a normal token using {@linkcode toTokens}.
- */
-export async function getTokensBySession(
+// Retrieves the token for the given session ID.
+export async function getTokens(
   sessionId: string,
   consistency?: Deno.KvConsistencyLevel,
 ) {
-  const result = await kv.get<StoredTokens>([
-    STORED_TOKENS_BY_SESSION_PREFIX,
-    sessionId,
-  ], { consistency });
-  return result.value !== null ? toTokens(result.value) : null;
+  const result = await kv.get<Tokens>([TOKENS_PREFIX, sessionId], {
+    consistency,
+  });
+  return result.value;
 }
 
 // Lists all tokens entries.
 export function listTokens() {
-  return kv.list<Tokens>({ prefix: [STORED_TOKENS_BY_SESSION_PREFIX] });
+  return kv.list<Tokens>({ prefix: [TOKENS_PREFIX] });
 }
 
-/**
- * Stores the token for the given session ID.
- * Before storage, the token is converted to a stored token using {@linkcode toStoredTokens}.
- */
-export async function setTokensBySession(
-  sessionId: string,
-  tokens: Tokens,
-) {
-  const storedTokens = toStoredTokens(tokens);
-  await kv.set([STORED_TOKENS_BY_SESSION_PREFIX, sessionId], storedTokens);
+// Stores the token for the given session ID.
+export async function setTokens(sessionId: string, tokens: Tokens) {
+  await kv.set([TOKENS_PREFIX, sessionId], tokens, {
+    expireIn: tokens.expiresIn !== undefined
+      ? tokens.expiresIn * SECOND
+      : undefined,
+  });
 }
 
 // Deletes the token for the given session ID.
-export async function deleteStoredTokensBySession(sessionId: string) {
-  await kv.delete([STORED_TOKENS_BY_SESSION_PREFIX, sessionId]);
+export async function deleteTokens(sessionId: string) {
+  await kv.delete([TOKENS_PREFIX, sessionId]);
 }
 
 /**

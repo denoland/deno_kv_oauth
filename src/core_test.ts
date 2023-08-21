@@ -2,17 +2,15 @@
 import { assert, assertEquals, Status, type Tokens } from "../dev_deps.ts";
 import {
   deleteOAuthSession,
-  deleteStoredTokensBySession,
+  deleteTokens,
   getCookieName,
   getOAuthSession,
-  getTokensBySession,
+  getTokens,
   isSecure,
   type OAuthSession,
   redirect,
   setOAuthSession,
-  setTokensBySession,
-  toStoredTokens,
-  toTokens,
+  setTokens,
 } from "./core.ts";
 
 Deno.test("isSecure() works correctly", () => {
@@ -44,35 +42,23 @@ Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
   assertEquals(await getOAuthSession(id), null);
 });
 
-Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
-  const initialTokens: Tokens = {
-    accessToken: crypto.randomUUID(),
-    tokenType: crypto.randomUUID(),
-    expiresIn: 42,
-  };
-  const currentTokens = toTokens(toStoredTokens(initialTokens));
-  assertEquals(currentTokens.accessToken, initialTokens.accessToken);
-  assertEquals(currentTokens.tokenType, initialTokens.tokenType);
-  assert(currentTokens.expiresIn! < initialTokens.expiresIn!);
-});
-
-Deno.test("(get/set/delete)TokensBySession() work interchangeably", async () => {
+Deno.test("(get/set/delete)Tokens() work interchangeably", async () => {
   const sessionId = crypto.randomUUID();
 
   // Tokens don't yet exist
-  assertEquals(await getTokensBySession(sessionId), null);
+  assertEquals(await getTokens(sessionId), null);
 
   const tokens: Tokens = {
     accessToken: crypto.randomUUID(),
     tokenType: crypto.randomUUID(),
   };
-  await setTokensBySession(sessionId, tokens);
+  await setTokens(sessionId, tokens);
 
-  assertEquals(await getTokensBySession(sessionId), tokens);
+  assertEquals(await getTokens(sessionId), tokens);
 
-  await deleteStoredTokensBySession(sessionId);
+  await deleteTokens(sessionId);
 
-  assertEquals(await getTokensBySession(sessionId), null);
+  assertEquals(await getTokens(sessionId), null);
 });
 
 Deno.test("redirect() returns a redirect response", () => {

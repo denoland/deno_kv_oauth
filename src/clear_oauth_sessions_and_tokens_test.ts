@@ -1,9 +1,9 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
   getOAuthSession,
-  getTokensBySession,
+  getTokens,
   setOAuthSession,
-  setTokensBySession,
+  setTokens,
 } from "./core.ts";
 import { clearOAuthSessionsAndTokens } from "./clear_oauth_sessions_and_tokens.ts";
 import { assertEquals, assertNotEquals } from "../dev_deps.ts";
@@ -17,17 +17,17 @@ Deno.test("clearOAuthSessionsAndTokens()", async () => {
       codeVerifier: crypto.randomUUID(),
     });
     assertNotEquals(await getOAuthSession(id), null);
-    await setTokensBySession(id, {
+    await setTokens(id, {
       accessToken: crypto.randomUUID(),
       tokenType: crypto.randomUUID(),
     });
-    assertNotEquals(await getTokensBySession(id), null);
+    assertNotEquals(await getTokens(id), null);
   }
 
   await clearOAuthSessionsAndTokens();
 
   for (const id of ids) {
     assertEquals(await getOAuthSession(id), null);
-    assertEquals(await getTokensBySession(id), null);
+    assertEquals(await getTokens(id), null);
   }
 });

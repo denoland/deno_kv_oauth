@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { deleteCookie } from "../deps.ts";
 import {
-  deleteStoredTokensBySession,
+  deleteTokens,
   getCookieName,
   isSecure,
   redirect,
@@ -32,7 +32,7 @@ export async function signOut(request: Request, redirectUrl = "/") {
   const sessionId = getSessionId(request);
   if (sessionId === undefined) return redirect(redirectUrl);
 
-  await deleteStoredTokensBySession(sessionId);
+  await deleteTokens(sessionId);
 
   const response = redirect(redirectUrl);
   const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
