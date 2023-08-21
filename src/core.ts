@@ -72,13 +72,16 @@ export async function deleteOAuthSession(id: string) {
 }
 
 // Legacy stored tokens
+/** @deprecated To be removed from v1.0.0 */
 const LEGACY_TOKENS_PREFIX = "stored_tokens_by_session";
 
 // Lists all legacy tokens entries.
+/** @deprecated To be removed from v1.0.0 */
 export function listLegacyTokens() {
   return kv.list({ prefix: [LEGACY_TOKENS_PREFIX] });
 }
 
+/** @deprecated To be removed from v1.0.0 */
 export async function deleteLegacyTokens(sessionId: string) {
   await kv.delete([LEGACY_TOKENS_PREFIX, sessionId]);
 }
