@@ -71,14 +71,42 @@ export async function deleteOAuthSession(id: string) {
   await kv.delete([OAUTH_SESSION_PREFIX, id]);
 }
 
-// Legacy stored tokens
-/** @deprecated To be removed from v1.0.0 */
+/**
+ * Legacy stored tokens
+ *
+ * @deprecated To be removed from v1.0.0
+ */
 const LEGACY_TOKENS_PREFIX = "stored_tokens_by_session";
 
-// Lists all legacy tokens entries.
-/** @deprecated To be removed from v1.0.0 */
+/**
+ * Exported for testing purposes only.
+ *
+ * @deprecated To be removed from v1.0.0
+ */
+export async function getLegacyTokens(sessionId: string) {
+  // deno-lint-ignore no-explicit-any
+  const res = await kv.get<any>([LEGACY_TOKENS_PREFIX, sessionId]);
+  return res.value;
+}
+
+/**
+ * Lists all legacy tokens entries.
+ *
+ * @deprecated To be removed from v1.0.0
+ */
 export function listLegacyTokens() {
-  return kv.list({ prefix: [LEGACY_TOKENS_PREFIX] });
+  // deno-lint-ignore no-explicit-any
+  return kv.list<any>({ prefix: [LEGACY_TOKENS_PREFIX] });
+}
+
+/**
+ * Exported for testing purposes only.
+ *
+ * @deprecated To be removed from v1.0.0
+ */
+// deno-lint-ignore no-explicit-any
+export async function setLegacyTokens(sessionId: string, tokens: any) {
+  await kv.set([LEGACY_TOKENS_PREFIX, sessionId], tokens);
 }
 
 /** @deprecated To be removed from v1.0.0 */

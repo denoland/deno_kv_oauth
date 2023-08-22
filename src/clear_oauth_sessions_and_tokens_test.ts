@@ -1,7 +1,9 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
+  getLegacyTokens,
   getOAuthSession,
   getTokens,
+  setLegacyTokens,
   setOAuthSession,
   setTokens,
 } from "./core.ts";
@@ -17,6 +19,8 @@ Deno.test("clearOAuthSessionsAndTokens()", async () => {
       codeVerifier: crypto.randomUUID(),
     });
     assertNotEquals(await getOAuthSession(id), null);
+    await setLegacyTokens(id, crypto.randomUUID());
+    assertNotEquals(await getLegacyTokens(id), null);
     await setTokens(id, {
       accessToken: crypto.randomUUID(),
       tokenType: crypto.randomUUID(),
@@ -28,6 +32,7 @@ Deno.test("clearOAuthSessionsAndTokens()", async () => {
 
   for (const id of ids) {
     assertEquals(await getOAuthSession(id), null);
+    assertEquals(await getLegacyTokens(id), null);
     assertEquals(await getTokens(id), null);
   }
 });
