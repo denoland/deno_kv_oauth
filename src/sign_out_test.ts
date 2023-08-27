@@ -1,11 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assertEquals, Status, type Tokens } from "../dev_deps.ts";
 import { signOut } from "./sign_out.ts";
-import {
-  getTokensBySession,
-  setTokensBySession,
-  SITE_COOKIE_NAME,
-} from "./core.ts";
+import { getTokens, setTokens, SITE_COOKIE_NAME } from "./core.ts";
 
 Deno.test("signOut()", async (test) => {
   const sessionId = crypto.randomUUID();
@@ -13,7 +9,7 @@ Deno.test("signOut()", async (test) => {
     accessToken: crypto.randomUUID(),
     tokenType: crypto.randomUUID(),
   };
-  await setTokensBySession(sessionId, tokens);
+  await setTokens(sessionId, tokens);
   const redirectUrl = "/why-hello-there";
   const request = new Request("http://example.com", {
     headers: {
@@ -36,6 +32,6 @@ Deno.test("signOut()", async (test) => {
   });
 
   await test.step("deletes the tokens entry in KV", async () => {
-    assertEquals(await getTokensBySession(sessionId), null);
+    assertEquals(await getTokens(sessionId), null);
   });
 });

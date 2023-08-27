@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getSessionAccessToken } from "./get_session_access_token.ts";
 import { assertEquals, assertRejects, SECOND, Tokens } from "../dev_deps.ts";
-import { setTokensBySession } from "./core.ts";
+import { setTokens } from "./core.ts";
 import { oauth2Client } from "./test_utils.ts";
 
 Deno.test("getSessionAccessToken()", async (test) => {
@@ -15,7 +15,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
       accessToken: crypto.randomUUID(),
       tokenType: "Bearer",
     };
-    await setTokensBySession(sessionId, tokens);
+    await setTokens(sessionId, tokens);
     assertEquals(
       await getSessionAccessToken(oauth2Client, sessionId),
       tokens.accessToken,
@@ -30,7 +30,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
       expiresIn: Date.now() + (30 * SECOND),
       refreshToken: crypto.randomUUID(),
     };
-    await setTokensBySession(sessionId, tokens);
+    await setTokens(sessionId, tokens);
     assertEquals(
       await getSessionAccessToken(oauth2Client, sessionId),
       tokens.accessToken,
@@ -45,7 +45,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
       expiresIn: 0,
       refreshToken: crypto.randomUUID(),
     };
-    await setTokensBySession(sessionId, tokens);
+    await setTokens(sessionId, tokens);
     assertRejects(async () =>
       await getSessionAccessToken(oauth2Client, sessionId)
     );
@@ -59,7 +59,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
       expiresIn: 60,
       refreshToken: crypto.randomUUID(),
     };
-    await setTokensBySession(sessionId, tokens);
+    await setTokens(sessionId, tokens);
     assertRejects(async () =>
       await getSessionAccessToken(oauth2Client, sessionId)
     );

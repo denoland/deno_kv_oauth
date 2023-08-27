@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { OAuth2Client, OAuth2ResponseError, SECOND, Tokens } from "../deps.ts";
-import { getTokensBySession, setTokensBySession } from "./core.ts";
+import { getTokens, setTokens } from "./core.ts";
 
 /**
  * Gets the access token for a given OAuth 2.0 client and session. If null is returned, the client must sign in.
@@ -24,8 +24,8 @@ export async function getSessionAccessToken(
   sessionId: string,
 ) {
   // First, try with eventual consistency. If that returns null, try with strong consistency.
-  const tokens = await getTokensBySession(sessionId, "eventual") ||
-    await getTokensBySession(sessionId);
+  const tokens = await getTokens(sessionId, "eventual") ||
+    await getTokens(sessionId);
   if (tokens === null) return null;
   if (
     tokens.refreshToken === undefined ||
@@ -49,7 +49,7 @@ export async function getSessionAccessToken(
     throw error;
   }
 
-  await setTokensBySession(sessionId, newTokens);
+  await setTokens(sessionId, newTokens);
 
   return newTokens.accessToken;
 }
