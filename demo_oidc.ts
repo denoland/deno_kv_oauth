@@ -1,25 +1,24 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { loadSync, OIDCClient, Status } from "./dev_deps.ts";
 import {
+  clearOAuthSessionsAndTokens,
   getSessionAccessToken,
   getSessionId,
   handleCallback,
   signIn,
   signOut,
 } from "./mod.ts";
-import { jwtVerify } from "https://deno.land/x/jose@v4.14.4/index.ts";
+import {
+  createRemoteJWKSet,
+  jwtVerify,
+} from "https://deno.land/x/jose@v4.14.4/index.ts";
 
 loadSync({ export: true });
 
-const { publicKey } = await crypto.subtle.generateKey(
-  {
-    name: "RSASSA-PKCS1-v1_5",
-    hash: "SHA-256", // SHA-1, SHA-256, SHA-384, or SHA-512
-    publicExponent: new Uint8Array([1, 0, 1]), // 0x03 or 0x010001
-    modulusLength: 2048, // 1024, 2048, or 4096
-  },
-  false,
-  ["sign", "verify"],
+await clearOAuthSessionsAndTokens();
+
+const jwks = createRemoteJWKSet(
+  new URL("https://www.googleapis.com/oauth2/v3/certs"),
 );
 
 const oauth2Client = new OIDCClient({
@@ -28,7 +27,7 @@ const oauth2Client = new OIDCClient({
   authorizationEndpointUri: "https://accounts.google.com/o/oauth2/v2/auth",
   tokenUri: "https://oauth2.googleapis.com/token",
   redirectUri: "http://localhost:8000/callback",
-  verifyJwt: (jwt) => jwtVerify(jwt, publicKey),
+  verifyJwt: (jwt) => jwtVerify(jwt, jwks),
   defaults: {
     scope: "openid",
   },
