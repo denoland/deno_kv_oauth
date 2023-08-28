@@ -6,3 +6,4 @@ export * from "./src/handle_callback.ts";
 export * from "./src/get_session_id.ts";
 export * from "./src/sign_in.ts";
 export * from "./src/sign_out.ts";
+export * from "./src/fresh_plugin.ts";
