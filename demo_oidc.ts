@@ -37,8 +37,13 @@ const oauth2Client = new OIDCClient({
 async function indexHandler(request: Request) {
   const sessionId = getSessionId(request);
   const hasSessionIdCookie = sessionId !== undefined;
-  const accessToken = hasSessionIdCookie
+  const tokens = hasSessionIdCookie
     ? await getSessionAccessToken(oauth2Client, sessionId)
+    : null;
+  const accessToken = tokens?.accessToken || null;
+  const userInfo = tokens !== null
+    // @ts-ignore Trust me
+    ? await oauth2Client.getUserInfo(tokens.accessToken, tokens.idToken)
     : null;
 
   const accessTokenInnerText = accessToken !== null
@@ -48,6 +53,7 @@ async function indexHandler(request: Request) {
     <p>Scope: ${oauth2Client.config.defaults?.scope}</p>
     <p>Signed in: ${hasSessionIdCookie}</p>
     <p>Your access token: ${accessTokenInnerText}</p>
+    <pre>${JSON.stringify(userInfo, undefined, 2)}</pre>
     <p>
       <a href="/signin">Sign in</a>
     </p>

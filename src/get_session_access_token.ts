@@ -32,7 +32,8 @@ export async function getSessionAccessToken(
   // First, try with eventual consistency. If that returns null, try with strong consistency.
   const tokens = await getTokensBySession(sessionId, "eventual") ||
     await getTokensBySession(sessionId);
-  if (tokens === null) return null;
+  return tokens;
+  /* if (tokens === null) return null;
   if (
     tokens.refreshToken === undefined ||
     // 5 second buffer
@@ -57,5 +58,5 @@ export async function getSessionAccessToken(
 
   await setTokensBySession(sessionId, newTokens);
 
-  return newTokens.accessToken;
+  return newTokens.accessToken; */
 }
