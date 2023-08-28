@@ -27,9 +27,10 @@ const oauth2Client = new OIDCClient({
   authorizationEndpointUri: "https://accounts.google.com/o/oauth2/v2/auth",
   tokenUri: "https://oauth2.googleapis.com/token",
   redirectUri: "http://localhost:8000/callback",
+  userInfoEndpoint: "https://openidconnect.googleapis.com/v1/userinfo",
   verifyJwt: (jwt) => jwtVerify(jwt, jwks),
   defaults: {
-    scope: "openid",
+    scope: ["openid", "email", "profile"],
   },
 });
 
