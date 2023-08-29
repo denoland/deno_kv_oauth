@@ -10,17 +10,17 @@ Deno.test("signOut()", async (test) => {
     tokenType: crypto.randomUUID(),
   };
   await setTokens(sessionId, tokens);
-  const redirectUrl = "/why-hello-there";
-  const request = new Request("http://example.com", {
+  const successUrl = "/why-hello-there";
+  const request = new Request("http://example.com?success_url=" + successUrl, {
     headers: {
       cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
     },
   });
-  const response = await signOut(request, redirectUrl);
+  const response = await signOut(request);
 
   await test.step("returns a redirect response", () => {
     assertEquals(response.body, null);
-    assertEquals(response.headers.get("location"), redirectUrl);
+    assertEquals(response.headers.get("location"), successUrl);
     assertEquals(response.status, Status.Found);
   });
 
