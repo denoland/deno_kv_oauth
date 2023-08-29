@@ -1,7 +1,9 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
+  deleteLegacyTokens,
   deleteOAuthSession,
-  deleteStoredTokensBySession,
+  deleteTokens,
+  listLegacyTokens,
   listOAuthSessions,
   listTokens,
 } from "./core.ts";
@@ -11,8 +13,9 @@ import {
  *
  * It does this by:
  * 1. Listing all OAuth 2.0 session entries and asynchronously deleting them.
- * 2. Listing all token entries and asynchronously deleting them.
- * 3. Waiting for all deletion tasks to complete.
+ * 2. Listing all legacy token entries and asynchronously deleting them.
+ * 3. Listing all token entries and asynchronously deleting them.
+ * 4. Waiting for all deletion tasks to complete.
  *
  * @example
  * ```ts
@@ -23,15 +26,17 @@ import {
  */
 export async function clearOAuthSessionsAndTokens() {
   const oauthSessionsIter = listOAuthSessions();
+  const legacyTokensIter = listLegacyTokens();
   const tokensIter = listTokens();
   const promises = [];
-  for await (const entry of oauthSessionsIter) {
-    const oauthSessionId = entry.key[1] as string;
-    promises.push(deleteOAuthSession(oauthSessionId));
+  for await (const { key } of oauthSessionsIter) {
+    promises.push(deleteOAuthSession(key[1] as string));
   }
-  for await (const entry of tokensIter) {
-    const sessionId = entry.key[1] as string;
-    promises.push(deleteStoredTokensBySession(sessionId));
+  for await (const { key } of legacyTokensIter) {
+    promises.push(deleteLegacyTokens(key[1] as string));
+  }
+  for await (const { key } of tokensIter) {
+    promises.push(deleteTokens(key[1] as string));
   }
   await Promise.all(promises);
 }
