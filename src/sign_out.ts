@@ -18,10 +18,7 @@ import { getSessionId } from "./get_session_id.ts";
  * 2. Deleting the stored OAuth 2.0 tokens from KV.
  * 3. Returning a response that invalidates the client's session cookie and redirects the client to the given success URL.
  *
- * The success URL defines the URL that the client will be redirected to once successfully signed-out. This value is set by the following order of precedence:
- * 1. The value of the `success_url` URL parameter of the request URL, if defined.
- * 2. The value of the [Referer]{@linkcode https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer} header, if of the same origin as the request.
- * 3. The root path, "/".
+ * See "Redirect URL after Sign-In or Sign-Out" section in the README for more information on the success URL.
  *
  * @example
  * ```ts
