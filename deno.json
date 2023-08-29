@@ -18,10 +18,5 @@
   },
   "exclude": [
     "cov/"
-  ],
-  "test": {
-    "exclude": [
-      "src/fresh_plugin.ts"
-    ]
-  }
+  ]
 }
