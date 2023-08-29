@@ -54,7 +54,44 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
 Check out the full documentation and API reference
 [here](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts).
 
-### Getting Started
+### Getting Started with [Fresh](https://fresh.deno.dev/)
+
+If you're not performing anything special in the sign-in, sign-out and callback
+handlers, you can add the Deno KV OAuth's Fresh plugin to your project. This
+automatically handles the following routes:
+
+- `GET /oauth/signin`
+- `GET /oauth/callback`
+- `GET /oauth/signout`
+
+```ts
+// utils/oauth2_client.ts
+import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+
+export const oauth2Client = createGitHubOAuth2Client();
+```
+
+```ts
+// main.ts
+import { start } from "$fresh/server.ts";
+import { freshPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+import manifest from "./fresh.gen.ts";
+import { oauth2Client } from "./utils/oauth2_client.ts";
+
+await start(manifest, {
+  plugins: [
+    freshPlugin(oauth2Client),
+  ],
+});
+```
+
+If you require more advanced plugin use, checkout:
+
+- The [source code](src/fresh_plugin.ts) for `freshPlugin()`
+- The [Plugin documentation](https://fresh.deno.dev/docs/concepts/plugins) for
+  Fresh
+
+### Getting Started with Other Frameworks
 
 This example uses GitHub as the OAuth 2.0 provider. However, you can use any
 provider you like.

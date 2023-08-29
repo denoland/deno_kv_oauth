@@ -8,7 +8,7 @@ import { signOut } from "./sign_out.ts";
 /**
  * Creates a basic plugin for the [Fresh]{@link https://fresh.deno.dev/} web framework.
  *
- * By default, the following routes are created:
+ * This creates handlers for the following routes:
  * - `GET /oauth/signin` for the sign-in page
  * - `GET /oauth/callback` for the callback page
  * - `GET /oauth/signout` for the sign-out page
