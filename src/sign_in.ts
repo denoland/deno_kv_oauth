@@ -3,6 +3,7 @@ import { type OAuth2Client, setCookie } from "../deps.ts";
 import {
   COOKIE_BASE,
   getCookieName,
+  getSuccessUrl,
   isSecure,
   OAUTH_COOKIE_NAME,
   redirect,
@@ -14,8 +15,13 @@ import {
  *
  * It does this by:
  * 1. Using a randomly generated state to construct the OAuth 2.0 provider's authorization URL and code verifier.
- * 2. Storing an OAuth 2.0 session object that contains the state and code verifier in KV. The OAuth 2.0 session object will be used in the callback handler to get the OAuth 2.0 tokens from the given provider.
+ * 2. Storing an OAuth 2.0 session object that contains the state and code verifier in KV. The OAuth 2.0 session object will be used in the callback handler to get the OAuth 2.0 tokens from the given provider and define the success URL.
  * 3. Returning a response that sets the client's OAuth 2.0 session cookie and redirects the client to the OAuth 2.0 provider's authorization URL.
+ *
+ * The success URL defines the URL that the client will be redirected to once successfully signed-in. This value is set by the following order of precedence:
+ * 1. The value of the `success_url` URL parameter of the request URL, if defined.
+ * 2. The value of the [Referer]{@linkcode https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer} header, if of the same origin as the request.
+ * 3. The root path, "/".
  *
  * @param request The HTTP request from the client.
  *
@@ -49,7 +55,8 @@ export async function signIn(
   }
 
   const oauthSessionId = crypto.randomUUID();
-  await setOAuthSession(oauthSessionId, { state, codeVerifier });
+  const successUrl = getSuccessUrl(request);
+  await setOAuthSession(oauthSessionId, { state, codeVerifier, successUrl });
 
   const response = redirect(uri.toString());
   setCookie(response.headers, {

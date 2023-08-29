@@ -5,6 +5,7 @@ import {
   deleteTokens,
   getCookieName,
   getOAuthSession,
+  getSuccessUrl,
   getTokens,
   isSecure,
   type OAuthSession,
@@ -79,4 +80,47 @@ Deno.test("redirect() returns a redirect response", () => {
   assertEquals(response.body, null);
   assertEquals(response.headers.get("location"), location);
   assertEquals(response.status, Status.Found);
+});
+
+Deno.test("getSuccessUrl()", async (test) => {
+  await test.step("returns `success_url` URL parameter, if defined", () => {
+    assertEquals(
+      getSuccessUrl(
+        new Request(
+          `http://example.com?success_url=${
+            encodeURIComponent("http://test.com")
+          }`,
+        ),
+      ),
+      "http://test.com",
+    );
+  });
+
+  await test.step("returns referer header of same origin, if defined", () => {
+    const referer = "http://example.com/path";
+    assertEquals(
+      getSuccessUrl(
+        new Request("http://example.com", { headers: { referer } }),
+      ),
+      referer,
+    );
+  });
+
+  await test.step("returns root path if referer is of different origin", () => {
+    assertEquals(
+      getSuccessUrl(
+        new Request("http://example.com", {
+          headers: { referer: "http://test.com" },
+        }),
+      ),
+      "/",
+    );
+  });
+
+  await test.step("returns root path by default", () => {
+    assertEquals(
+      getSuccessUrl(new Request("http://example.com")),
+      "/",
+    );
+  });
 });

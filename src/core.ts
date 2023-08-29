@@ -42,6 +42,7 @@ addEventListener("beforeunload", async () => {
 export interface OAuthSession {
   state: string;
   codeVerifier: string;
+  successUrl?: string;
 }
 
 const OAUTH_SESSIONS_PREFIX = "oauth_sessions";
@@ -200,4 +201,18 @@ export function redirect(location: string) {
     },
     status: Status.Found,
   });
+}
+
+export function getSuccessUrl(request: Request) {
+  const url = new URL(request.url);
+
+  const successUrl = url.searchParams.get("success_url");
+  if (successUrl !== null) return successUrl;
+
+  const referrer = request.headers.get("referer");
+  if (referrer !== null && (new URL(referrer).origin === url.origin)) {
+    return referrer;
+  }
+
+  return "/";
 }
