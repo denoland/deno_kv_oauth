@@ -1,11 +1,11 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { freshPlugin } from "./fresh_plugin.ts";
+import { kvOAuthPlugin } from "./fresh_plugin.ts";
 import { assert, assertArrayIncludes, assertNotEquals } from "../dev_deps.ts";
 import { oauth2Client } from "./test_utils.ts";
 
-Deno.test("freshPlugin() works correctly", async (test) => {
+Deno.test("kvOAuthPlugin() works correctly", async (test) => {
   await test.step("with default values", () => {
-    const plugin = freshPlugin(oauth2Client);
+    const plugin = kvOAuthPlugin(oauth2Client);
     assertNotEquals(plugin.routes, undefined);
     assert(plugin.routes!.every((route) => route.handler !== undefined));
     assertArrayIncludes(plugin.routes!.map((route) => route.path), [
@@ -19,7 +19,7 @@ Deno.test("freshPlugin() works correctly", async (test) => {
     const signInPath = "/signin";
     const callbackPath = "/callback";
     const signOutPath = "/signout";
-    const plugin = freshPlugin(oauth2Client, {
+    const plugin = kvOAuthPlugin(oauth2Client, {
       signInPath,
       callbackPath,
       signOutPath,

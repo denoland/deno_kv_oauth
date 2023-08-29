@@ -74,20 +74,20 @@ export const oauth2Client = createGitHubOAuth2Client();
 ```ts
 // main.ts
 import { start } from "$fresh/server.ts";
-import { freshPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 import manifest from "./fresh.gen.ts";
 import { oauth2Client } from "./utils/oauth2_client.ts";
 
 await start(manifest, {
   plugins: [
-    freshPlugin(oauth2Client),
+    kvOAuthPlugin(oauth2Client),
   ],
 });
 ```
 
 If you require more advanced plugin use, checkout:
 
-- The [source code](src/fresh_plugin.ts) for `freshPlugin()`
+- The [source code](src/fresh_plugin.ts) for `kvOAuthPlugin()`
 - The [Plugin documentation](https://fresh.deno.dev/docs/concepts/plugins) for
   Fresh
 

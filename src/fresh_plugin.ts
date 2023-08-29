@@ -23,18 +23,18 @@ import { signOut } from "./sign_out.ts";
  * ```ts
  * // main.ts
  * import { start } from "$fresh/server.ts";
- * import { freshPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  * import manifest from "./fresh.gen.ts";
  * import { oauth2Client } from "./utils/oauth2_client.ts"
  *
  * await start(manifest, {
  *   plugins: [
- *     freshPlugin(oauth2Client)
+ *     kvOAuthPlugin(oauth2Client)
  *   ]
  * });
  * ```
  */
-export function freshPlugin(
+export function kvOAuthPlugin(
   oauth2Client: OAuth2Client,
   options?: {
     /**
