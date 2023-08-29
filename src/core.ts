@@ -42,6 +42,7 @@ addEventListener("beforeunload", async () => {
 export interface OAuthSession {
   state: string;
   codeVerifier: string;
+  successUrl?: string;
 }
 
 const OAUTH_SESSIONS_PREFIX = "oauth_sessions";
@@ -200,4 +201,24 @@ export function redirect(location: string) {
     },
     status: Status.Found,
   });
+}
+
+/**
+ * The success URL defines the URL that the client will be redirected to once successfully signed-in or signed-out. This value is set by the following order of precedence:
+ * 1. The value of the `success_url` URL parameter of the request URL, if defined.
+ * 2. The value of the [Referer]{@linkcode https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer} header, if of the same origin as the request.
+ * 3. The root path, "/".
+ */
+export function getSuccessUrl(request: Request) {
+  const url = new URL(request.url);
+
+  const successUrl = url.searchParams.get("success_url");
+  if (successUrl !== null) return successUrl;
+
+  const referrer = request.headers.get("referer");
+  if (referrer !== null && (new URL(referrer).origin === url.origin)) {
+    return referrer;
+  }
+
+  return "/";
 }

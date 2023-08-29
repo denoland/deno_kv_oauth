@@ -13,17 +13,16 @@ import {
 } from "./core.ts";
 
 /**
- * Handles the OAuth 2.0 callback request for a given OAuth 2.0 client, and then redirects the client to the given redirect URL.
+ * Handles the OAuth 2.0 callback request for a given OAuth 2.0 client, and then redirects the client to the success URL set in {@linkcode signIn}.
  *
  * It does this by:
  * 1. Getting the OAuth 2.0 session ID from the cookie in the given request.
  * 2. Getting, then deleting, the OAuth 2.0 session object from KV using the OAuth 2.0 session ID. The OAuth 2.0 session object was generated in the sign-in process.
  * 3. Getting the OAuth 2.0 tokens from the given OAuth 2.0 client using the OAuth 2.0 session object.
  * 4. Storing the OAuth 2.0 tokens in KV using a generated session ID.
- * 5. Returning a response that sets a session cookie and redirects the client to the given redirect URL, the access token and the session ID for processing during the callback handler.
+ * 5. Returning a response that sets a session cookie and redirects the client to the success URL set in {@linkcode signIn}, the access token and the session ID for processing during the callback handler.
  *
  * @param request The HTTP request from the client. The URL of the request must match that of the OAuth 2.0 redirect URL.
- * @param redirectUrl The absolute URL or path that the client is redirected to after callback handling is complete.
  *
  * @example
  * ```ts
@@ -35,7 +34,6 @@ import {
  *   const { response, accessToken, sessionId } = await handleCallback(
  *     request,
  *     oauth2Client,
- *     "/redirect-path-after-handle"
  *   );
  *
  *    // Perform some actions with the `accessToken` and `sessionId`.
@@ -47,7 +45,6 @@ import {
 export async function handleCallback(
   request: Request,
   oauth2Client: OAuth2Client,
-  redirectUrl = "/",
 ) {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
@@ -69,7 +66,7 @@ export async function handleCallback(
   const sessionId = crypto.randomUUID();
   await setTokens(sessionId, tokens);
 
-  const response = redirect(redirectUrl);
+  const response = redirect(oauthSession.successUrl ?? "/");
   setCookie(
     response.headers,
     {
