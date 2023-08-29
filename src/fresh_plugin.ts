@@ -23,7 +23,7 @@ import { signOut } from "./sign_out.ts";
  * ```ts
  * // main.ts
  * import { start } from "$fresh/server.ts";
- * import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh_plugin.ts";
+ * import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
  * import manifest from "./fresh.gen.ts";
  * import { oauth2Client } from "./utils/oauth2_client.ts"
  *
