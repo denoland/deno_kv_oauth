@@ -232,6 +232,26 @@ Twitter:
 PROVIDER=Twitter SCOPE=users.read deno task demo
 ```
 
+### Redirect URL after Sign-In or Sign-Out
+
+The URL that the client is redirected to upon successful sign-in or sign-out is
+determined by the request made to the sign-in or sign-out endpoint. This value
+is set by the following order of precedence:
+
+1. The value of the `success_url` URL parameter of the request URL, if defined.
+   E.g. a request to `http://example.com/signin?success_url=/success` redirects
+   the client to `/success` after successful sign-in.
+2. The value of the
+   [`Referer`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer)
+   header, if of the same origin as the request. E.g. a request to
+   `http://example.com/signin` with `Referer` header `http://example.com/about`
+   redirects the client to `http://example.com/about` after successful sign-in.
+3. The root path, "/". E.g. a request to `http://example.com/signin` without the
+   `Referer` header redirects the client to `http://example.com` after
+   successful sign-in.
+
+The same applies to user sign-out.
+
 ## Known Issues
 
 ### Twitch Incompatibility
