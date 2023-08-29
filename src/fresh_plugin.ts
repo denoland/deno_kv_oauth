@@ -50,19 +50,11 @@ export function kvOAuthPlugin(
      */
     callbackPath?: string;
     /**
-     * The absolute URL or path that the client is redirected to after callback handling is complete.
-     */
-    callbackRedirectUrl?: string;
-    /**
      * Sign-out page path
      *
      * @default {"/oauth/signout"}
      */
     signOutPath?: string;
-    /**
-     * The absolute URL or path that the client is redirected to after sign out handling is complete.
-     */
-    signOutRedirectUrl?: string;
   },
 ): Plugin {
   return {
@@ -76,11 +68,7 @@ export function kvOAuthPlugin(
         path: options?.callbackPath ?? "/oauth/callback",
         handler: async (req) => {
           // Return object also includes `accessToken` and `sessionId` properties.
-          const { response } = await handleCallback(
-            req,
-            oauth2Client,
-            options?.callbackRedirectUrl,
-          );
+          const { response } = await handleCallback(req, oauth2Client);
           return response;
         },
       },
