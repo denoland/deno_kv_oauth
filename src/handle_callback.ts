@@ -8,7 +8,7 @@ import {
   isSecure,
   OAUTH_COOKIE_NAME,
   redirect,
-  setTokensBySession,
+  setTokens,
   SITE_COOKIE_NAME,
 } from "./core.ts";
 
@@ -67,7 +67,7 @@ export async function handleCallback(
   );
 
   const sessionId = crypto.randomUUID();
-  await setTokensBySession(sessionId, tokens);
+  await setTokens(sessionId, tokens);
 
   const response = redirect(redirectUrl);
   setCookie(
