@@ -9,6 +9,7 @@ import {
 } from "./dev_deps.ts";
 import { Status } from "./deps.ts";
 import { setTokens, SITE_COOKIE_NAME } from "./src/core.ts";
+import { genTokens } from "./src/test_utils.ts";
 
 const baseUrl = "http://localhost";
 
@@ -33,11 +34,8 @@ Deno.test("demo", async (test) => {
 
   await test.step("GET / serves a signed-in web page", async () => {
     const sessionId = crypto.randomUUID();
-    const accessToken = crypto.randomUUID();
-    await setTokens(sessionId, {
-      accessToken,
-      tokenType: crypto.randomUUID(),
-    });
+    const tokens = genTokens();
+    await setTokens(sessionId, tokens);
     const request = new Request(baseUrl, {
       headers: {
         cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
@@ -52,7 +50,7 @@ Deno.test("demo", async (test) => {
       response.headers.get("content-type"),
       "text/html; charset=utf-8",
     );
-    assertStringIncludes(html, accessToken);
+    assertStringIncludes(html, tokens.accessToken);
   });
 
   await test.step("GET / serves a signed-out web page", async () => {

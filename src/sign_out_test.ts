@@ -1,14 +1,12 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assertEquals, Status, type Tokens } from "../dev_deps.ts";
+import { assertEquals, Status } from "../dev_deps.ts";
 import { signOut } from "./sign_out.ts";
 import { getTokens, setTokens, SITE_COOKIE_NAME } from "./core.ts";
+import { genTokens } from "./test_utils.ts";
 
 Deno.test("signOut()", async (test) => {
   const sessionId = crypto.randomUUID();
-  const tokens: Tokens = {
-    accessToken: crypto.randomUUID(),
-    tokenType: crypto.randomUUID(),
-  };
+  const tokens = genTokens();
   await setTokens(sessionId, tokens);
   const successUrl = "/why-hello-there";
   const request = new Request("http://example.com?success_url=" + successUrl, {

@@ -9,22 +9,17 @@ import {
 } from "./core.ts";
 import { clearOAuthSessionsAndTokens } from "./clear_oauth_sessions_and_tokens.ts";
 import { assertEquals, assertNotEquals } from "../dev_deps.ts";
+import { genOAuthSession, genTokens } from "./test_utils.ts";
 
 Deno.test("clearOAuthSessionsAndTokens()", async () => {
   const ids = Array.from({ length: 10 }).map(() => crypto.randomUUID());
 
   for (const id of ids) {
-    await setOAuthSession(id, {
-      state: crypto.randomUUID(),
-      codeVerifier: crypto.randomUUID(),
-    });
+    await setOAuthSession(id, genOAuthSession());
     assertNotEquals(await getOAuthSession(id), null);
     await setLegacyTokens(id, crypto.randomUUID());
     assertNotEquals(await getLegacyTokens(id), null);
-    await setTokens(id, {
-      accessToken: crypto.randomUUID(),
-      tokenType: crypto.randomUUID(),
-    });
+    await setTokens(id, genTokens());
     assertNotEquals(await getTokens(id), null);
   }
 

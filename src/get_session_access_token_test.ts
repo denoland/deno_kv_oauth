@@ -2,7 +2,7 @@
 import { getSessionAccessToken } from "./get_session_access_token.ts";
 import { assertEquals, assertRejects, SECOND, Tokens } from "../dev_deps.ts";
 import { setTokens } from "./core.ts";
-import { oauth2Client } from "./test_utils.ts";
+import { genTokens, oauth2Client } from "./test_utils.ts";
 
 Deno.test("getSessionAccessToken()", async (test) => {
   await test.step("returns null for non-existent session", async () => {
@@ -11,10 +11,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
 
   await test.step("returns the access token for session without expiry", async () => {
     const sessionId = crypto.randomUUID();
-    const tokens: Tokens = {
-      accessToken: crypto.randomUUID(),
-      tokenType: "Bearer",
-    };
+    const tokens = genTokens();
     await setTokens(sessionId, tokens);
     assertEquals(
       await getSessionAccessToken(oauth2Client, sessionId),
@@ -25,10 +22,8 @@ Deno.test("getSessionAccessToken()", async (test) => {
   await test.step("returns the access token for session with far expiry", async () => {
     const sessionId = crypto.randomUUID();
     const tokens: Tokens = {
-      accessToken: crypto.randomUUID(),
-      tokenType: "Bearer",
+      ...genTokens(),
       expiresIn: Date.now() + (30 * SECOND),
-      refreshToken: crypto.randomUUID(),
     };
     await setTokens(sessionId, tokens);
     assertEquals(
@@ -40,10 +35,8 @@ Deno.test("getSessionAccessToken()", async (test) => {
   await test.step("rejects for an expired access token", async () => {
     const sessionId = crypto.randomUUID();
     const tokens: Tokens = {
-      accessToken: crypto.randomUUID(),
-      tokenType: "Bearer",
+      ...genTokens(),
       expiresIn: 0,
-      refreshToken: crypto.randomUUID(),
     };
     await setTokens(sessionId, tokens);
     assertRejects(async () =>
@@ -54,10 +47,8 @@ Deno.test("getSessionAccessToken()", async (test) => {
   await test.step("rejects if the OAuth provider hasn't issued the access token", async () => {
     const sessionId = crypto.randomUUID();
     const tokens: Tokens = {
-      accessToken: crypto.randomUUID(),
-      tokenType: "Bearer",
+      ...genTokens(),
       expiresIn: 60,
-      refreshToken: crypto.randomUUID(),
     };
     await setTokens(sessionId, tokens);
     assertRejects(async () =>
