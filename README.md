@@ -56,7 +56,7 @@ Check out the full documentation and API reference
 
 ### Getting Started with [Fresh](https://fresh.deno.dev/)
 
-> Note: The minimum required version for plugins in Fresh is 1.4.0
+> Note: The minimum required version for plugins in Fresh is 1.3.0
 
 If you're not performing anything special in the sign-in, sign-out and callback
 handlers, you can add the Fresh plugin to your project. This automatically
