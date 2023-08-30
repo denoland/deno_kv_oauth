@@ -175,11 +175,7 @@ export function listTokens() {
  */
 export async function setTokens(sessionId: string, tokens: Tokens) {
   const storedTokens = toStoredTokens(tokens);
-  await kv.set([TOKENS_PREFIX, sessionId], storedTokens, {
-    expireIn: tokens.expiresIn !== undefined
-      ? tokens.expiresIn * SECOND
-      : undefined,
-  });
+  await kv.set([TOKENS_PREFIX, sessionId], storedTokens);
 }
 
 // Deletes the token for the given session ID.
