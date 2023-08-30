@@ -1,13 +1,17 @@
 {
   "imports": {
-    "https://deno.land/x/deno_kv_oauth@$VERSION/": "./"
+    "https://deno.land/x/deno_kv_oauth@$VERSION/": "./",
+    "$fresh/": "https://deno.land/x/fresh@1.4.2/",
+    "preact": "https://esm.sh/preact@10.15.1",
+    "preact/": "https://esm.sh/preact@10.15.1/",
+    "preact-render-to-string": "https://esm.sh/*preact-render-to-string@6.2.1"
   },
   "tasks": {
     "demo": "deno run --allow-net --allow-env --allow-read --unstable --watch=demo.ts,mod.ts demo.ts",
     "check:license": "deno run -A tools/check_license.ts --check",
     "check:types": "deno check --unstable **/*.ts",
     "check": "deno task check:license && deno task check:types",
-    "test": "KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --doc --trace-ops --coverage=./cov",
+    "test": "KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --trace-ops --coverage=./cov",
     "ok": "deno fmt --check && deno lint && deno task check && deno task test",
     "cov": "deno coverage ./cov/ --lcov --exclude='test.ts|testdata' > cov.lcov",
     "update": "deno run -A https://deno.land/x/udd/main.ts --test=\"deno task test\" deps.ts dev_deps.ts"

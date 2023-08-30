@@ -54,7 +54,51 @@ Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
 Check out the full documentation and API reference
 [here](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts).
 
-### Getting Started
+### Getting Started with [Fresh](https://fresh.deno.dev/)
+
+> Note: The minimum required version for plugins in Fresh is 1.3.0
+
+If you're not performing anything special in the sign-in, sign-out and callback
+handlers, you can add the Fresh plugin to your project. This automatically
+handles `GET /oauth/signin`, `GET /oauth/callback` and `GET /oauth/signout`
+routes.
+
+1. Create your OAuth 2.0 application for your given provider.
+
+1. Create your [pre-configured](#pre-configured-oauth-20-clients) or
+   [custom OAuth 2.0 client instance](#custom-oauth-20-client).
+
+   ```ts
+   // utils/oauth2_client.ts
+   import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+
+   const oauth2Client = createGitHubOAuth2Client();
+   ```
+
+1. Configure Fresh to use the plugin.
+
+   ```ts
+   // main.ts
+   import { start } from "$fresh/server.ts";
+   import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
+   import manifest from "./fresh.gen.ts";
+   import { oauth2Client } from "./utils/oauth2_client.ts";
+
+   await start(manifest, {
+     plugins: [
+       kvOAuthPlugin(oauth2Client),
+     ],
+   });
+   ```
+
+If you require more advanced setups, you can create your own plugin. For more
+information, see:
+
+- The [source code](src/fresh_plugin.ts) for `kvOAuthPlugin()`
+- The [Plugin documentation](https://fresh.deno.dev/docs/concepts/plugins) for
+  Fresh
+
+### Getting Started with Other Frameworks
 
 This example uses GitHub as the OAuth 2.0 provider. However, you can use any
 provider you like.
