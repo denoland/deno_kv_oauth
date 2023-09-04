@@ -66,27 +66,22 @@ routes.
 1. Create your OAuth 2.0 application for your given provider.
 
 1. Create your [pre-configured](#pre-configured-oauth-20-clients) or
-   [custom OAuth 2.0 client instance](#custom-oauth-20-client).
-
-   ```ts
-   // utils/oauth2_client.ts
-   import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
-
-   const oauth2Client = createGitHubOAuth2Client();
-   ```
-
-1. Configure Fresh to use the plugin.
+   [custom OAuth 2.0 client instance](#custom-oauth-20-client) and configure
+   Fresh to use the plugin.
 
    ```ts
    // main.ts
    import { start } from "$fresh/server.ts";
-   import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
+   import {
+     createGitHubOAuth2Client,
+     kvOAuthPlugin,
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
    import manifest from "./fresh.gen.ts";
    import { oauth2Client } from "./utils/oauth2_client.ts";
 
    await start(manifest, {
      plugins: [
-       kvOAuthPlugin(oauth2Client),
+       kvOAuthPlugin(createGitHubOAuth2Client()),
      ],
    });
    ```

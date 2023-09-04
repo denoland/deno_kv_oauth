@@ -14,22 +14,17 @@ import { signOut } from "./sign_out.ts";
  * - `GET /oauth/signout` for the sign-out page
  *
  * ```ts
- * // utils/oauth2_client.ts
- * import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
- *
- * export const oauth2Client = createGitHubOAuth2Client();
- * ```
- *
- * ```ts
  * // main.ts
  * import { start } from "$fresh/server.ts";
- * import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
+ * import {
+ *   kvOAuthPlugin,
+ *   createGitHubOAuth2Client
+ * } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
  * import manifest from "./fresh.gen.ts";
- * import { oauth2Client } from "./utils/oauth2_client.ts"
  *
  * await start(manifest, {
  *   plugins: [
- *     kvOAuthPlugin(oauth2Client)
+ *     kvOAuthPlugin(createGitHubOAuth2Client())
  *   ]
  * });
  * ```
