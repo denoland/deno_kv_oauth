@@ -1,4 +1,5 @@
 {
+  "lock": false,
   "imports": {
     "https://deno.land/x/deno_kv_oauth@$VERSION/": "./",
     "$fresh/": "https://deno.land/x/fresh@1.4.2/",
