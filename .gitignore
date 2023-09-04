@@ -3,3 +3,4 @@
 cov/
 cov.lcov
 dev.ts
+deno.lock
