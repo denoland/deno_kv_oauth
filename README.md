@@ -77,7 +77,6 @@ routes.
      kvOAuthPlugin,
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
    import manifest from "./fresh.gen.ts";
-   import { oauth2Client } from "./utils/oauth2_client.ts";
 
    await start(manifest, {
      plugins: [
