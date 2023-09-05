@@ -89,6 +89,11 @@ information, see:
 - The [source code](src/fresh_plugin.ts) for `kvOAuthPlugin()`
 - The [Plugin documentation](https://fresh.deno.dev/docs/concepts/plugins) for
   Fresh
+- The
+  [Fresh + Deno KV OAuth demo](https://github.com/denoland/fresh-deno-kv-oauth-demo)
+  which uses the Fresh plugin
+- [Deno SaaSKit](https://saaskit.deno.dev/)'s custom
+  [plugin implementation](https://github.com/denoland/saaskit/blob/3accffdc44c2d2eb6dba28126f8d4cb525eba340/plugins/kv_oauth.ts)
 
 ### Getting Started with Other Frameworks
 
@@ -302,8 +307,8 @@ for this module.
 
 Check out these projects powered by Deno KV OAuth 2.0:
 
-1. [Deno SaaSKit / Deno Hunt](https://saaskit.deno.dev/) - A modern SaaS
-   template built on Fresh.
+1. [Deno SaaSKit](https://saaskit.deno.dev/) - A modern SaaS template built on
+   Fresh.
 1. [KV SketchBook](https://hashrock-kv-sketchbook.deno.dev/) - Dead simple
    sketchbook app.
 1. [Fresh + Deno KV OAuth demo](https://github.com/denoland/fresh-deno-kv-oauth-demo) -
