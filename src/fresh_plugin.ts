@@ -16,10 +16,8 @@ import { signOut } from "./sign_out.ts";
  * ```ts
  * // main.ts
  * import { start } from "$fresh/server.ts";
- * import {
- *   kvOAuthPlugin,
- *   createGitHubOAuth2Client
- * } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
+ * import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
  * import manifest from "./fresh.gen.ts";
  *
  * await start(manifest, {
