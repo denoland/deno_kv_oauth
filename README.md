@@ -29,7 +29,7 @@
   [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/),
   access token refresh, and client redirection.
 - Comes with
-  [pre-configured OAuth 2.0 clients for popular providers](#pre-configured-oauth2-clients).
+  [pre-configured OAuth 2.0 clients for popular providers](#pre-configured-oauth-20-clients).
 - Works locally and in the cloud, including
   [Deno Deploy](https://deno.com/deploy).
 - Based on the
