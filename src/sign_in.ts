@@ -1,5 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { type OAuth2Client, setCookie } from "../deps.ts";
+import type { OAuthConfig } from "./types.ts";
+import { getAuthorizationUri } from "./_internal/oauth2_client.ts";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -35,15 +37,14 @@ import {
  */
 export async function signIn(
   request: Request,
-  oauth2Client: OAuth2Client,
+  config: OAuthConfig | OAuth2Client,
   options?: {
     /** These parameters will be appended to the authorization URI, if defined. */
     urlParams?: Record<string, string>;
   },
 ): Promise<Response> {
   const state = crypto.randomUUID();
-  const { uri, codeVerifier } = await oauth2Client.code
-    .getAuthorizationUri({ state });
+  const { uri, codeVerifier } = await getAuthorizationUri(config, state);
 
   if (options?.urlParams) {
     Object.entries(options.urlParams).forEach(([key, value]) =>

@@ -1,5 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assert, getCookies, type OAuth2Client, setCookie } from "../deps.ts";
+import type { OAuthConfig } from "./types.ts";
+import { getToken } from "./_internal/oauth2_client.ts";
 import {
   COOKIE_BASE,
   deleteOAuthSession,
@@ -44,7 +46,7 @@ import {
  */
 export async function handleCallback(
   request: Request,
-  oauth2Client: OAuth2Client,
+  config: OAuthConfig | OAuth2Client,
 ) {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
@@ -58,10 +60,7 @@ export async function handleCallback(
   await deleteOAuthSession(oauthSessionId);
 
   // This is as far as automated testing can go
-  const tokens = await oauth2Client.code.getToken(
-    request.url,
-    oauthSession,
-  );
+  const tokens = await getToken(config, request.url, oauthSession);
 
   const sessionId = crypto.randomUUID();
   await setTokens(sessionId, tokens);

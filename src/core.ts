@@ -1,5 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { type Cookie, SECOND, Status, type Tokens } from "../deps.ts";
+import type { OAuthSession } from "./types.ts";
+export type { OAuthSession } from "./types.ts";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
@@ -37,13 +39,6 @@ const kv = await Deno.openKv(path);
 addEventListener("beforeunload", async () => {
   await kv.close();
 });
-
-// OAuth 2.0 session
-export interface OAuthSession {
-  state: string;
-  codeVerifier: string;
-  successUrl?: string;
-}
 
 const OAUTH_SESSIONS_PREFIX = "oauth_sessions";
 
