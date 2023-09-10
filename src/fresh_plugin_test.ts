@@ -34,7 +34,7 @@ Deno.test("kvOAuthPlugin() works correctly", async (test) => {
   });
 
   await test.step("with mapped providers", () => {
-    const providerKey = 'customProvider';
+    const providerKey = "customProvider";
     const plugin = kvOAuthPlugin({
       [providerKey]: oauth2Client,
     });
