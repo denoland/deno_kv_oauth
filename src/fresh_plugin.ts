@@ -117,11 +117,35 @@ export function kvOAuthPlugin(
     );
   }
 
-  const firstArgIsOAuthClient = args[0] instanceof OAuth2Client;
+  const [providersOrOAuth2Client] = args;
 
-  if (args.length === 1 && !firstArgIsOAuthClient) {
-    const [providers] = args;
-    Object.entries(providers).forEach(([providerName, oauth2Client]) =>
+  if (providersOrOAuth2Client instanceof OAuth2Client) {
+    const [_, options] = args;
+    routes.push(
+      {
+        path: options?.signInPath ?? "/oauth/signin",
+        handler: async (req) => await signIn(req, providersOrOAuth2Client),
+      },
+      {
+        path: options?.callbackPath ?? "/oauth/callback",
+        handler: async (req) => {
+          // Return object also includes `accessToken` and `sessionId` properties.
+          const { response } = await handleCallback(
+            req,
+            providersOrOAuth2Client,
+          );
+          return response;
+        },
+      },
+      {
+        path: options?.signOutPath ?? "/oauth/signout",
+        handler: signOut,
+      },
+    );
+  } else {
+    Object.entries(providersOrOAuth2Client).forEach((
+      [providerName, oauth2Client],
+    ) =>
       routes.push(
         {
           path: `/oauth/${providerName}/signin`,
@@ -143,31 +167,6 @@ export function kvOAuthPlugin(
           handler: signOut,
         },
       )
-    );
-  }
-
-  if (args.length === 2 || firstArgIsOAuthClient) {
-    const [oauth2Client, options] = args;
-    routes.push(
-      {
-        path: options?.signInPath ?? "/oauth/signin",
-        handler: async (req) => await signIn(req, oauth2Client),
-      },
-      {
-        path: options?.callbackPath ?? "/oauth/callback",
-        handler: async (req) => {
-          // Return object also includes `accessToken` and `sessionId` properties.
-          const { response } = await handleCallback(
-            req,
-            oauth2Client,
-          );
-          return response;
-        },
-      },
-      {
-        path: options?.signOutPath ?? "/oauth/signout",
-        handler: signOut,
-      },
     );
   }
 
