@@ -1,7 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { type Cookie, SECOND, Status, type Tokens } from "../deps.ts";
-import type { OAuthSession } from "./types.ts";
-export type { OAuthSession } from "./types.ts";
+import { type Cookie, SECOND, Status } from "../deps.ts";
+import type { OAuthSession, Tokens } from "./types.ts";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";

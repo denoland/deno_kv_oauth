@@ -1,30 +1,33 @@
+// Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type {
   OAuthConfig,
   OAuthPredefinedConfig,
-  OAuthProviderConfig,
+  OAuthProviderInfo,
   OAuthUserConfig,
-} from "../types.ts";
+} from "./types.ts";
 import { assert } from "https://deno.land/std@0.201.0/assert/assert.ts";
 
-export { assert };
-
 export function createOAuthConfig(
-  providerConfig: OAuthProviderConfig & OAuthPredefinedConfig,
+  providerConfig:
+    & OAuthProviderInfo
+    & OAuthPredefinedConfig
+    & Partial<OAuthUserConfig>,
   userConfig: OAuthUserConfig,
 ): OAuthConfig {
   const prefix = providerConfig.name.toUpperCase();
 
-  const fullConfig = {
+  return {
     ...providerConfig,
     ...userConfig,
-    clientId: fallbackToEnv(userConfig.clientId, `${prefix}_CLIENT_ID`),
+    clientId: fallbackToEnv(
+      userConfig?.clientId ?? providerConfig.clientId,
+      `${prefix}_CLIENT_ID`,
+    ),
     clientSecret: fallbackToEnv(
-      userConfig.clientSecret,
+      userConfig?.clientSecret ?? providerConfig.clientSecret,
       `${prefix}_CLIENT_SECRET`,
     ),
   };
-
-  return fullConfig;
 }
 
 export function fallbackToEnv(
@@ -34,14 +37,8 @@ export function fallbackToEnv(
   if (explicitValue) {
     return explicitValue;
   }
-  let value;
-  try {
-    value = Deno.env.get(envVarName);
-  } catch {
-    // Env access denied
-  }
 
+  const value = Deno.env.get(envVarName);
   assert(value, `${envVarName} env var is required`);
-
   return value;
 }

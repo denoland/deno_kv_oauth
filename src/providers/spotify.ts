@@ -1,42 +1,34 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-
-import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
-import type { WithRedirectUri, WithScope } from "./_types.ts";
+import type { OAuthUserConfig } from "../types.ts";
+import { createOAuthConfig } from "../config.ts";
 
 /**
- * Creates an OAuth 2.0 client with Spotify as the provider.
+ * Create a configuration for Spotify as the auth provider
  *
  * Requires `--allow-env[=SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET]` permissions and environment variables:
  * 1. `SPOTIFY_CLIENT_ID`
  * 2. `SPOTIFY_CLIENT_SECRET`
  *
- * @param additionalOAuth2ClientConfig Requires `defaults.scope` property.
- *
  * @example
  * ```ts
- * import { createSpotifyOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createSpotifyOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/src/providers/spotify.ts";
  *
- * const oauth2Client = createSpotifyOAuth2Client({
+ * const oauthConfig = createSpotifyOAuthConfig({
  *  redirectUri: "http://localhost:8000/callback",
- *  defaults: {
- *    scope: "user-read-private user-read-email"
- *  }
  * });
  * ```
  *
+ * @param config Requires `redirectUri`
+ *
  * @see {@link https://developer.spotify.com/documentation/web-api/tutorials/code-flow}
  */
-export function createSpotifyOAuth2Client(
-  additionalOAuth2ClientConfig:
-    & Partial<OAuth2ClientConfig>
-    & WithRedirectUri
-    & WithScope,
-): OAuth2Client {
-  return new OAuth2Client({
-    clientId: Deno.env.get("SPOTIFY_CLIENT_ID")!,
-    clientSecret: Deno.env.get("SPOTIFY_CLIENT_SECRET")!,
+export function createSpotifyOAuthConfig(config: OAuthUserConfig) {
+  return createOAuthConfig({
+    name: "Spotify",
     authorizationEndpointUri: "https://accounts.spotify.com/authorize",
     tokenUri: "https://accounts.spotify.com/api/token",
-    ...additionalOAuth2ClientConfig,
-  });
+    scope: ["user-read-email"],
+  }, config);
 }
+
+export default createSpotifyOAuthConfig;

@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "verbatimModuleSyntax": true
+  },
   "lock": false,
   "imports": {
     "https://deno.land/x/deno_kv_oauth@$VERSION/": "./",

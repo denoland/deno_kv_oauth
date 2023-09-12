@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, getCookies, type OAuth2Client, setCookie } from "../deps.ts";
+import { assert, getCookies, setCookie } from "../deps.ts";
 import type { OAuthConfig } from "./types.ts";
 import { getToken } from "./_internal/oauth2_client.ts";
 import {
@@ -13,6 +13,7 @@ import {
   setTokens,
   SITE_COOKIE_NAME,
 } from "./core.ts";
+import { resolveRedirectUri } from "./_internal/resolve_redirect_uri.ts";
 
 /**
  * Handles the OAuth 2.0 callback request for a given OAuth 2.0 client, and then redirects the client to the success URL set in {@linkcode signIn}.
@@ -46,7 +47,7 @@ import {
  */
 export async function handleCallback(
   request: Request,
-  config: OAuthConfig | OAuth2Client,
+  config: OAuthConfig,
 ) {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
@@ -59,8 +60,10 @@ export async function handleCallback(
   assert(oauthSession, `OAuth 2.0 session ${oauthSessionId} entry not found`);
   await deleteOAuthSession(oauthSessionId);
 
+  const resolvedConfig = resolveRedirectUri(config, request.url);
+
   // This is as far as automated testing can go
-  const tokens = await getToken(config, request.url, oauthSession);
+  const tokens = await getToken(resolvedConfig, request.url, oauthSession);
 
   const sessionId = crypto.randomUUID();
   await setTokens(sessionId, tokens);

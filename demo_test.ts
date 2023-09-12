@@ -14,6 +14,9 @@ import { genTokens } from "./src/test_utils.ts";
 const baseUrl = "http://localhost";
 
 Deno.test("demo", async (test) => {
+  Deno.env.set("GITHUB_CLIENT_ID", "dummy_id");
+  Deno.env.set("GITHUB_CLIENT_SECRET", "dummy_secret");
+
   await test.step("non-GET * serves a not found response", async () => {
     const request = new Request(baseUrl, { method: "POST" });
     const response = await handler(request);

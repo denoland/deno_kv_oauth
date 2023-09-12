@@ -1,6 +1,8 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { OAuth2Client, OAuth2ResponseError, SECOND, Tokens } from "../deps.ts";
+import { SECOND } from "../deps.ts";
+import { refresh } from "./_internal/oauth2_client.ts";
 import { getTokens, setTokens } from "./core.ts";
+import type { OAuthConfig } from "./types.ts";
 
 /**
  * Gets the access token for a given OAuth 2.0 client and session. If null is returned, the client must sign in.
@@ -20,9 +22,9 @@ import { getTokens, setTokens } from "./core.ts";
  * ```
  */
 export async function getSessionAccessToken(
-  oauth2Client: OAuth2Client,
+  oauthConfig: OAuthConfig,
   sessionId: string,
-) {
+): Promise<string | null> {
   // First, try with eventual consistency. If that returns null, try with strong consistency.
   const tokens = await getTokens(sessionId, "eventual") ||
     await getTokens(sessionId);
@@ -36,20 +38,11 @@ export async function getSessionAccessToken(
   }
 
   // This is as far as automated testing can go.
-  let newTokens: Tokens;
-  try {
-    newTokens = await oauth2Client.refreshToken.refresh(tokens.refreshToken);
-  } catch (error) {
-    if (
-      error instanceof OAuth2ResponseError && error.error === "invalid_grant"
-    ) {
-      // The refresh token is likely expired
-      return null;
-    }
-    throw error;
+  const newTokens = await refresh(oauthConfig, tokens.refreshToken);
+
+  if (newTokens) {
+    await setTokens(sessionId, newTokens);
   }
 
-  await setTokens(sessionId, newTokens);
-
-  return newTokens.accessToken;
+  return newTokens?.accessToken ?? null;
 }

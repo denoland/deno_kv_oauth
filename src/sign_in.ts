@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { type OAuth2Client, setCookie } from "../deps.ts";
+import { setCookie } from "../deps.ts";
 import type { OAuthConfig } from "./types.ts";
 import { getAuthorizationUri } from "./_internal/oauth2_client.ts";
 import {
@@ -11,6 +11,7 @@ import {
   redirect,
   setOAuthSession,
 } from "./core.ts";
+import { resolveRedirectUri } from "./_internal/resolve_redirect_uri.ts";
 
 /**
  * Handles the sign-in process for a given OAuth 2.0 client and redirects the client to the authorization URL.
@@ -37,14 +38,18 @@ import {
  */
 export async function signIn(
   request: Request,
-  config: OAuthConfig | OAuth2Client,
+  config: OAuthConfig,
   options?: {
     /** These parameters will be appended to the authorization URI, if defined. */
     urlParams?: Record<string, string>;
   },
 ): Promise<Response> {
   const state = crypto.randomUUID();
-  const { uri, codeVerifier } = await getAuthorizationUri(config, state);
+  const resolvedConfig = resolveRedirectUri(config, request.url);
+  const { uri, codeVerifier } = await getAuthorizationUri(
+    resolvedConfig,
+    state,
+  );
 
   if (options?.urlParams) {
     Object.entries(options.urlParams).forEach(([key, value]) =>

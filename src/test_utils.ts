@@ -1,13 +1,16 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { OAuth2Client, type Tokens } from "../dev_deps.ts";
-import { OAuthSession } from "./core.ts";
+import type { OAuthSession, Tokens } from "./types.ts";
+import { createCustomOAuthConfig } from "./providers/custom.ts";
 
-// Dummy OAuth 2.0 client for testing only.
-export const oauth2Client = new OAuth2Client({
+// Dummy config for testing only.
+export const oauthConfig = createCustomOAuthConfig({
+  name: "Test",
   clientId: crypto.randomUUID(),
   clientSecret: crypto.randomUUID(),
   authorizationEndpointUri: "https://example.com/authorize",
   tokenUri: "https://example.com/token",
+  scope: [],
+  redirectUri: "/callback",
 });
 
 export function genOAuthSession(): OAuthSession {

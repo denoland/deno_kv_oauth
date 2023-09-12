@@ -21,7 +21,7 @@ import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./core.ts";
  * }
  * ```
  */
-export function getSessionId(request: Request) {
+export function getSessionId(request: Request): string | undefined {
   const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
-  return getCookies(request.headers)[cookieName] as string | undefined;
+  return getCookies(request.headers)[cookieName];
 }

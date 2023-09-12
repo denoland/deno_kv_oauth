@@ -1,19 +1,40 @@
-import { OAuth2Client } from "../../deps.ts";
-import type { OAuthConfig, OAuthSession } from "../types.ts";
+// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+import {
+  OAuth2Client,
+  OAuth2ResponseError,
+} from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
+import type { OAuthConfig, OAuthSession, Tokens } from "../types.ts";
 
 export function getAuthorizationUri(
-  config: OAuthConfig | OAuth2Client,
+  config: OAuthConfig,
   state: string,
 ): Promise<{ uri: URL; codeVerifier: string }> {
-  return getAuthorizationCodeGrant(config).getAuthorizationUri({ state });
+  return createOAuth2Client(config).code.getAuthorizationUri({ state });
 }
 
 export function getToken(
-  config: OAuthConfig | OAuth2Client,
+  config: OAuthConfig,
   url: string | URL,
   oauthSession: OAuthSession,
-) {
-  return getAuthorizationCodeGrant(config).getToken(url, oauthSession);
+): Promise<Tokens> {
+  return createOAuth2Client(config).code.getToken(url, oauthSession);
+}
+
+export async function refresh(
+  config: OAuthConfig,
+  refreshToken: string,
+): Promise<Tokens | undefined> {
+  try {
+    return await createOAuth2Client(config).refreshToken.refresh(refreshToken);
+  } catch (error) {
+    if (
+      error instanceof OAuth2ResponseError && error.error === "invalid_grant"
+    ) {
+      // The refresh token is likely expired
+      return undefined;
+    }
+    throw error;
+  }
 }
 
 function createOAuth2Client(config: OAuthConfig): OAuth2Client {
@@ -23,41 +44,17 @@ function createOAuth2Client(config: OAuthConfig): OAuth2Client {
     redirectUri,
     authorizationEndpointUri,
     tokenUri,
-    headers,
-    body,
-    urlParams,
     scope,
-    stateValidator,
   } = config;
 
   return new OAuth2Client({
     clientId,
     clientSecret,
-    redirectUri,
-    authorizationEndpointUri,
-    tokenUri,
+    redirectUri: redirectUri?.toString(),
+    authorizationEndpointUri: authorizationEndpointUri?.toString(),
+    tokenUri: tokenUri?.toString(),
     defaults: {
-      requestOptions: {
-        headers,
-        body,
-        urlParams,
-      },
       scope,
-      stateValidator,
     },
   });
-}
-
-function isOAuth2Client(
-  config: OAuthConfig | OAuth2Client,
-): config is OAuth2Client {
-  return config instanceof OAuth2Client;
-}
-
-function getAuthorizationCodeGrant(config: OAuthConfig | OAuth2Client) {
-  if (isOAuth2Client(config)) {
-    return config.code;
-  } else {
-    return createOAuth2Client(config).code;
-  }
 }

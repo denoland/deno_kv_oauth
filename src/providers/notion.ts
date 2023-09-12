@@ -1,9 +1,9 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-
-import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
+import type { OAuthUserConfig } from "../types.ts";
+import { createOAuthConfig } from "../config.ts";
 
 /**
- * Creates an OAuth 2.0 client with Notion as the provider.
+ * Create a configuration for Notion as the auth provider
  *
  * Requires `--allow-env[=NOTION_CLIENT_ID,NOTION_CLIENT_SECRET]` permissions and environment variables:
  * 1. `NOTION_CLIENT_ID`
@@ -11,22 +11,25 @@ import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
  *
  * @example
  * ```ts
- * import { createNotionOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createNotionOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/src/providers/notion.ts";
  *
- * const oauth2Client = createNotionOAuth2Client();
+ * const oauthConfig = createNotionOAuthConfig({
+ *  redirectUri: "http://localhost:8000/callback",
+ * });
  * ```
+ *
+ * @param config Requires `redirectUri`
  *
  * @see {@link https://developers.notion.com/docs/authorization}
  */
-export function createNotionOAuth2Client(
-  additionalOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
-): OAuth2Client {
-  return new OAuth2Client({
-    clientId: Deno.env.get("NOTION_CLIENT_ID")!,
-    clientSecret: Deno.env.get("NOTION_CLIENT_SECRET")!,
+export function createNotionOAuthConfig(config: OAuthUserConfig) {
+  return createOAuthConfig({
+    name: "Notion",
     authorizationEndpointUri:
       "https://api.notion.com/v1/oauth/authorize?owner=user",
     tokenUri: "https://api.notion.com/v1/oauth/token",
-    ...additionalOAuth2ClientConfig,
-  });
+    scope: [],
+  }, config);
 }
+
+export default createNotionOAuthConfig;

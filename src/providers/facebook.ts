@@ -1,42 +1,34 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-
-import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
-import type { WithRedirectUri, WithScope } from "./_types.ts";
+import type { OAuthUserConfig } from "../types.ts";
+import { createOAuthConfig } from "../config.ts";
 
 /**
- * Creates an OAuth 2.0 client with Facebook as the provider.
+ * Create a configuration for Facebook as the auth provider
  *
  * Requires `--allow-env[=FACEBOOK_CLIENT_ID,FACEBOOK_CLIENT_SECRET]` permissions and environment variables:
  * 1. `FACEBOOK_CLIENT_ID`
  * 2. `FACEBOOK_CLIENT_SECRET`
  *
- * @param additionalOAuth2ClientConfig Requires `redirectUri` and `defaults.scope` properties.
- *
  * @example
  * ```ts
- * import { createFacebookOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createFacebookOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/src/providers/facebook.ts";
  *
- * const oauth2Client = createFacebookOAuth2Client({
- *   redirectUri: "http://localhost:8000/callback",
- *   defaults: {
- *    scope: "email"
- *   }
+ * const oauthConfig = createFacebookOAuthConfig({
+ *  redirectUri: "http://localhost:8000/callback",
  * });
  * ```
  *
+ * @param config Requires `redirectUri`
+ *
  * @see {@link https://developers.facebook.com/docs/facebook-login/guides/advanced/manual-flow}
  */
-export function createFacebookOAuth2Client(
-  additionalOAuth2ClientConfig:
-    & Partial<OAuth2ClientConfig>
-    & WithScope
-    & WithRedirectUri,
-): OAuth2Client {
-  return new OAuth2Client({
-    clientId: Deno.env.get("FACEBOOK_CLIENT_ID")!,
-    clientSecret: Deno.env.get("FACEBOOK_CLIENT_SECRET")!,
+export function createFacebookOAuthConfig(config: OAuthUserConfig) {
+  return createOAuthConfig({
+    name: "Facebook",
     authorizationEndpointUri: "https://www.facebook.com/v17.0/dialog/oauth",
     tokenUri: "https://graph.facebook.com/v17.0/oauth/access_token",
-    ...additionalOAuth2ClientConfig,
-  });
+    scope: ["email"],
+  }, config);
 }
+
+export default createFacebookOAuthConfig;

@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "../dev_deps.ts";
-import * as createOAuth2ClientFns from "./providers.ts";
+import * as createOAuthConfigFns from "./providers.ts";
 
 [
   "Auth0",
@@ -17,22 +17,24 @@ import * as createOAuth2ClientFns from "./providers.ts";
   "Spotify",
   "Twitter",
 ].map((provider) => {
-  const fnName = `create${provider}OAuth2Client`;
-  Deno.test(`${fnName}() returns the correctly configured client`, () => {
+  const fnName = `create${provider}OAuthConfig`;
+  Deno.test(`${fnName}() returns the correctly configured config`, () => {
     const clientId = crypto.randomUUID();
     const clientSecret = crypto.randomUUID();
     const redirectUri = "http://example.com";
-    const defaults = { scope: "scope" };
+    const scope = ["scope"];
 
     const envVarKeyPrefix = provider.toUpperCase();
     Deno.env.set(`${envVarKeyPrefix}_CLIENT_ID`, clientId);
     Deno.env.set(`${envVarKeyPrefix}_CLIENT_SECRET`, clientSecret);
+    Deno.env.set(`${envVarKeyPrefix}_DOMAIN`, "example.com");
 
     // @ts-ignore Trust me
-    const client = createOAuth2ClientFns[fnName]({ redirectUri, defaults });
-    assertEquals(client.config.clientId, clientId);
-    assertEquals(client.config.clientSecret, clientSecret);
-    assertEquals(client.config.redirectUri, redirectUri);
-    assertEquals(client.config.defaults, defaults);
+    const config = createOAuthConfigFns[fnName]({ redirectUri, scope });
+
+    assertEquals(config.clientId, clientId);
+    assertEquals(config.clientSecret, clientSecret);
+    assertEquals(config.redirectUri, redirectUri);
+    assertEquals(config.scope, scope);
   });
 });

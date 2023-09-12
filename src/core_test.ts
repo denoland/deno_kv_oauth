@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, assertEquals, Status, type Tokens } from "../dev_deps.ts";
+import { assert, assertEquals, Status } from "../dev_deps.ts";
 import {
   deleteOAuthSession,
   deleteTokens,
@@ -15,6 +15,7 @@ import {
   toTokens,
 } from "./core.ts";
 import { genOAuthSession, genTokens } from "./test_utils.ts";
+import type { Tokens } from "./types.ts";
 
 Deno.test("isSecure() works correctly", () => {
   assertEquals(isSecure("https://example.com"), true);

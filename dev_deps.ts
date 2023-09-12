@@ -3,6 +3,7 @@ export {
   assert,
   assertArrayIncludes,
   assertEquals,
+  AssertionError,
   assertNotEquals,
   assertRejects,
   assertStringIncludes,

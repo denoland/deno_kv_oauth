@@ -1,42 +1,34 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-
-import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
-import type { WithRedirectUri, WithScope } from "./_types.ts";
+import type { OAuthUserConfig } from "../types.ts";
+import { createOAuthConfig } from "../config.ts";
 
 /**
- * Creates an OAuth 2.0 client with Twitter as the provider.
+ * Create a configuration for Twitter as the auth provider
  *
  * Requires `--allow-env[=TWITTER_CLIENT_ID,TWITTER_CLIENT_SECRET]` permissions and environment variables:
  * 1. `TWITTER_CLIENT_ID`
  * 2. `TWITTER_CLIENT_SECRET`
  *
- * @param additionalOAuth2ClientConfig Requires `redirectUri` and `defaults.scope` properties.
- *
  * @example
  * ```ts
- * import { createTwitterOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createTwitterOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/src/providers/twitter.ts";
  *
- * const oauth2Client = createTwitterOAuth2Client({
+ * const oauthConfig = createTwitterOAuthConfig({
  *  redirectUri: "http://localhost:8000/callback",
- *  defaults: {
- *    scope: "users.read"
- *  }
  * });
  * ```
  *
- * @see {@link https://github.com/twitterdev/twitter-api-typescript-sdk}
+ * @param config Requires `redirectUri`
+ *
+ * @see {@link https://developer.twitter.com/en/docs/authentication/oauth-2-0/authorization-code}
  */
-export function createTwitterOAuth2Client(
-  additionalOAuth2ClientConfig:
-    & Partial<OAuth2ClientConfig>
-    & WithRedirectUri
-    & WithScope,
-): OAuth2Client {
-  return new OAuth2Client({
-    clientId: Deno.env.get("TWITTER_CLIENT_ID")!,
-    clientSecret: Deno.env.get("TWITTER_CLIENT_SECRET")!,
+export function createTwitterOAuthConfig(config: OAuthUserConfig) {
+  return createOAuthConfig({
+    name: "Twitter",
     authorizationEndpointUri: "https://twitter.com/i/oauth2/authorize",
     tokenUri: "https://api.twitter.com/2/oauth2/token",
-    ...additionalOAuth2ClientConfig,
-  });
+    scope: [],
+  }, config);
 }
+
+export default createTwitterOAuthConfig;

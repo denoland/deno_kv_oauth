@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type { Plugin } from "$fresh/server.ts";
-import { OAuth2Client } from "../deps.ts";
+import type { OAuthConfig } from "./types.ts";
 import { signIn } from "./sign_in.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signOut } from "./sign_out.ts";
@@ -28,7 +28,7 @@ import { signOut } from "./sign_out.ts";
  * ```
  */
 export function kvOAuthPlugin(
-  oauth2Client: OAuth2Client,
+  oauthConfig: OAuthConfig,
   options?: {
     /**
      * Sign-in page path
@@ -55,13 +55,13 @@ export function kvOAuthPlugin(
     routes: [
       {
         path: options?.signInPath ?? "/oauth/signin",
-        handler: async (req) => await signIn(req, oauth2Client),
+        handler: async (req) => await signIn(req, oauthConfig),
       },
       {
         path: options?.callbackPath ?? "/oauth/callback",
         handler: async (req) => {
           // Return object also includes `accessToken` and `sessionId` properties.
-          const { response } = await handleCallback(req, oauth2Client);
+          const { response } = await handleCallback(req, oauthConfig);
           return response;
         },
       },
