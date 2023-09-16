@@ -144,8 +144,7 @@ export function toTokens(storedTokens: StoredTokens): Tokens {
   if (storedTokens.expiresAt === undefined) return storedTokens;
 
   const expiresIn =
-    (Date.now() - Date.parse(storedTokens.expiresAt.toString())) / SECOND;
-
+    (Date.parse(storedTokens.expiresAt.toString()) - Date.now()) / SECOND;
   const tokens = { ...storedTokens };
   delete tokens.expiresAt;
   return { ...tokens, expiresIn };

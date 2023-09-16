@@ -1,4 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
+import { SECOND } from "https://deno.land/x/deno_kv_oauth@$VERSION/deps.ts";
 import { assert, assertEquals, Status, type Tokens } from "../dev_deps.ts";
 import {
   deleteOAuthSession,
@@ -48,7 +49,9 @@ Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
   const currentTokens = toTokens(toStoredTokens(tokens));
   assertEquals(currentTokens.accessToken, tokens.accessToken);
   assertEquals(currentTokens.tokenType, tokens.tokenType);
+  // expiresIn should be both positive and less than tokens.expiresIn
   assert(currentTokens.expiresIn! < tokens.expiresIn!);
+  assert(currentTokens.expiresIn! > 0);
 });
 
 Deno.test("(get/set/delete)Tokens() work interchangeably", async () => {
