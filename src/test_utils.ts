@@ -17,13 +17,9 @@ export function genOAuthSession(): OAuthSession {
   };
 }
 
-export function genTokens(withRefresh = true): Tokens {
-  const tokens: Tokens = {
+export function genTokens(): Tokens {
+  return {
     accessToken: crypto.randomUUID(),
     tokenType: crypto.randomUUID(),
   };
-  if (withRefresh) {
-    tokens.refreshToken = crypto.randomUUID();
-  }
-  return tokens;
 }
