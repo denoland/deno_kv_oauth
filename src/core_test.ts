@@ -48,7 +48,9 @@ Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
   const currentTokens = toTokens(toStoredTokens(tokens));
   assertEquals(currentTokens.accessToken, tokens.accessToken);
   assertEquals(currentTokens.tokenType, tokens.tokenType);
+  // expiresIn should be both positive and less than tokens.expiresIn
   assert(currentTokens.expiresIn! < tokens.expiresIn!);
+  assert(currentTokens.expiresIn! > 0);
 });
 
 Deno.test("(get/set/delete)Tokens() work interchangeably", async () => {
