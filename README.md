@@ -56,6 +56,10 @@ Check out the full documentation and API reference
 
 ### Getting Started
 
+> Note: Fresh has a first party Plugin for Deno KV OAuth. Check out the
+> [Fresh](https://fresh.deno.dev/docs/examples/using-deno-kv-oauth)
+> documentation for more information.
+
 This example uses GitHub as the OAuth 2.0 provider. However, you can use any
 provider you like.
 
