@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { OAuth2Client, OAuth2ResponseError, SECOND, Tokens } from "../deps.ts";
+import { OAuth2Client, OAuth2ResponseError, Tokens } from "../deps.ts";
 import { getTokens, setTokens } from "./core.ts";
 
 /**
@@ -29,8 +29,9 @@ export async function getSessionAccessToken(
   if (tokens === null) return null;
   if (
     tokens.refreshToken === undefined ||
+    tokens.expiresIn === undefined ||
     // 5 second buffer
-    (tokens.expiresIn && tokens.expiresIn < (5 * SECOND))
+    tokens.expiresIn > 5
   ) {
     return tokens.accessToken;
   }
