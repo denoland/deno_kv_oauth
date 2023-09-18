@@ -75,16 +75,16 @@ Deno.test("getSessionAccessToken()", async (test) => {
     );
   });
 
-  // await test.step("rejects if the OAuth provider hasn't issued the access token", async () => {
-  //   const sessionId = crypto.randomUUID();
-  //   const tokens: Tokens = {
-  //     ...genTokens(),
-  //     refreshToken: crypto.randomUUID(),
-  //     expiresIn: 60,
-  //   };
-  //   await setTokens(sessionId, tokens);
-  //   await assertRejects(async () =>
-  //     await getSessionAccessToken(oauth2Client, sessionId)
-  //   );
-  // });
+  await test.step("rejects if the OAuth provider hasn't issued the access token", async () => {
+    const sessionId = crypto.randomUUID();
+    const tokens: Tokens = {
+      ...genTokens(),
+      refreshToken: crypto.randomUUID(),
+      expiresIn: 60,
+    };
+    await setTokens(sessionId, tokens);
+    assertRejects(async () =>
+      await getSessionAccessToken(oauth2Client, sessionId)
+    );
+  });
 });
