@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getSessionAccessToken } from "./get_session_access_token.ts";
-import { assertEquals, assertRejects, Tokens } from "../dev_deps.ts";
+import { assertEquals, assertRejects, type Tokens } from "../dev_deps.ts";
 import { setTokens } from "./core.ts";
 import { genTokens, oauth2Client } from "./test_utils.ts";
 
@@ -11,7 +11,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
 
   await test.step("returns the access token for session without refresh token", async () => {
     const sessionId = crypto.randomUUID();
-    const tokens = {
+    const tokens: Tokens = {
       ...genTokens(),
       expiresIn: 3, // if we had a refresh token this would cause a refresh
     };
