@@ -2,19 +2,19 @@
 import { handleCallback } from "./handle_callback.ts";
 import { assertEquals, assertRejects } from "../dev_deps.ts";
 import { getOAuthSession, OAUTH_COOKIE_NAME, setOAuthSession } from "./core.ts";
-import { genOAuthSession, oauth2Client } from "./test_utils.ts";
+import { genOAuthSession, oauthConfig } from "./test_utils.ts";
 
 Deno.test("handleCallback()", async (test) => {
   await test.step("rejects for no OAuth 2.0 cookie", async () => {
     const request = new Request("http://example.com");
-    await assertRejects(() => handleCallback(request, oauth2Client));
+    await assertRejects(() => handleCallback(request, oauthConfig));
   });
 
   await test.step("rejects for non-existent OAuth 2.0 session", async () => {
     const request = new Request("http://example.com", {
       headers: { cookie: `${OAUTH_COOKIE_NAME}=xxx` },
     });
-    await assertRejects(() => handleCallback(request, oauth2Client));
+    await assertRejects(() => handleCallback(request, oauthConfig));
   });
 
   await test.step("deletes the OAuth 2.0 session KV entry", async () => {
@@ -24,7 +24,7 @@ Deno.test("handleCallback()", async (test) => {
     const request = new Request("http://example.com", {
       headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
     });
-    await assertRejects(() => handleCallback(request, oauth2Client));
+    await assertRejects(() => handleCallback(request, oauthConfig));
     await assertEquals(await getOAuthSession(oauthSessionId), null);
   });
 });

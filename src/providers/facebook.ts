@@ -1,42 +1,37 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 
-import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
-import type { WithRedirectUri, WithScope } from "./types.ts";
+import type { OAuth2ClientConfig } from "../../deps.ts";
+import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
- * Creates an OAuth 2.0 client with Facebook as the provider.
+ * Returns the OAuth configuration for Facebook.
  *
  * Requires `--allow-env[=FACEBOOK_CLIENT_ID,FACEBOOK_CLIENT_SECRET]` permissions and environment variables:
  * 1. `FACEBOOK_CLIENT_ID`
  * 2. `FACEBOOK_CLIENT_SECRET`
  *
- * @param additionalOAuth2ClientConfig Requires `redirectUri` and `defaults.scope` properties.
+ * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
+ * @param scope Default scopes to request unless otherwise specified.
  *
  * @example
  * ```ts
- * import { createFacebookOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createFacebookOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauth2Client = createFacebookOAuth2Client({
- *   redirectUri: "http://localhost:8000/callback",
- *   defaults: {
- *    scope: "email"
- *   }
- * });
+ * const oauthConfig = createFacebookOAuthConfig("http://localhost:8000/callback", "email");
  * ```
  *
  * @see {@link https://developers.facebook.com/docs/facebook-login/guides/advanced/manual-flow}
  */
-export function createFacebookOAuth2Client(
-  additionalOAuth2ClientConfig:
-    & Partial<OAuth2ClientConfig>
-    & WithScope
-    & WithRedirectUri,
-): OAuth2Client {
-  return new OAuth2Client({
-    clientId: Deno.env.get("FACEBOOK_CLIENT_ID")!,
-    clientSecret: Deno.env.get("FACEBOOK_CLIENT_SECRET")!,
+export function createFacebookOAuthConfig(
+  redirectUri: string,
+  scope: string | string[],
+): OAuth2ClientConfig {
+  return {
+    clientId: getRequiredEnv("FACEBOOK_CLIENT_ID"),
+    clientSecret: getRequiredEnv("FACEBOOK_CLIENT_SECRET"),
     authorizationEndpointUri: "https://www.facebook.com/v17.0/dialog/oauth",
     tokenUri: "https://graph.facebook.com/v17.0/oauth/access_token",
-    ...additionalOAuth2ClientConfig,
-  });
+    redirectUri,
+    defaults: { scope },
+  };
 }

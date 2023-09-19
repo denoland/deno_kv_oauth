@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type { Plugin } from "$fresh/server.ts";
-import { OAuth2Client } from "../deps.ts";
+import type { OAuth2ClientConfig } from "../deps.ts";
 import { signIn } from "./sign_in.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signOut } from "./sign_out.ts";
@@ -16,19 +16,19 @@ import { signOut } from "./sign_out.ts";
  * ```ts
  * // main.ts
  * import { start } from "$fresh/server.ts";
- * import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  * import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
  * import manifest from "./fresh.gen.ts";
  *
  * await start(manifest, {
  *   plugins: [
- *     kvOAuthPlugin(createGitHubOAuth2Client())
+ *     kvOAuthPlugin(createGitHubOAuthConfig())
  *   ]
  * });
  * ```
  */
 export function kvOAuthPlugin(
-  oauth2Client: OAuth2Client,
+  oauthConfig: OAuth2ClientConfig,
   options?: {
     /**
      * Sign-in page path
@@ -55,13 +55,13 @@ export function kvOAuthPlugin(
     routes: [
       {
         path: options?.signInPath ?? "/oauth/signin",
-        handler: async (req) => await signIn(req, oauth2Client),
+        handler: async (req) => await signIn(req, oauthConfig),
       },
       {
         path: options?.callbackPath ?? "/oauth/callback",
         handler: async (req) => {
           // Return object also includes `accessToken` and `sessionId` properties.
-          const { response } = await handleCallback(req, oauth2Client);
+          const { response } = await handleCallback(req, oauthConfig);
           return response;
         },
       },

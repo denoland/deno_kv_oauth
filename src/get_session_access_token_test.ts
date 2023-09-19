@@ -2,11 +2,11 @@
 import { getSessionAccessToken } from "./get_session_access_token.ts";
 import { assertEquals, assertRejects, type Tokens } from "../dev_deps.ts";
 import { setTokens } from "./core.ts";
-import { genTokens, oauth2Client } from "./test_utils.ts";
+import { genTokens, oauthConfig } from "./test_utils.ts";
 
 Deno.test("getSessionAccessToken()", async (test) => {
   await test.step("returns null for non-existent session", async () => {
-    assertEquals(await getSessionAccessToken(oauth2Client, "nil"), null);
+    assertEquals(await getSessionAccessToken(oauthConfig, "nil"), null);
   });
 
   await test.step("returns the access token for session without refresh token", async () => {
@@ -17,7 +17,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
     };
     await setTokens(sessionId, tokens);
     assertEquals(
-      await getSessionAccessToken(oauth2Client, sessionId),
+      await getSessionAccessToken(oauthConfig, sessionId),
       tokens.accessToken,
     );
   });
@@ -30,7 +30,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
     };
     await setTokens(sessionId, tokens);
     assertEquals(
-      await getSessionAccessToken(oauth2Client, sessionId),
+      await getSessionAccessToken(oauthConfig, sessionId),
       tokens.accessToken,
     );
   });
@@ -44,7 +44,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
     };
     await setTokens(sessionId, tokens);
     assertEquals(
-      await getSessionAccessToken(oauth2Client, sessionId),
+      await getSessionAccessToken(oauthConfig, sessionId),
       tokens.accessToken,
     );
   });
@@ -58,7 +58,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
     };
     await setTokens(sessionId, tokens);
     await assertRejects(async () =>
-      await getSessionAccessToken(oauth2Client, sessionId)
+      await getSessionAccessToken(oauthConfig, sessionId)
     );
   });
 
@@ -71,7 +71,7 @@ Deno.test("getSessionAccessToken()", async (test) => {
     };
     await setTokens(sessionId, tokens);
     await assertRejects(async () =>
-      await getSessionAccessToken(oauth2Client, sessionId)
+      await getSessionAccessToken(oauthConfig, sessionId)
     );
   });
 });

@@ -29,7 +29,7 @@
   [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/),
   access token refresh, and client redirection.
 - Comes with
-  [pre-configured OAuth 2.0 clients for popular providers](#pre-configured-oauth-20-clients).
+  [pre-defined OAuth configurations for popular providers](#pre-defined-oauth-configurations).
 - Works locally and in the cloud, including
   [Deno Deploy](https://deno.com/deploy).
 - Based on the
@@ -72,13 +72,13 @@ routes.
    ```ts
    // main.ts
    import { start } from "$fresh/server.ts";
-   import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   import { createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
    import { kvOAuthPlugin } from "https://deno.land/x/deno_kv_oauth@$VERSION/fresh.ts";
    import manifest from "./fresh.gen.ts";
 
    await start(manifest, {
      plugins: [
-       kvOAuthPlugin(createGitHubOAuth2Client()),
+       kvOAuthPlugin(createGitHubOAuthConfig()),
      ],
    });
    ```
@@ -102,36 +102,36 @@ provider you like.
 
 1. Create your OAuth 2.0 application for your given provider.
 
-1. Create your [pre-configured](#pre-configured-oauth-20-clients) or
-   [custom OAuth 2.0 client instance](#custom-oauth-20-client).
+1. Create your [pre-defined](#pre-configured-oauth-20-clients) or
+   [custom](#custom-oauth-20-client) OAuth configuration.
 
    ```ts
    // Pre-configured OAuth 2.0 client
-   import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   import { createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
-   const oauth2Client = createGitHubOAuth2Client();
+   const oauthConfig = createGitHubOAuthConfig();
    ```
 
-1. Using the OAuth 2.0 client instance, insert the authentication flow functions
-   into your authentication routes.
+1. Using the OAuth 2.0 client configuration, insert the authentication flow
+   functions into your authentication routes.
 
    ```ts
    // Sign-in, callback and sign-out handlers
    import {
-     createGitHubOAuth2Client,
+     createGitHubOAuthConfig,
      handleCallback,
      signIn,
      signOut,
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
-   const oauth2Client = createGitHubOAuth2Client();
+   const oauthConfig = createGitHubOAuthConfig();
 
    async function handleSignIn(request: Request) {
-     return await signIn(request, oauth2Client);
+     return await signIn(request, oauthConfig);
    }
 
    async function handleOAuth2Callback(request: Request) {
-     return await handleCallback(request, oauth2Client);
+     return await handleCallback(request, oauthConfig);
    }
 
    async function handleSignOut(request: Request) {
@@ -144,12 +144,12 @@ provider you like.
    ```ts
    // Protected route
    import {
-     createGitHubOAuth2Client,
+     createGitHubOAuthConfig,
      getSessionAccessToken,
      getSessionId,
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
-   const oauth2Client = createGitHubOAuth2Client();
+   const oauth2Client = createGitHubOAuthConfig();
 
    async function getGitHubUser(accessToken: string): Promise<any> {
      const response = await fetch("https://api.github.com/user", {
@@ -198,24 +198,24 @@ provider you like.
    await clearOAuthSessionsAndTokens();
    ```
 
-### Pre-configured OAuth 2.0 Clients
+### Pre-Defined OAuth Configurations
 
-This module comes with a suite of pre-configured OAuth 2.0 clients for the
+This module comes with a suite of pre-defined OAuth configurations for the
 following providers:
 
-1. [Auth0](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAuth0OAuth2Client)
-1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuth2Client)
-1. [Dropbox](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDropboxOAuth2Client)
-1. [Facebook](https://deno.land/x/deno_kv_oauth/mod.ts?s=createFacebookOAuth2Client)
-1. [GitHub](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitHubOAuth2Client)
-1. [GitLab](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitLabOAuth2Client)
-1. [Google](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGoogleOAuth2Client)
-1. [Notion](https://deno.land/x/deno_kv_oauth/mod.ts?s=createNotionOAuth2Client)
-1. [Okta](https://deno.land/x/deno_kv_oauth/mod.ts?s=createOktaOAuth2Client)
-1. [Patreon](https://deno.land/x/deno_kv_oauth/mod.ts?s=createPatreonOAuth2Client)
-1. [Slack](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSlackOAuth2Client)
-1. [Spotify](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSpotifyOAuth2Client)
-1. [Twitter](https://deno.land/x/deno_kv_oauth/mod.ts?s=createTwitterOAuth2Client)
+1. [Auth0](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAuth0OAuthConfig)
+1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuthConfig)
+1. [Dropbox](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDropboxOAuthConfig)
+1. [Facebook](https://deno.land/x/deno_kv_oauth/mod.ts?s=createFacebookOAuthConfig)
+1. [GitHub](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitHubOAuthConfig)
+1. [GitLab](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitLabOAuthConfig)
+1. [Google](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGoogleOAuthConfig)
+1. [Notion](https://deno.land/x/deno_kv_oauth/mod.ts?s=createNotionOAuthConfig)
+1. [Okta](https://deno.land/x/deno_kv_oauth/mod.ts?s=createOktaOAuthConfig)
+1. [Patreon](https://deno.land/x/deno_kv_oauth/mod.ts?s=createPatreonOAuthConfig)
+1. [Slack](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSlackOAuthConfig)
+1. [Spotify](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSpotifyOAuthConfig)
+1. [Twitter](https://deno.land/x/deno_kv_oauth/mod.ts?s=createTwitterOAuthConfig)
 
 Each function is typed so that their respective platform's requirements are met.
 
@@ -223,24 +223,23 @@ Each function is typed so that their respective platform's requirements are met.
 > please submit a pull request or
 > [create a new issue](https://github.com/denoland/deno_kv_oauth/issues/new).
 
-### Custom OAuth 2.0 Client
+### Custom OAuth Configurations
 
-If you require custom OAuth 2.0 configuration, you must define your `client`
-using
-[`new OAuth2Client()`](https://deno.land/x/oauth2_client/mod.ts?s=OAuth2Client)
+Custom OAuth must be defined using
+[`new OAuthConfig()`](https://deno.land/x/oauth2_client/mod.ts?s=OAuthConfig)
 from the [`oauth2_client` module](https://deno.land/x/oauth2_client/mod.ts).
 E.g.:
 
 ```ts
-import { OAuth2Client } from "https://deno.land/x/oauth2_client/mod.ts";
+import type { OAuth2ClientConfig } from "https://deno.land/x/oauth2_client/mod.ts";
 
-const client = new OAuth2Client({
+const oauthConfig: OAuth2ClientConfig = {
   clientId: Deno.env.get("CUSTOM_CLIENT_ID")!,
   clientSecret: Deno.env.get("CUSTOM_CLIENT_SECRET")!,
   authorizationEndpointUri: "https://custom.com/oauth/authorize",
   tokenUri: "https://custom.com/oauth/token",
   redirectUri: "https://my-site.com",
-});
+};
 ```
 
 ### Environment Variables
