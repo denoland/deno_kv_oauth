@@ -50,6 +50,7 @@ import {
  */
 export async function handleCallback(
   request: Request,
+  /** @see {@linkcode OAuth2ClientConfig} */
   oauthConfig: OAuth2ClientConfig,
 ) {
   const oauthCookieName = getCookieName(

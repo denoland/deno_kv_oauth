@@ -35,6 +35,7 @@ import {
  */
 export async function signIn(
   request: Request,
+  /** @see {@linkcode OAuth2ClientConfig} */
   oauthConfig: OAuth2ClientConfig,
   options?: {
     /** These parameters will be appended to the authorization URI, if defined. */

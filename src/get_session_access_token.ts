@@ -25,6 +25,7 @@ import { getTokens, setTokens } from "./core.ts";
  * ```
  */
 export async function getSessionAccessToken(
+  /** @see {@linkcode OAuth2ClientConfig} */
   oauthConfig: OAuth2ClientConfig,
   sessionId: string,
 ) {

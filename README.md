@@ -189,7 +189,7 @@ Each function is typed so that their respective platform's requirements are met.
 ### Custom OAuth Configuration
 
 Custom OAuth must be defined using
-[`new OAuthConfig()`](https://deno.land/x/oauth2_client/mod.ts?s=OAuthConfig)
+[`OAuth2ClientConfig`](https://deno.land/x/oauth2_client/mod.ts?s=OAuth2ClientConfig)
 from the [`oauth2_client` module](https://deno.land/x/oauth2_client/mod.ts).
 E.g.:
 
