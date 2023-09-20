@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, assertEquals, Status, type Tokens } from "../dev_deps.ts";
+import { assert, assertEquals, type Tokens } from "../dev_deps.ts";
 import {
   deleteOAuthSession,
   deleteTokens,
@@ -14,14 +14,18 @@ import {
   toStoredTokens,
   toTokens,
 } from "./core.ts";
-import { randomOAuthSession, randomTokens } from "./test_utils.ts";
+import {
+  assertRedirect,
+  randomOAuthSession,
+  randomTokens,
+} from "./test_utils.ts";
 
-Deno.test("isSecure() works correctly", () => {
+Deno.test("isSecure()", () => {
   assertEquals(isSecure("https://example.com"), true);
   assertEquals(isSecure("http://example.com"), false);
 });
 
-Deno.test("getCookieName() works correctly", () => {
+Deno.test("getCookieName()", () => {
   assertEquals(getCookieName("hello", true), "__Host-hello");
   assertEquals(getCookieName("hello", false), "hello");
 });
@@ -69,53 +73,47 @@ Deno.test("(get/set/delete)Tokens() work interchangeably", async () => {
 
 Deno.test("redirect() returns a redirect response", () => {
   const location = "/hello-there";
-
   const response = redirect(location);
-  assert(!response.ok);
-  assertEquals(response.body, null);
-  assertEquals(response.headers.get("location"), location);
-  assertEquals(response.status, Status.Found);
+  assertRedirect(response, location);
 });
 
-Deno.test("getSuccessUrl()", async (test) => {
-  await test.step("returns `success_url` URL parameter, if defined", () => {
-    assertEquals(
-      getSuccessUrl(
-        new Request(
-          `http://example.com?success_url=${
-            encodeURIComponent("http://test.com")
-          }`,
-        ),
+Deno.test("getSuccessUrl() returns `success_url` URL parameter, if defined", () => {
+  assertEquals(
+    getSuccessUrl(
+      new Request(
+        `http://example.com?success_url=${
+          encodeURIComponent("http://test.com")
+        }`,
       ),
-      "http://test.com",
-    );
-  });
+    ),
+    "http://test.com",
+  );
+});
 
-  await test.step("returns referer header of same origin, if defined", () => {
-    const referer = "http://example.com/path";
-    assertEquals(
-      getSuccessUrl(
-        new Request("http://example.com", { headers: { referer } }),
-      ),
-      referer,
-    );
-  });
+Deno.test("getSuccessUrl() returns referer header of same origin, if defined", () => {
+  const referer = "http://example.com/path";
+  assertEquals(
+    getSuccessUrl(
+      new Request("http://example.com", { headers: { referer } }),
+    ),
+    referer,
+  );
+});
 
-  await test.step("returns root path if referer is of different origin", () => {
-    assertEquals(
-      getSuccessUrl(
-        new Request("http://example.com", {
-          headers: { referer: "http://test.com" },
-        }),
-      ),
-      "/",
-    );
-  });
+Deno.test("getSuccessUrl() returns root path if referer is of different origin", () => {
+  assertEquals(
+    getSuccessUrl(
+      new Request("http://example.com", {
+        headers: { referer: "http://test.com" },
+      }),
+    ),
+    "/",
+  );
+});
 
-  await test.step("returns root path by default", () => {
-    assertEquals(
-      getSuccessUrl(new Request("http://example.com")),
-      "/",
-    );
-  });
+Deno.test("getSuccessUrl() returns root path by default", () => {
+  assertEquals(
+    getSuccessUrl(new Request("http://example.com")),
+    "/",
+  );
 });

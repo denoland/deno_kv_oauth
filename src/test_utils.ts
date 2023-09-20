@@ -1,5 +1,11 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import type { OAuth2ClientConfig, Tokens } from "../dev_deps.ts";
+import {
+  assert,
+  assertEquals,
+  type OAuth2ClientConfig,
+  Status,
+  type Tokens,
+} from "../dev_deps.ts";
 import type { OAuthSession } from "./core.ts";
 
 export function randomOAuthConfig(): OAuth2ClientConfig {
@@ -23,4 +29,13 @@ export function randomTokens(): Tokens {
     accessToken: crypto.randomUUID(),
     tokenType: crypto.randomUUID(),
   };
+}
+
+export function assertRedirect(response: Response, location?: string) {
+  assertEquals(response.status, Status.Found);
+  if (location !== undefined) {
+    assertEquals(response.headers.get("location"), location);
+  } else {
+    assert(response.headers.has("location"));
+  }
 }

@@ -1,55 +1,35 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { signIn } from "./sign_in.ts";
-import {
-  assert,
-  assertEquals,
-  assertNotEquals,
-  getSetCookies,
-  Status,
-} from "../dev_deps.ts";
+import { assertEquals, assertNotEquals, getSetCookies } from "../dev_deps.ts";
 import { getOAuthSession, OAUTH_COOKIE_NAME } from "./core.ts";
-import { randomOAuthConfig } from "./test_utils.ts";
+import { assertRedirect, randomOAuthConfig } from "./test_utils.ts";
 
-Deno.test("signIn()", async (test) => {
-  const request = new Request("http://my-site.com");
+Deno.test("signIn() returns a response that signs-in the user", async () => {
+  const request = new Request("http://example.com/signin");
   const response = await signIn(request, randomOAuthConfig());
-
-  await test.step("returns a redirect response", () => {
-    assertEquals(response.body, null);
-    assertNotEquals(response.headers.get("location"), null);
-    assertEquals(response.status, Status.Found);
-  });
+  assertRedirect(response);
 
   const [setCookie] = getSetCookies(response.headers);
-  await test.step("correctly sets the session cookie", () => {
-    assertEquals(setCookie.name, OAUTH_COOKIE_NAME);
-    assertEquals(setCookie.httpOnly, true);
-    assertEquals(setCookie.maxAge, 10 * 60);
-    assertEquals(setCookie.sameSite, "Lax");
-    assertEquals(setCookie.path, "/");
+  assertEquals(setCookie.name, OAUTH_COOKIE_NAME);
+  assertEquals(setCookie.httpOnly, true);
+  assertEquals(setCookie.maxAge, 10 * 60);
+  assertEquals(setCookie.sameSite, "Lax");
+  assertEquals(setCookie.path, "/");
+
+  const oauthSessionId = setCookie.value;
+  const oauthSession = await getOAuthSession(oauthSessionId);
+  assertNotEquals(oauthSession, null);
+  const location = response.headers.get("location")!;
+  const state = new URL(location).searchParams.get("state");
+  assertEquals(oauthSession!.state, state);
+});
+
+Deno.test("signIn() returns a redirect response with URL params", async () => {
+  const request = new Request("http://example.com/signin");
+  const response = await signIn(request, randomOAuthConfig(), {
+    urlParams: { foo: "bar" },
   });
-
-  await test.step("correctly sets the OAuth session entry in KV", async () => {
-    const oauthSessionId = setCookie.value;
-    const oauthSession = await getOAuthSession(oauthSessionId);
-    const state = new URL(
-      response.headers.get("location")!,
-    ).searchParams.get("state");
-    assert(oauthSession);
-    assertEquals(oauthSession?.state, state);
-  });
-
-  await test.step("returns a redirect response with URL params", async () => {
-    const responseWithUrlParams = await signIn(request, randomOAuthConfig(), {
-      urlParams: { foo: "bar" },
-    });
-
-    const location = responseWithUrlParams.headers.get("location");
-    assert(location !== null);
-
-    const url = new URL(location);
-    assertEquals(responseWithUrlParams.body, null);
-    assertEquals(url.searchParams.get("foo"), "bar");
-    assertEquals(responseWithUrlParams.status, Status.Found);
-  });
+  assertRedirect(response);
+  const location = response.headers.get("location")!;
+  assertEquals(new URL(location).searchParams.get("foo"), "bar");
 });
