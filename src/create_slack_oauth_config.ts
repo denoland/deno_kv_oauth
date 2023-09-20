@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Slack.
  *
- * Requires `--allow-env[=SLACK_CLIENT_ID,SLACK_CLIENT_SECRET]` permissions and environment variables:
+ * Requires `--allow-env[=SLACK_CLIENT_ID,SLACK_CLIENT_SECRET]` permissions and
+ * environment variables:
  * 1. `SLACK_CLIENT_ID`
  * 2. `SLACK_CLIENT_SECRET`
  *

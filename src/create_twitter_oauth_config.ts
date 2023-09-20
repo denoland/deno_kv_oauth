@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Twitter.
  *
- * Requires `--allow-env[=TWITTER_CLIENT_ID,TWITTER_CLIENT_SECRET]` permissions and environment variables:
+ * Requires `--allow-env[=TWITTER_CLIENT_ID,TWITTER_CLIENT_SECRET]` permissions
+ * and environment variables:
  * 1. `TWITTER_CLIENT_ID`
  * 2. `TWITTER_CLIENT_SECRET`
  *

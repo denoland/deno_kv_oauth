@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Spotify.
  *
- * Requires `--allow-env[=SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET]` permissions and environment variables:
+ * Requires `--allow-env[=SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET]` permissions
+ * and environment variables:
  * 1. `SPOTIFY_CLIENT_ID`
  * 2. `SPOTIFY_CLIENT_SECRET`
  *

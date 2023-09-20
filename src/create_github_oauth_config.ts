@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Facebook.
  *
- * Requires `--allow-env[=GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET]` permissions and environment variables:
+ * Requires `--allow-env[=GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET]` permissions
+ * and environment variables:
  * 1. `GITHUB_CLIENT_ID`
  * 2. `GITHUB_CLIENT_SECRET`
  *

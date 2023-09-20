@@ -19,16 +19,23 @@ import {
 } from "./core.ts";
 
 /**
- * Handles the OAuth 2.0 callback request for the given OAuth configuration, and then redirects the client to the success URL set in {@linkcode signIn}.
+ * Handles the OAuth callback request for the given OAuth configuration, and
+ * then redirects the client to the success URL set in {@linkcode signIn}.
  *
  * It does this by:
- * 1. Getting the OAuth 2.0 session ID from the cookie in the given request.
- * 2. Getting, then deleting, the OAuth 2.0 session object from KV using the OAuth 2.0 session ID. The OAuth 2.0 session object was generated in the sign-in process.
- * 3. Getting the OAuth 2.0 tokens from the given OAuth configuration using the OAuth 2.0 session object.
- * 4. Storing the OAuth 2.0 tokens in KV using a generated session ID.
- * 5. Returning a response that sets a session cookie and redirects the client to the success URL set in {@linkcode signIn}, the access token and the session ID for processing during the callback handler.
+ * 1. Getting the OAuth session ID from the cookie in the given request.
+ * 2. Getting, then deleting, the OAuth session object from KV using the
+ * OAuth session ID. The OAuth session object was generated in the sign-in
+ * process.
+ * 3. Getting the OAuth tokens from the given OAuth configuration using the
+ * OAuth session object.
+ * 4. Storing the OAuth tokens in KV using a generated session ID.
+ * 5. Returning a response that sets a session cookie and redirects the client
+ * to the success URL set in {@linkcode signIn}, the access token and the
+ * session ID for processing during the callback handler.
  *
- * @param request The HTTP request from the client. The URL of the request must match that of the OAuth 2.0 redirect URL.
+ * @param request The HTTP request from the client. The URL of the request must
+ * match that of the OAuth redirect URL.
  *
  * @example
  * ```ts
@@ -58,10 +65,10 @@ export async function handleCallback(
     isSecure(request.url),
   );
   const oauthSessionId = getCookies(request.headers)[oauthCookieName];
-  assert(oauthSessionId, `OAuth 2.0 cookie not found`);
+  assert(oauthSessionId, `OAuth cookie not found`);
 
   const oauthSession = await getOAuthSession(oauthSessionId);
-  assert(oauthSession, `OAuth 2.0 session ${oauthSessionId} entry not found`);
+  assert(oauthSession, `OAuth session ${oauthSessionId} entry not found`);
   await deleteOAuthSession(oauthSessionId);
 
   // This is as far as automated testing can go

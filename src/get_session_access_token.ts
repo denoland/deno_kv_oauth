@@ -8,11 +8,15 @@ import {
 import { getTokens, setTokens } from "./core.ts";
 
 /**
- * Gets the access token for the given OAuth configuration and session. If null is returned, the client must sign in.
+ * Gets the access token for the given OAuth configuration and session. If null
+ * is returned, the client must sign in.
  *
  * It does this by:
- * 1. Getting the OAuth 2.0 tokens from KV using the given session ID. If the token doesn't exist, null is returned. If the token is valid, not close to expiry or unable to be refreshed, the access token is returned.
- * 2. Refreshing and updating the stored token in KV and returning the access token.
+ * 1. Getting the OAuth tokens from KV using the given session ID. If the
+ * token doesn't exist, null is returned. If the token is valid, not close to
+ * expiry or unable to be refreshed, the access token is returned.
+ * 2. Refreshing and updating the stored token in KV and returning the access
+ * token.
  *
  * @param sessionId Get the client's session ID using {@linkcode getSessionId}.
  *
@@ -29,7 +33,10 @@ export async function getSessionAccessToken(
   oauthConfig: OAuth2ClientConfig,
   sessionId: string,
 ) {
-  // First, try with eventual consistency. If that returns null, try with strong consistency.
+  /**
+   * First, try with eventual consistency. If that returns null, try with strong
+   * consistency.
+   */
   const tokens = await getTokens(sessionId, "eventual") ||
     await getTokens(sessionId);
   if (tokens === null) return null;

@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Patreon.
  *
- * Requires `--allow-env[=PATREON_CLIENT_ID,PATREON_CLIENT_SECRET]` permissions and environment variables:
+ * Requires `--allow-env[=PATREON_CLIENT_ID,PATREON_CLIENT_SECRET]` permissions
+ * and environment variables:
  * 1. `PATREON_CLIENT_ID`
  * 2. `PATREON_CLIENT_SECRET`
  *

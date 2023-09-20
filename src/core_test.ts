@@ -29,7 +29,7 @@ Deno.test("getCookieName() works correctly", () => {
 Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
   const id = crypto.randomUUID();
 
-  // OAuth 2.0 session doesn't yet exist
+  // OAuth session doesn't yet exist
   assertEquals(await getOAuthSession(id), null);
 
   const oauthSession = randomOAuthSession();

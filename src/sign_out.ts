@@ -11,14 +11,19 @@ import {
 import { getSessionId } from "./get_session_id.ts";
 
 /**
- * Handles the sign-out process, and then redirects the client to the given success URL.
+ * Handles the sign-out process, and then redirects the client to the given
+ * success URL.
  *
  * It does this by:
- * 1. Getting the OAuth 2.0 session ID from the cookie in the given request. If no OAuth 2.0 session cookie is found, a response that redirects the client to the given redirect URL is returned.
- * 2. Deleting the stored OAuth 2.0 tokens from KV.
- * 3. Returning a response that invalidates the client's session cookie and redirects the client to the given success URL.
+ * 1. Getting the OAuth session ID from the cookie in the given request. If no
+ * OAuth session cookie is found, a response that redirects the client to the
+ * given redirect URL is returned.
+ * 2. Deleting the stored OAuth tokens from KV.
+ * 3. Returning a response that invalidates the client's session cookie and
+ * redirects the client to the given success URL.
  *
- * See "Redirect URL after Sign-In or Sign-Out" section in the README for more information on the success URL.
+ * See "Redirect URL after Sign-In or Sign-Out" section in the README for more
+ * information on the success URL.
  *
  * @example
  * ```ts

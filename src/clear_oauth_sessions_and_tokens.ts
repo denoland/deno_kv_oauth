@@ -9,10 +9,10 @@ import {
 } from "./core.ts";
 
 /**
- * Deletes all OAuth 2.0 sessions and tokens stored in KV.
+ * Deletes all OAuth sessions and tokens stored in KV.
  *
  * It does this by:
- * 1. Listing all OAuth 2.0 session entries and asynchronously deleting them.
+ * 1. Listing all OAuth session entries and asynchronously deleting them.
  * 2. Listing all legacy token entries and asynchronously deleting them.
  * 3. Listing all token entries and asynchronously deleting them.
  * 4. Waiting for all deletion tasks to complete.

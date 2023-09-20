@@ -23,7 +23,7 @@
 
 ## Features
 
-- Uses [oauth2_client](https://deno.land/x/oauth2_client@v1.0.0) for OAuth 2.0
+- Uses [oauth2_client](https://deno.land/x/oauth2_client@v1.0.0) for OAuth
   workflows and [Deno KV](https://deno.com/kv) for persistent session storage.
 - Automatically handles the authorization code flow with
   [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/),
@@ -47,7 +47,7 @@
 ## Live Demo
 
 You can also check out a live demo at https://kv-oauth.deno.dev, which uses
-Github as the OAuth 2.0 provider. Source code is located in [demo.ts](demo.ts).
+Github as the OAuth provider. Source code is located in [demo.ts](demo.ts).
 
 ## Usage
 
@@ -60,22 +60,22 @@ Check out the full documentation and API reference
 > [Fresh](https://fresh.deno.dev/docs/examples/using-deno-kv-oauth)
 > documentation for more information.
 
-This example uses GitHub as the OAuth 2.0 provider. However, you can use any
+This example uses GitHub as the OAuth provider. However, you can use any
 provider you like.
 
-1. Create your OAuth 2.0 application for your given provider.
+1. Create your OAuth application for your given provider.
 
 1. Create your [pre-defined](#pre-defined-oauth-configurations) or
    [custom](#custom-oauth-configuration) OAuth configuration.
 
    ```ts
-   // Pre-configured OAuth 2.0 client
+   // Pre-configured OAuth client
    import { createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    const oauthConfig = createGitHubOAuthConfig();
    ```
 
-1. Using the OAuth 2.0 client configuration, insert the authentication flow
+1. Using the OAuth client configuration, insert the authentication flow
    functions into your authentication routes.
 
    ```ts
@@ -153,7 +153,7 @@ provider you like.
 
 > Check out a full implementation in the [demo source code](./demo.ts).
 
-1. When needed, you can delete all KV-stored OAuth 2.0 sessions and tokens.
+1. When needed, you can delete all KV-stored OAuth sessions and tokens.
 
    ```ts
    import { clearOAuthSessionsAndTokens } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
@@ -182,7 +182,7 @@ following providers:
 
 Each function is typed so that their respective platform's requirements are met.
 
-> If there's a pre-configured OAuth 2.0 client for a provider you'd like added,
+> If there's a pre-configured OAuth client for a provider you'd like added,
 > please submit a pull request or
 > [create a new issue](https://github.com/denoland/deno_kv_oauth/issues/new).
 
@@ -211,8 +211,8 @@ const oauthConfig: OAuth2ClientConfig = {
   [the API reference](https://deno.land/api?s=Deno.openKv&unstable=) for further
   details.
 - `${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` - required when
-  creating a pre-configured OAuth 2.0 client for a given provider. E.g. for
-  Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
+  creating a pre-configured OAuth client for a given provider. E.g. for Twitter,
+  the environment variable keys are `TWITTER_CLIENT_ID` and
   `TWITTER_CLIENT_SECRET`. See
   [the list below](#pre-defined-oauth-configurations) for specifics.
 - `OKTA_DOMAIN` or `AUTH0_DOMAIN` - required only when using the Okta or Auth0
@@ -262,12 +262,12 @@ The same applies to user sign-out.
 This module is incompatible with [Twitch](https://www.twitch.tv/) as an OAuth
 2.0 provider, as the platform
 [doesn't support PKCE](https://twitch.uservoice.com/forums/310213-developers/suggestions/39785686-add-pkce-support-to-the-oauth2-0-authorization-cod).
-[PKCE](https://oauth.net/2/pkce/) is a requirement for all OAuth 2.0 providers
-for this module.
+[PKCE](https://oauth.net/2/pkce/) is a requirement for all OAuth providers for
+this module.
 
 ## In the Wild
 
-Check out these projects powered by Deno KV OAuth 2.0:
+Check out these projects powered by Deno KV OAuth:
 
 1. [Deno SaaSKit](https://saaskit.deno.dev/) - A modern SaaS template built on
    Fresh.
@@ -290,5 +290,5 @@ Check out these projects powered by Deno KV OAuth 2.0:
    [Cheetah web framework](https://cheetah.mod.land/).
 1. [Paquet](https://paquet.app) - A web app shop
 
-> Do you have a project powered by Deno KV OAuth 2.0 that you'd like to share?
+> Do you have a project powered by Deno KV OAuth that you'd like to share?
 > Please submit a pull request adding that project to this list.

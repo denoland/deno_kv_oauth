@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Okta.
  *
- * Requires `--allow-env[=OKTA_CLIENT_ID,OKTA_CLIENT_SECRET,OKTA_DOMAIN]` permissions and environment variables:
+ * Requires `--allow-env[=OKTA_CLIENT_ID,OKTA_CLIENT_SECRET,OKTA_DOMAIN]`
+ * permissions and environment variables:
  * 1. `OKTA_CLIENT_ID`
  * 2. `OKTA_CLIENT_SECRET`
  * 3. `OKTA_DOMAIN`
