@@ -6,7 +6,7 @@ import {
   Status,
   type Tokens,
 } from "../dev_deps.ts";
-import type { OAuthSession } from "./core.ts";
+import type { OAuthSession } from "./_core.ts";
 
 export function randomOAuthConfig(): OAuth2ClientConfig {
   return {

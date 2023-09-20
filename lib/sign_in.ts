@@ -8,7 +8,7 @@ import {
   OAUTH_COOKIE_NAME,
   redirect,
   setOAuthSession,
-} from "./core.ts";
+} from "./_core.ts";
 
 /**
  * Handles the sign-in process for the given OAuth configuration and redirects

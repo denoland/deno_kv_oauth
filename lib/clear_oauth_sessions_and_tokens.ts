@@ -6,7 +6,7 @@ import {
   listLegacyTokens,
   listOAuthSessions,
   listTokens,
-} from "./core.ts";
+} from "./_core.ts";
 
 /**
  * Deletes all OAuth sessions and tokens stored in KV.

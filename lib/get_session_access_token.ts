@@ -5,7 +5,7 @@ import {
   OAuth2ResponseError,
   Tokens,
 } from "../deps.ts";
-import { getTokens, setTokens } from "./core.ts";
+import { getTokens, setTokens } from "./_core.ts";
 
 /**
  * Gets the access token for the given OAuth configuration and session. If null
