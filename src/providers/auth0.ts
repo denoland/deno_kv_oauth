@@ -12,7 +12,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 3. `AUTH0_DOMAIN`
  *
  * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Default scopes to request unless otherwise specified.
+ * @param scope Scopes to request.
  *
  * @example
  * ```ts

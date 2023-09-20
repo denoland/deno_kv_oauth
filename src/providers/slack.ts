@@ -11,20 +11,20 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 2. `SLACK_CLIENT_SECRET`
  *
  * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Default scopes to request unless otherwise specified.
+ * @param scope Scopes to request.
  *
  * @example
  * ```ts
  * import { createSlackOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createSlackOAuthConfig("http://localhost:8000/callback", "users.profile:read");
+ * const oauthConfig = createSlackOAuthConfig("users.profile:read");
  * ```
  *
  * @see {@link https://api.slack.com/authentication/oauth-v2}
  */
 export function createSlackOAuthConfig(
-  redirectUri: string,
   scope: string | string[],
+  redirectUri?: string,
 ): OAuth2ClientConfig {
   return {
     clientId: getRequiredEnv("SLACK_CLIENT_ID"),

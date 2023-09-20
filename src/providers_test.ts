@@ -14,8 +14,8 @@ import * as createOAuthConfigFns from "./providers.ts";
   "Notion",
   "Okta",
   "Patreon",
-  "Slack",
-  "Spotify",
+  // "Slack",
+  // "Spotify",
   "Twitter",
 ].map((provider) => {
   const fnName = `create${provider}OAuthConfig`;
