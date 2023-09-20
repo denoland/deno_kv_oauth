@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Discord.
  *
- * Requires `--allow-env[=DISCORD_CLIENT_ID,DISCORD_CLIENT_SECRET]` permissions and environment variables:
+ * Requires `--allow-env[=DISCORD_CLIENT_ID,DISCORD_CLIENT_SECRET]` permissions
+ * and environment variables:
  * 1. `DISCORD_CLIENT_ID`
  * 2. `DISCORD_CLIENT_SECRET`
  *

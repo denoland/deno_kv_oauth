@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for GitLab.
  *
- * Requires `--allow-env[=GITLAB_CLIENT_ID,GITLAB_CLIENT_SECRET]` permissions and environment variables:
+ * Requires `--allow-env[=GITLAB_CLIENT_ID,GITLAB_CLIENT_SECRET]` permissions
+ * and environment variables:
  * 1. `GITLAB_CLIENT_ID`
  * 2. `GITLAB_CLIENT_SECRET`
  *

@@ -4,12 +4,18 @@ import { type Cookie, SECOND, Status, type Tokens } from "../deps.ts";
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
 
-// Determines whether the request URL is of a secure origin using the HTTPS protocol.
+/**
+ * Determines whether the request URL is of a secure origin using the HTTPS
+ * protocol.
+ */
 export function isSecure(requestUrl: string) {
   return new URL(requestUrl).protocol === "https:";
 }
 
-// Dynamically prefixes the cookie name, depending on whether it's for a secure origin (HTTPS).
+/**
+ * Dynamically prefixes the cookie name, depending on whether it's for a secure
+ * origin (HTTPS).
+ */
 export function getCookieName(name: string, isSecure: boolean) {
   return isSecure ? "__Host-" + name : name;
 }
@@ -38,7 +44,7 @@ addEventListener("beforeunload", async () => {
   await kv.close();
 });
 
-// OAuth 2.0 session
+// OAuth session
 export interface OAuthSession {
   state: string;
   codeVerifier: string;
@@ -47,23 +53,23 @@ export interface OAuthSession {
 
 const OAUTH_SESSIONS_PREFIX = "oauth_sessions";
 
-// Retrieves the OAuth 2.0 session object for the given OAuth 2.0 session ID.
+// Retrieves the OAuth session object for the given OAuth session ID.
 export async function getOAuthSession(id: string) {
   const result = await kv.get<OAuthSession>([OAUTH_SESSIONS_PREFIX, id]);
   return result.value;
 }
 
-// Lists all OAuth 2.0 session entries.
+// Lists all OAuth session entries.
 export function listOAuthSessions() {
   return kv.list<OAuthSession>({ prefix: [OAUTH_SESSIONS_PREFIX] });
 }
 
-// Stores the OAuth 2.0 session object for the given OAuth 2.0 session ID.
+// Stores the OAuth session object for the given OAuth session ID.
 export async function setOAuthSession(id: string, value: OAuthSession) {
   await kv.set([OAUTH_SESSIONS_PREFIX, id], value);
 }
 
-// Deletes the OAuth 2.0 session object for the given OAuth 2.0 session ID.
+// Deletes the OAuth session object for the given OAuth session ID.
 export async function deleteOAuthSession(id: string) {
   await kv.delete([OAUTH_SESSIONS_PREFIX, id]);
 }
@@ -119,8 +125,9 @@ interface StoredTokens extends Omit<Tokens, "expiresIn"> {
 }
 
 /**
- * Converts a normal token, with a time-relative expiry, to a stored token, with a time-absolute expiry.
- * This is done by replacing the normal token's `expiresIn` property with an `expiresAt` property.
+ * Converts a normal token, with a time-relative expiry, to a stored token,
+ * with a time-absolute expiry. This is done by replacing the normal token's
+ * `expiresIn` property with an `expiresAt` property.
  *
  * Note: this is exported for testing purposes only.
  */
@@ -135,8 +142,9 @@ export function toStoredTokens(tokens: Tokens): StoredTokens {
 }
 
 /**
- * Converts a stored token, with a time-absolute expiry, to a normal token, with a time-relative expiry.
- * This is done by replacing the stored token's `expiresAt` property with an `expiresIn` property.
+ * Converts a stored token, with a time-absolute expiry, to a normal token, with
+ * a time-relative expiry. This is done by replacing the stored token's
+ * `expiresAt` property with an `expiresIn` property.
  *
  * Note: this is exported for testing purposes only.
  */
@@ -170,7 +178,8 @@ export function listTokens() {
 
 /**
  * Stores the token for the given session ID.
- * Before storage, the token is converted to a stored token using {@linkcode toStoredTokens}.
+ * Before storage, the token is converted to a stored token using
+ * {@linkcode toStoredTokens}.
  */
 export async function setTokens(sessionId: string, tokens: Tokens) {
   const storedTokens = toStoredTokens(tokens);
@@ -185,7 +194,9 @@ export async function deleteTokens(sessionId: string) {
 /**
  * Returns a response that redirects the client to the specified location.
  * The location can be a relative path or absolute URL.
- * This function differs from [Response.redirect()]{@linkcode https://developer.mozilla.org/en-US/docs/Web/API/Response/redirect_static} in that it allows for relative URLs to be specified.
+ * This function differs from
+ * [Response.redirect()]{@linkcode https://developer.mozilla.org/en-US/docs/Web/API/Response/redirect_static}
+ * in that it allows for relative URLs to be specified.
  *
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Location}
  */
@@ -198,7 +209,10 @@ export function redirect(location: string) {
   });
 }
 
-// See "Redirect URL after Sign-In or Sign-Out" section in the README for more information on the success URL.
+/**
+ * See "Redirect URL after Sign-In or Sign-Out" section in the README for more
+ * information on the success URL.
+ */
 export function getSuccessUrl(request: Request) {
   const url = new URL(request.url);
 

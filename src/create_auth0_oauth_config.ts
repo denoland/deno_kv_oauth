@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Auth0.
  *
- * Requires `--allow-env[=AUTH0_CLIENT_ID,AUTH0_CLIENT_SECRET,AUTH0_DOMAIN]` permissions and environment variables:
+ * Requires `--allow-env[=AUTH0_CLIENT_ID,AUTH0_CLIENT_SECRET,AUTH0_DOMAIN]`
+ * permissions and environment variables:
  * 1. `AUTH0_CLIENT_ID`
  * 2. `AUTH0_CLIENT_SECRET`
  * 3. `AUTH0_DOMAIN`

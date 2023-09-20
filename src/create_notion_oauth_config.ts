@@ -6,7 +6,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Google.
  *
- * Requires `--allow-env[=NOTION_CLIENT_ID,NOTION_CLIENT_SECRET]` permissions and environment variables:
+ * Requires `--allow-env[=NOTION_CLIENT_ID,NOTION_CLIENT_SECRET]` permissions
+ * and environment variables:
  * 1. `NOTION_CLIENT_ID`
  * 2. `NOTION_CLIENT_SECRET`
  *

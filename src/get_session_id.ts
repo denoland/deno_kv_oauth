@@ -3,9 +3,11 @@ import { getCookies } from "../deps.ts";
 import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./core.ts";
 
 /**
- * Gets the session ID for a given request. This is well-suited for checking whether the client is signed in by checking if undefined.
+ * Gets the session ID for a given request. This is well-suited for checking
+ * whether the client is signed in by checking if undefined.
  *
- * It does this by getting the session ID from the cookie in the given request. If the request has no cookie, undefined is returned.
+ * It does this by getting the session ID from the cookie in the given request.
+ * If the request has no cookie, undefined is returned.
  *
  * @param request The HTTP request from the client.
  *
