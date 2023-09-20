@@ -2,11 +2,11 @@
 import { assertEquals, Status } from "../dev_deps.ts";
 import { signOut } from "./sign_out.ts";
 import { getTokens, setTokens, SITE_COOKIE_NAME } from "./core.ts";
-import { genTokens } from "./test_utils.ts";
+import { randomTokens } from "./test_utils.ts";
 
 Deno.test("signOut()", async (test) => {
   const sessionId = crypto.randomUUID();
-  const tokens = genTokens();
+  const tokens = randomTokens();
   await setTokens(sessionId, tokens);
   const successUrl = "/why-hello-there";
   const request = new Request("http://example.com?success_url=" + successUrl, {
