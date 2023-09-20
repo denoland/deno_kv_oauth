@@ -112,7 +112,7 @@ provider you like.
      getSessionId,
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
-   const oauth2Client = createGitHubOAuthConfig();
+   const oauthConfig = createGitHubOAuthConfig();
 
    async function getGitHubUser(accessToken: string): Promise<any> {
      const response = await fetch("https://api.github.com/user", {
@@ -131,7 +131,7 @@ provider you like.
 
      if (!hasSessionIdCookie) return new Response(null, { status: 404 });
 
-     const accessToken = await getSessionAccessToken(oauth2Client, sessionId);
+     const accessToken = await getSessionAccessToken(oauthConfig, sessionId);
      if (accessToken === null) return new Response(null, { status: 400 });
 
      try {
