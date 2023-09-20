@@ -1,9 +1,10 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 
-import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
+import type { OAuth2ClientConfig } from "../../deps.ts";
+import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
- * Creates an OAuth 2.0 client with GitHub as the provider.
+ * Returns the OAuth configuration for Facebook.
  *
  * Requires `--allow-env[=GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET]` permissions and environment variables:
  * 1. `GITHUB_CLIENT_ID`
@@ -11,21 +12,27 @@ import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
  *
  * @example
  * ```ts
- * import { createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauth2Client = createGitHubOAuth2Client();
+ * const oauthConfig = createGitHubOAuthConfig();
  * ```
  *
  * @see {@link https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps}
  */
-export function createGitHubOAuth2Client(
-  additionalOAuth2ClientConfig?: Partial<OAuth2ClientConfig>,
-): OAuth2Client {
-  return new OAuth2Client({
-    clientId: Deno.env.get("GITHUB_CLIENT_ID")!,
-    clientSecret: Deno.env.get("GITHUB_CLIENT_SECRET")!,
+export function createGitHubOAuthConfig(
+  config?: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri?: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope?: string | string[];
+  },
+): OAuth2ClientConfig {
+  return {
+    clientId: getRequiredEnv("GITHUB_CLIENT_ID"),
+    clientSecret: getRequiredEnv("GITHUB_CLIENT_SECRET"),
     authorizationEndpointUri: "https://github.com/login/oauth/authorize",
     tokenUri: "https://github.com/login/oauth/access_token",
-    ...additionalOAuth2ClientConfig,
-  });
+    redirectUri: config?.redirectUri,
+    defaults: { scope: config?.scope },
+  };
 }

@@ -1,38 +1,40 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 
-import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
-import type { WithRedirectUri } from "./types.ts";
+import type { OAuth2ClientConfig } from "../../deps.ts";
+import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
- * Creates an OAuth 2.0 client with Dropbox as the provider.
+ * Returns the OAuth configuration for Dropbox.
  *
  * Requires `--allow-env[=DROPBOX_CLIENT_ID,DROPBOX_CLIENT_SECRET]` permissions and environment variables:
  * 1. `DROPBOX_CLIENT_ID`
  * 2. `DROPBOX_CLIENT_SECRET`
  *
- * @param additionalOAuth2ClientConfig Requires `redirectUri` property.
- *
  * @example
  * ```ts
- * import { createDropboxOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createDropboxOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauth2Client = createDropboxOAuth2Client({
- *   redirectUri: "http://localhost:8000/callback",
+ * const oauthConfig = createDropboxOAuthConfig({
+ *   redirectUri: "http://localhost:8000/callback"
  * });
  * ```
  *
  * @see {@link https://developers.dropbox.com/oauth-guide}
  */
-export function createDropboxOAuth2Client(
-  additionalOAuth2ClientConfig:
-    & Partial<OAuth2ClientConfig>
-    & WithRedirectUri,
-): OAuth2Client {
-  return new OAuth2Client({
-    clientId: Deno.env.get("DROPBOX_CLIENT_ID")!,
-    clientSecret: Deno.env.get("DROPBOX_CLIENT_SECRET")!,
+export function createDropboxOAuthConfig(
+  config: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope?: string | string[];
+  },
+): OAuth2ClientConfig {
+  return {
+    clientId: getRequiredEnv("DROPBOX_CLIENT_ID"),
+    clientSecret: getRequiredEnv("DROPBOX_CLIENT_SECRET"),
     authorizationEndpointUri: "https://www.dropbox.com/oauth2/authorize",
     tokenUri: "https://api.dropboxapi.com/oauth2/token",
-    ...additionalOAuth2ClientConfig,
-  });
+    redirectUri: config.redirectUri,
+    defaults: { scope: config.scope },
+  };
 }

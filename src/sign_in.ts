@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { type OAuth2Client, setCookie } from "../deps.ts";
+import { OAuth2Client, OAuth2ClientConfig, setCookie } from "../deps.ts";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -11,7 +11,7 @@ import {
 } from "./core.ts";
 
 /**
- * Handles the sign-in process for a given OAuth 2.0 client and redirects the client to the authorization URL.
+ * Handles the sign-in process for the given OAuth configuration and redirects the client to the authorization URL.
  *
  * It does this by:
  * 1. Using a randomly generated state to construct the OAuth 2.0 provider's authorization URL and code verifier.
@@ -24,26 +24,27 @@ import {
  *
  * @example
  * ```ts
- * import { signIn, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { signIn, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauth2Client = createGitHubOAuth2Client();
+ * const oauthConfig = createGitHubOAuthConfig();
  *
  * export async function handleSignIn(request: Request) {
- *  return await signIn(request, oauth2Client);
+ *  return await signIn(request, oauthConfig);
  * }
  * ```
  */
 export async function signIn(
   request: Request,
-  oauth2Client: OAuth2Client,
+  /** @see {@linkcode OAuth2ClientConfig} */
+  oauthConfig: OAuth2ClientConfig,
   options?: {
     /** These parameters will be appended to the authorization URI, if defined. */
     urlParams?: Record<string, string>;
   },
 ): Promise<Response> {
   const state = crypto.randomUUID();
-  const { uri, codeVerifier } = await oauth2Client.code
-    .getAuthorizationUri({ state });
+  const { uri, codeVerifier } = await new OAuth2Client(oauthConfig)
+    .code.getAuthorizationUri({ state });
 
   if (options?.urlParams) {
     Object.entries(options.urlParams).forEach(([key, value]) =>

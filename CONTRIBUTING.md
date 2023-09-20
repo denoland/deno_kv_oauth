@@ -14,5 +14,5 @@ In the pull request, please do the following:
    This confirms that the newly created OAuth 2.0 client is working correctly.
 1. Ensure the code example snippet is reproducible.
 1. Add the provider to the README's list of
-   [pre-configured OAuth 2.0 clients](README.md#pre-configured-oauth-20-clients),
+   [pre-configured OAuth 2.0 clients](README.md#pre-defined-oauth-configurations),
    in alphabetical order.

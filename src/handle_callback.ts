@@ -1,5 +1,11 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, getCookies, type OAuth2Client, setCookie } from "../deps.ts";
+import {
+  assert,
+  getCookies,
+  OAuth2Client,
+  OAuth2ClientConfig,
+  setCookie,
+} from "../deps.ts";
 import {
   COOKIE_BASE,
   deleteOAuthSession,
@@ -13,12 +19,12 @@ import {
 } from "./core.ts";
 
 /**
- * Handles the OAuth 2.0 callback request for a given OAuth 2.0 client, and then redirects the client to the success URL set in {@linkcode signIn}.
+ * Handles the OAuth 2.0 callback request for the given OAuth configuration, and then redirects the client to the success URL set in {@linkcode signIn}.
  *
  * It does this by:
  * 1. Getting the OAuth 2.0 session ID from the cookie in the given request.
  * 2. Getting, then deleting, the OAuth 2.0 session object from KV using the OAuth 2.0 session ID. The OAuth 2.0 session object was generated in the sign-in process.
- * 3. Getting the OAuth 2.0 tokens from the given OAuth 2.0 client using the OAuth 2.0 session object.
+ * 3. Getting the OAuth 2.0 tokens from the given OAuth configuration using the OAuth 2.0 session object.
  * 4. Storing the OAuth 2.0 tokens in KV using a generated session ID.
  * 5. Returning a response that sets a session cookie and redirects the client to the success URL set in {@linkcode signIn}, the access token and the session ID for processing during the callback handler.
  *
@@ -26,14 +32,14 @@ import {
  *
  * @example
  * ```ts
- * import { handleCallback, createGitHubOAuth2Client } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { handleCallback, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauth2Client = createGitHubOAuth2Client();
+ * const oauthConfig = createGitHubOAuthConfig();
  *
  * export async function handleOAuthCallback(request: Request) {
  *   const { response, accessToken, sessionId } = await handleCallback(
  *     request,
- *     oauth2Client,
+ *     oauthConfig,
  *   );
  *
  *    // Perform some actions with the `accessToken` and `sessionId`.
@@ -44,7 +50,8 @@ import {
  */
 export async function handleCallback(
   request: Request,
-  oauth2Client: OAuth2Client,
+  /** @see {@linkcode OAuth2ClientConfig} */
+  oauthConfig: OAuth2ClientConfig,
 ) {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
@@ -58,10 +65,8 @@ export async function handleCallback(
   await deleteOAuthSession(oauthSessionId);
 
   // This is as far as automated testing can go
-  const tokens = await oauth2Client.code.getToken(
-    request.url,
-    oauthSession,
-  );
+  const tokens = await new OAuth2Client(oauthConfig)
+    .code.getToken(request.url, oauthSession);
 
   const sessionId = crypto.randomUUID();
   await setTokens(sessionId, tokens);
