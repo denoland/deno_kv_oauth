@@ -2,6 +2,7 @@
 
 import type { OAuth2ClientConfig } from "../../deps.ts";
 import { getRequiredEnv } from "./get_required_env.ts";
+
 /**
  * Returns the OAuth configuration for Okta.
  *
