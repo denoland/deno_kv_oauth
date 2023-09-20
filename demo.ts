@@ -11,6 +11,14 @@ import {
 
 loadSync({ export: true });
 
+// For testing
+if (!Deno.env.has("GITHUB_CLIENT_ID")) {
+  Deno.env.set("GITHUB_CLIENT_ID", crypto.randomUUID());
+}
+if (!Deno.env.has("GITHUB_CLIENT_SECRET")) {
+  Deno.env.set("GITHUB_CLIENT_SECRET", crypto.randomUUID());
+}
+
 /**
  * Modify the OAuth configuration creation function when testing for providers.
  *
