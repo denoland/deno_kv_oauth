@@ -14,7 +14,7 @@ import {
   toStoredTokens,
   toTokens,
 } from "./core.ts";
-import { genOAuthSession, genTokens } from "./test_utils.ts";
+import { randomOAuthSession, randomTokens } from "./test_utils.ts";
 
 Deno.test("isSecure() works correctly", () => {
   assertEquals(isSecure("https://example.com"), true);
@@ -32,7 +32,7 @@ Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
   // OAuth 2.0 session doesn't yet exist
   assertEquals(await getOAuthSession(id), null);
 
-  const oauthSession = genOAuthSession();
+  const oauthSession = randomOAuthSession();
   await setOAuthSession(id, oauthSession);
   assertEquals(await getOAuthSession(id), oauthSession);
 
@@ -42,7 +42,7 @@ Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
 
 Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
   const tokens: Tokens = {
-    ...genTokens(),
+    ...randomTokens(),
     expiresIn: 42,
   };
   const currentTokens = toTokens(toStoredTokens(tokens));
@@ -59,7 +59,7 @@ Deno.test("(get/set/delete)Tokens() work interchangeably", async () => {
   // Tokens don't yet exist
   assertEquals(await getTokens(sessionId), null);
 
-  const tokens = genTokens();
+  const tokens = randomTokens();
   await setTokens(sessionId, tokens);
   assertEquals(await getTokens(sessionId), tokens);
 

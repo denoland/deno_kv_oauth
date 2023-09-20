@@ -9,7 +9,7 @@ import {
 } from "./dev_deps.ts";
 import { Status } from "./deps.ts";
 import { setTokens, SITE_COOKIE_NAME } from "./src/core.ts";
-import { genTokens } from "./src/test_utils.ts";
+import { randomTokens } from "./src/test_utils.ts";
 
 const baseUrl = "http://localhost";
 
@@ -34,7 +34,7 @@ Deno.test("demo", async (test) => {
 
   await test.step("GET / serves a signed-in web page", async () => {
     const sessionId = crypto.randomUUID();
-    const tokens = genTokens();
+    const tokens = randomTokens();
     await setTokens(sessionId, tokens);
     const request = new Request(baseUrl, {
       headers: {

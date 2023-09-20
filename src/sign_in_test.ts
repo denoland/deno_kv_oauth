@@ -8,11 +8,11 @@ import {
   Status,
 } from "../dev_deps.ts";
 import { getOAuthSession, OAUTH_COOKIE_NAME } from "./core.ts";
-import { oauthConfig } from "./test_utils.ts";
+import { randomOAuthConfig } from "./test_utils.ts";
 
 Deno.test("signIn()", async (test) => {
   const request = new Request("http://my-site.com");
-  const response = await signIn(request, oauthConfig);
+  const response = await signIn(request, randomOAuthConfig());
 
   await test.step("returns a redirect response", () => {
     assertEquals(response.body, null);
@@ -40,7 +40,7 @@ Deno.test("signIn()", async (test) => {
   });
 
   await test.step("returns a redirect response with URL params", async () => {
-    const responseWithUrlParams = await signIn(request, oauthConfig, {
+    const responseWithUrlParams = await signIn(request, randomOAuthConfig(), {
       urlParams: { foo: "bar" },
     });
 
