@@ -10,28 +10,31 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `SLACK_CLIENT_ID`
  * 2. `SLACK_CLIENT_SECRET`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createSlackOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createSlackOAuthConfig("users.profile:read");
+ * const oauthConfig = createSlackOAuthConfig({
+ *   scope: "users.profile:read",
+ * });
  * ```
  *
  * @see {@link https://api.slack.com/authentication/oauth-v2}
  */
 export function createSlackOAuthConfig(
-  scope: string | string[],
-  redirectUri?: string,
+  config: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri?: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope: string | string[];
+  },
 ): OAuth2ClientConfig {
   return {
     clientId: getRequiredEnv("SLACK_CLIENT_ID"),
     clientSecret: getRequiredEnv("SLACK_CLIENT_SECRET"),
     authorizationEndpointUri: "https://slack.com/oauth/v2/authorize",
     tokenUri: "https://slack.com/api/oauth.v2.access",
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config.redirectUri,
+    defaults: { scope: config.scope },
   };
 }

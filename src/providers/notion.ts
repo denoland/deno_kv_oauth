@@ -10,9 +10,6 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `NOTION_CLIENT_ID`
  * 2. `NOTION_CLIENT_SECRET`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createNotionOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
@@ -23,8 +20,12 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * @see {@link https://developers.notion.com/docs/authorization}
  */
 export function createNotionOAuthConfig(
-  redirectUri?: string,
-  scope?: string | string[],
+  config?: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri?: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope?: string | string[];
+  },
 ): OAuth2ClientConfig {
   return {
     clientId: getRequiredEnv("NOTION_CLIENT_ID"),
@@ -32,7 +33,7 @@ export function createNotionOAuthConfig(
     authorizationEndpointUri:
       "https://api.notion.com/v1/oauth/authorize?owner=user",
     tokenUri: "https://api.notion.com/v1/oauth/token",
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config?.redirectUri,
+    defaults: { scope: config?.scope },
   };
 }

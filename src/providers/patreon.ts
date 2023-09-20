@@ -10,28 +10,32 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `PATREON_CLIENT_ID`
  * 2. `PATREON_CLIENT_SECRET`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createPatreonOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createPatreonOAuthConfig("http://localhost:8000/callback", "identity identity[email]");
+ * const oauthConfig = createPatreonOAuthConfig({
+ *   redirectUri: "http://localhost:8000/callback",
+ *   scope: "identity identity[email]"
+ * });
  * ```
  *
  * @see {@link https://www.patreon.com/portal/registration/register-clients}
  */
 export function createPatreonOAuthConfig(
-  redirectUri: string,
-  scope: string | string[],
+  config: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope: string | string[];
+  },
 ): OAuth2ClientConfig {
   return {
     clientId: getRequiredEnv("PATREON_CLIENT_ID"),
     clientSecret: getRequiredEnv("PATREON_CLIENT_SECRET"),
     authorizationEndpointUri: "https://www.patreon.com/oauth2/authorize",
     tokenUri: "https://www.patreon.com/api/oauth2/token",
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config.redirectUri,
+    defaults: { scope: config.scope },
   };
 }

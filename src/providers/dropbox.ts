@@ -10,28 +10,31 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `DROPBOX_CLIENT_ID`
  * 2. `DROPBOX_CLIENT_SECRET`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createDropboxOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createDropboxOAuthConfig("http://localhost:8000/callback");
+ * const oauthConfig = createDropboxOAuthConfig({
+ *   redirectUri: "http://localhost:8000/callback"
+ * });
  * ```
  *
  * @see {@link https://developers.dropbox.com/oauth-guide}
  */
 export function createDropboxOAuthConfig(
-  redirectUri: string,
-  scope?: string | string[],
+  config: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope?: string | string[];
+  },
 ): OAuth2ClientConfig {
   return {
     clientId: getRequiredEnv("DROPBOX_CLIENT_ID"),
     clientSecret: getRequiredEnv("DROPBOX_CLIENT_SECRET"),
     authorizationEndpointUri: "https://www.dropbox.com/oauth2/authorize",
     tokenUri: "https://api.dropboxapi.com/oauth2/token",
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config.redirectUri,
+    defaults: { scope: config.scope },
   };
 }

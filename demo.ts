@@ -66,7 +66,7 @@ if (!Deno.env.has("GITHUB_CLIENT_ID")) {
 if (!Deno.env.has("GITHUB_CLIENT_SECRET")) {
   Deno.env.set("GITHUB_CLIENT_SECRET", crypto.randomUUID());
 }
-const oauthConfig = createOAuthConfigFn(redirectUri, scope);
+const oauthConfig = createOAuthConfigFn({ redirectUri, scope });
 
 async function indexHandler(request: Request) {
   const sessionId = getSessionId(request);

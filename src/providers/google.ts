@@ -10,28 +10,32 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `GOOGLE_CLIENT_ID`
  * 2. `GOOGLE_CLIENT_SECRET`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createGoogleOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createGoogleOAuthConfig("http://localhost:8000/callback", "https://www.googleapis.com/auth/userinfo.profile");
+ * const oauthConfig = createGoogleOAuthConfig({
+ *   redirectUri: "http://localhost:8000/callback",
+ *   scope: "https://www.googleapis.com/auth/userinfo.profile"
+ * });
  * ```
  *
  * @see {@link https://developers.google.com/identity/protocols/oauth2/web-server}
  */
 export function createGoogleOAuthConfig(
-  redirectUri: string,
-  scope: string | string[],
+  config: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope: string | string[];
+  },
 ): OAuth2ClientConfig {
   return {
     clientId: getRequiredEnv("GOOGLE_CLIENT_ID"),
     clientSecret: getRequiredEnv("GOOGLE_CLIENT_SECRET"),
     authorizationEndpointUri: "https://accounts.google.com/o/oauth2/v2/auth",
     tokenUri: "https://oauth2.googleapis.com/token",
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config.redirectUri,
+    defaults: { scope: config.scope },
   };
 }

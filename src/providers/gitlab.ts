@@ -10,28 +10,32 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `GITLAB_CLIENT_ID`
  * 2. `GITLAB_CLIENT_SECRET`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createGitLabOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createGitLabOAuthConfig("http://localhost:8000/callback", "profile");
+ * const oauthConfig = createGitLabOAuthConfig({
+ *   redirectUri: "http://localhost:8000/callback",
+ *   scope: "profile",
+ * });
  * ```
  *
  * @see {@link https://docs.gitlab.com/ee/api/oauth2.html}
  */
 export function createGitLabOAuthConfig(
-  redirectUri: string,
-  scope: string | string[],
+  config: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope: string | string[];
+  },
 ): OAuth2ClientConfig {
   return {
     clientId: getRequiredEnv("GITLAB_CLIENT_ID"),
     clientSecret: getRequiredEnv("GITLAB_CLIENT_SECRET"),
     authorizationEndpointUri: "https://gitlab.com/oauth/authorize",
     tokenUri: "https://gitlab.com/oauth/token",
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config.redirectUri,
+    defaults: { scope: config.scope },
   };
 }

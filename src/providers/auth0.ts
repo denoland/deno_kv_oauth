@@ -11,22 +11,26 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 2. `AUTH0_CLIENT_SECRET`
  * 3. `AUTH0_DOMAIN`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createAuth0OAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createAuth0OAuthConfig("http://localhost:8000/callback", "openid");
+ * const oauthConfig = createAuth0OAuthConfig({
+ *   redirectUri: "http://localhost:8000/callback",
+ *   scope: "openid"
+ * });
  * ```
  *
  * @see {@link https://auth0.com/docs/authenticate/protocols/oauth}
  */
 
 export function createAuth0OAuthConfig(
-  redirectUri: string,
-  scope: string | string[],
+  config: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope: string | string[];
+  },
 ): OAuth2ClientConfig {
   const domain = getRequiredEnv("AUTH0_DOMAIN");
   const baseURL = `https://${domain}/oauth2`;
@@ -35,7 +39,7 @@ export function createAuth0OAuthConfig(
     clientSecret: getRequiredEnv("AUTH0_CLIENT_SECRET"),
     authorizationEndpointUri: `${baseURL}/authorize`,
     tokenUri: `${baseURL}/oauth/token`,
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config.redirectUri,
+    defaults: { scope: config.scope },
   };
 }

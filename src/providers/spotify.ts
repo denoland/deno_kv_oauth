@@ -10,28 +10,31 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `SPOTIFY_CLIENT_ID`
  * 2. `SPOTIFY_CLIENT_SECRET`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createSpotifyOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createSpotifyOAuthConfig("user-read-private user-read-email");
+ * const oauthConfig = createSpotifyOAuthConfig({
+ *   scope: "user-read-private user-read-email"
+ * });
  * ```
  *
  * @see {@link https://developer.spotify.com/documentation/web-api/tutorials/code-flow}
  */
 export function createSpotifyOAuthConfig(
-  scope: string | string[],
-  redirectUri?: string,
+  config: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri?: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope: string | string[];
+  },
 ): OAuth2ClientConfig {
   return {
     clientId: getRequiredEnv("SPOTIFY_CLIENT_ID"),
     clientSecret: getRequiredEnv("SPOTIFY_CLIENT_SECRET"),
     authorizationEndpointUri: "https://accounts.spotify.com/authorize",
     tokenUri: "https://accounts.spotify.com/api/token",
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config.redirectUri,
+    defaults: { scope: config.scope },
   };
 }

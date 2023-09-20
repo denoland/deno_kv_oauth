@@ -11,21 +11,25 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 2. `OKTA_CLIENT_SECRET`
  * 3. `OKTA_DOMAIN`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createOktaOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createOktaOAuthConfig("http://localhost:8000/callback", "openid");
+ * const oauthConfig = createOktaOAuthConfig({
+ *   redirectUri: "http://localhost:8000/callback",
+ *   scope: "openid",
+ * });
  * ```
  *
  * @see {@link https://developer.okta.com/docs/reference/api/oidc}
  */
 export function createOktaOAuthConfig(
-  redirectUri: string,
-  scope: string | string[],
+  config: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope: string | string[];
+  },
 ): OAuth2ClientConfig {
   const domain = getRequiredEnv("OKTA_DOMAIN");
   const baseURL = `https://${domain}/oauth2`;
@@ -34,7 +38,7 @@ export function createOktaOAuthConfig(
     clientSecret: getRequiredEnv("OKTA_CLIENT_SECRET"),
     authorizationEndpointUri: `${baseURL}/v1/authorize`,
     tokenUri: `${baseURL}/v1/token`,
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config.redirectUri,
+    defaults: { scope: config.scope },
   };
 }

@@ -4,8 +4,6 @@
  * Returns the environment variable with the given key after ensuring that it's
  * been set in the current process.
  *
- * @private
- *
  * @example
  * ```
  * import { getRequiredEnv } from "./src/providers/get_required_env.ts";

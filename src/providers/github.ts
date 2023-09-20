@@ -10,9 +10,6 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `GITHUB_CLIENT_ID`
  * 2. `GITHUB_CLIENT_SECRET`
  *
- * @param redirectUri The URI of the client's redirection endpoint (sometimes also called callback URI).
- * @param scope Scopes to request.
- *
  * @example
  * ```ts
  * import { createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
@@ -23,15 +20,19 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * @see {@link https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps}
  */
 export function createGitHubOAuthConfig(
-  redirectUri?: string,
-  scope?: string | string[],
+  config?: {
+    /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
+    redirectUri?: string;
+    /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
+    scope?: string | string[];
+  },
 ): OAuth2ClientConfig {
   return {
     clientId: getRequiredEnv("GITHUB_CLIENT_ID"),
     clientSecret: getRequiredEnv("GITHUB_CLIENT_SECRET"),
     authorizationEndpointUri: "https://github.com/login/oauth/authorize",
     tokenUri: "https://github.com/login/oauth/access_token",
-    redirectUri,
-    defaults: { scope },
+    redirectUri: config?.redirectUri,
+    defaults: { scope: config?.scope },
   };
 }

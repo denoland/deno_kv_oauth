@@ -32,7 +32,7 @@ import * as createOAuthConfigFns from "./providers.ts";
     Deno.env.set("AUTH0_DOMAIN", "auth0_domain");
 
     // @ts-ignore Trust me
-    const client = createOAuthConfigFns[fnName](redirectUri, scope);
+    const client = createOAuthConfigFns[fnName]({ redirectUri, scope });
     assertEquals(client.clientId, clientId);
     assertEquals(client.clientSecret, clientSecret);
     assertEquals(client.redirectUri, redirectUri);
