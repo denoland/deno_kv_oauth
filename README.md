@@ -65,8 +65,8 @@ provider you like.
 
 1. Create your OAuth 2.0 application for your given provider.
 
-1. Create your [pre-defined](#pre-configured-oauth-20-clients) or
-   [custom](#custom-oauth-20-client) OAuth configuration.
+1. Create your [pre-defined](#pre-defined-oauth-configurations) or
+   [custom](#custom-oauth-configuration) OAuth configuration.
 
    ```ts
    // Pre-configured OAuth 2.0 client
@@ -186,7 +186,7 @@ Each function is typed so that their respective platform's requirements are met.
 > please submit a pull request or
 > [create a new issue](https://github.com/denoland/deno_kv_oauth/issues/new).
 
-### Custom OAuth Configurations
+### Custom OAuth Configuration
 
 Custom OAuth must be defined using
 [`new OAuthConfig()`](https://deno.land/x/oauth2_client/mod.ts?s=OAuthConfig)
@@ -214,7 +214,7 @@ const oauthConfig: OAuth2ClientConfig = {
   creating a pre-configured OAuth 2.0 client for a given provider. E.g. for
   Twitter, the environment variable keys are `TWITTER_CLIENT_ID` and
   `TWITTER_CLIENT_SECRET`. See
-  [the list below](#pre-configured-oauth-20-clients) for specifics.
+  [the list below](#pre-defined-oauth-configurations) for specifics.
 - `OKTA_DOMAIN` or `AUTH0_DOMAIN` - required only when using the Okta or Auth0
   provider to supply your own given domain.
 
