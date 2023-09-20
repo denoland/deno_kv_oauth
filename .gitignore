@@ -4,3 +4,4 @@ cov/
 cov.lcov
 dev.ts
 deno.lock
+html_cov/

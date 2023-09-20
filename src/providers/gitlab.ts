@@ -1,7 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 
 import { OAuth2Client, OAuth2ClientConfig } from "../../deps.ts";
-import type { WithRedirectUri, WithScope } from "./_types.ts";
+import type { WithRedirectUri, WithScope } from "./types.ts";
 
 /**
  * Creates an OAuth 2.0 client with GitLab as the provider.
