@@ -60,6 +60,12 @@ if (createOAuthConfigFn === undefined) {
 const redirectUri = Deno.env.get("DENO_DEPLOYMENT_ID") ??
   "http://localhost:8000/callback";
 const scope = Deno.env.get("SCOPE")!;
+if (!Deno.env.has("GITHUB_CLIENT_ID")) {
+  Deno.env.set("GITHUB_CLIENT_ID", crypto.randomUUID());
+}
+if (!Deno.env.has("GITHUB_CLIENT_SECRET")) {
+  Deno.env.set("GITHUB_CLIENT_SECRET", crypto.randomUUID());
+}
 const oauthConfig = createOAuthConfigFn(redirectUri, scope);
 
 async function indexHandler(request: Request) {
