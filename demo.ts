@@ -33,7 +33,7 @@ loadSync({ export: true });
  * ```ts
  * import { createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauth2Client = createGitHubOAuthConfig();
+ * const oauthConfig = createGitHubOAuthConfig();
  * ```
  */
 const provider = Deno.env.get("PROVIDER") ?? "GitHub";
@@ -60,13 +60,13 @@ if (createOAuthConfigFn === undefined) {
 const redirectUri = Deno.env.get("DENO_DEPLOYMENT_ID") ??
   "http://localhost:8000/callback";
 const scope = Deno.env.get("SCOPE")!;
-const oauth2Client = createOAuthConfigFn(redirectUri, scope);
+const oauthConfig = createOAuthConfigFn(redirectUri, scope);
 
 async function indexHandler(request: Request) {
   const sessionId = getSessionId(request);
   const hasSessionIdCookie = sessionId !== undefined;
   const accessToken = hasSessionIdCookie
-    ? await getSessionAccessToken(oauth2Client, sessionId)
+    ? await getSessionAccessToken(oauthConfig, sessionId)
     : null;
 
   const accessTokenInnerText = accessToken !== null
@@ -74,7 +74,7 @@ async function indexHandler(request: Request) {
     : accessToken;
   const body = `
     <p>Provider: ${provider}</p>
-    <p>Scope: ${oauth2Client.defaults?.scope}</p>
+    <p>Scope: ${oauthConfig.defaults?.scope}</p>
     <p>Signed in: ${hasSessionIdCookie}</p>
     <p>Your access token: ${accessTokenInnerText}</p>
     <p>
@@ -103,11 +103,11 @@ export async function handler(request: Request): Promise<Response> {
       return await indexHandler(request);
     }
     case "/signin": {
-      return await signIn(request, oauth2Client);
+      return await signIn(request, oauthConfig);
     }
     case "/callback": {
       try {
-        const { response } = await handleCallback(request, oauth2Client);
+        const { response } = await handleCallback(request, oauthConfig);
         return response;
       } catch {
         return new Response(null, { status: Status.InternalServerError });
