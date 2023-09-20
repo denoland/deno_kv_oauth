@@ -5,6 +5,27 @@ import { signIn } from "./sign_in.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signOut } from "./sign_out.ts";
 
+export interface KvOAuthPluginOptions {
+  /**
+   * Sign-in page path
+   *
+   * @default {"/oauth/signin"}
+   */
+  signInPath?: string;
+  /**
+   * Callback page path
+   *
+   * @default {"/oauth/callback"}
+   */
+  callbackPath?: string;
+  /**
+   * Sign-out page path
+   *
+   * @default {"/oauth/signout"}
+   */
+  signOutPath?: string;
+}
+
 /**
  * Creates a basic plugin for the [Fresh]{@link https://fresh.deno.dev/} web framework.
  *
@@ -28,26 +49,7 @@ import { signOut } from "./sign_out.ts";
  */
 export function kvOAuthPlugin(
   oauthConfig: OAuth2ClientConfig,
-  options?: {
-    /**
-     * Sign-in page path
-     *
-     * @default {"/oauth/signin"}
-     */
-    signInPath?: string;
-    /**
-     * Callback page path
-     *
-     * @default {"/oauth/callback"}
-     */
-    callbackPath?: string;
-    /**
-     * Sign-out page path
-     *
-     * @default {"/oauth/signout"}
-     */
-    signOutPath?: string;
-  },
+  options?: KvOAuthPluginOptions,
 ): Plugin {
   return {
     name: "kv-oauth",
