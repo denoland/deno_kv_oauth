@@ -1,8 +1,8 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { signIn } from "./sign_in.ts";
 import { assertEquals, assertNotEquals, getSetCookies } from "../dev_deps.ts";
-import { getOAuthSession, OAUTH_COOKIE_NAME } from "./core.ts";
-import { assertRedirect, randomOAuthConfig } from "./test_utils.ts";
+import { getOAuthSession, OAUTH_COOKIE_NAME } from "./_core.ts";
+import { assertRedirect, randomOAuthConfig } from "./_test_utils.ts";
 
 Deno.test("signIn() returns a response that signs-in the user", async () => {
   const request = new Request("http://example.com/signin");

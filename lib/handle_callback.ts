@@ -16,7 +16,7 @@ import {
   redirect,
   setTokens,
   SITE_COOKIE_NAME,
-} from "./core.ts";
+} from "./_core.ts";
 
 /**
  * Handles the OAuth callback request for the given OAuth configuration, and

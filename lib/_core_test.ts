@@ -13,12 +13,12 @@ import {
   setTokens,
   toStoredTokens,
   toTokens,
-} from "./core.ts";
+} from "./_core.ts";
 import {
   assertRedirect,
   randomOAuthSession,
   randomTokens,
-} from "./test_utils.ts";
+} from "./_test_utils.ts";
 
 Deno.test("isSecure()", () => {
   assertEquals(isSecure("https://example.com"), true);

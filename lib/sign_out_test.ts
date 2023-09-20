@@ -1,8 +1,8 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "../dev_deps.ts";
 import { signOut } from "./sign_out.ts";
-import { getTokens, setTokens, SITE_COOKIE_NAME } from "./core.ts";
-import { assertRedirect, randomTokens } from "./test_utils.ts";
+import { getTokens, setTokens, SITE_COOKIE_NAME } from "./_core.ts";
+import { assertRedirect, randomTokens } from "./_test_utils.ts";
 
 Deno.test("signOut() returns a redirect response if the user is not signed-in", async () => {
   const request = new Request("http://example.com/signout");

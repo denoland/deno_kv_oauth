@@ -1,8 +1,8 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getSessionAccessToken } from "./get_session_access_token.ts";
 import { assertEquals, assertRejects, type Tokens } from "../dev_deps.ts";
-import { setTokens } from "./core.ts";
-import { randomOAuthConfig, randomTokens } from "./test_utils.ts";
+import { setTokens } from "./_core.ts";
+import { randomOAuthConfig, randomTokens } from "./_test_utils.ts";
 
 Deno.test("getSessionAccessToken() returns null for non-existent session", async () => {
   assertEquals(await getSessionAccessToken(randomOAuthConfig(), "nil"), null);

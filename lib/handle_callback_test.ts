@@ -1,8 +1,12 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { handleCallback } from "./handle_callback.ts";
 import { assertEquals, assertRejects } from "../dev_deps.ts";
-import { getOAuthSession, OAUTH_COOKIE_NAME, setOAuthSession } from "./core.ts";
-import { randomOAuthConfig, randomOAuthSession } from "./test_utils.ts";
+import {
+  getOAuthSession,
+  OAUTH_COOKIE_NAME,
+  setOAuthSession,
+} from "./_core.ts";
+import { randomOAuthConfig, randomOAuthSession } from "./_test_utils.ts";
 
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
   const request = new Request("http://example.com");

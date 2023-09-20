@@ -6,10 +6,10 @@ import {
   setLegacyTokens,
   setOAuthSession,
   setTokens,
-} from "./core.ts";
+} from "./_core.ts";
 import { clearOAuthSessionsAndTokens } from "./clear_oauth_sessions_and_tokens.ts";
 import { assertEquals, assertNotEquals } from "../dev_deps.ts";
-import { randomOAuthSession, randomTokens } from "./test_utils.ts";
+import { randomOAuthSession, randomTokens } from "./_test_utils.ts";
 
 Deno.test("clearOAuthSessionsAndTokens()", async () => {
   const ids = Array.from({ length: 10 }).map(() => crypto.randomUUID());
