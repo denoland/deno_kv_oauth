@@ -10,6 +10,7 @@
     "check": "deno task check:license && deno task check:types",
     "test": "KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --trace-ops --coverage=./cov",
     "ok": "deno fmt --check && deno lint && deno task check && deno task test",
+    "cov:clean": "rm -rf cov html_cov cov.lcov",
     "cov:gen": "deno coverage ./cov/ --lcov --output=cov.lcov",
     "cov:view": "genhtml -o html_cov cov.lcov && open html_cov/index.html",
     "update": "deno run -A https://deno.land/x/udd/main.ts --test=\"deno task test\" deps.ts dev_deps.ts"
