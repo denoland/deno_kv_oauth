@@ -1,5 +1,10 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { OAuth2Client, OAuth2ClientConfig, setCookie } from "../deps.ts";
+import {
+  OAuth2Client,
+  OAuth2ClientConfig,
+  SECOND,
+  setCookie,
+} from "../deps.ts";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -58,9 +63,19 @@ export async function signIn(
     );
   }
 
+  /**
+   * A maximum authorization code lifetime of 10 minutes is recommended.
+   * This cookie lifetime matches that value.
+   *
+   * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
+   */
+  const maxAge = 10 * 60;
+
   const oauthSessionId = crypto.randomUUID();
   const successUrl = getSuccessUrl(request);
-  await setOAuthSession(oauthSessionId, { state, codeVerifier, successUrl });
+  await setOAuthSession(oauthSessionId, { state, codeVerifier, successUrl }, {
+    expireIn: maxAge * SECOND,
+  });
 
   const response = redirect(uri.toString());
   setCookie(response.headers, {
@@ -68,13 +83,7 @@ export async function signIn(
     name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
     value: oauthSessionId,
     secure: isSecure(request.url),
-    /**
-     * A maximum authorization code lifetime of 10 minutes is recommended.
-     * This cookie lifetime matches that value.
-     *
-     * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
-     */
-    maxAge: 10 * 60,
+    maxAge,
   });
   return response;
 }

@@ -6,6 +6,7 @@ import { assertRedirect, randomOAuthConfig } from "./_test_utils.ts";
 
 Deno.test("signIn() returns a response that signs-in the user", async () => {
   const request = new Request("http://example.com/signin");
+
   const response = await signIn(request, randomOAuthConfig());
   assertRedirect(response);
 

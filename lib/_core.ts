@@ -65,8 +65,12 @@ export function listOAuthSessions() {
 }
 
 // Stores the OAuth session object for the given OAuth session ID.
-export async function setOAuthSession(id: string, value: OAuthSession) {
-  await kv.set([OAUTH_SESSIONS_PREFIX, id], value);
+export async function setOAuthSession(
+  id: string,
+  value: OAuthSession,
+  options?: { expireIn?: number },
+) {
+  await kv.set([OAUTH_SESSIONS_PREFIX, id], value, options);
 }
 
 // Deletes the OAuth session object for the given OAuth session ID.

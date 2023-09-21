@@ -1,4 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
+import { delay } from "https://deno.land/std@0.202.0/async/delay.ts";
 import { assert, assertEquals, type Tokens } from "../dev_deps.ts";
 import {
   deleteOAuthSession,
@@ -42,6 +43,16 @@ Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
 
   await deleteOAuthSession(id);
   assertEquals(await getOAuthSession(id), null);
+});
+
+Deno.test("setTokens() applies key expiry", async () => {
+  const sessionId = crypto.randomUUID();
+  const oauthSession = randomOAuthSession();
+  await setOAuthSession(sessionId, oauthSession, { expireIn: 1_000 });
+
+  assertEquals(await getOAuthSession(sessionId), oauthSession);
+  await delay(10_000);
+  assertEquals(await getOAuthSession(sessionId), null);
 });
 
 Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
