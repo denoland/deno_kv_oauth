@@ -1,7 +1,25 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { kvOAuthPlugin } from "./fresh_plugin.ts";
-import { assert, assertArrayIncludes, assertNotEquals } from "../dev_deps.ts";
-import { randomOAuthConfig } from "./_test_utils.ts";
+import {
+  assert,
+  assertArrayIncludes,
+  assertEquals,
+  assertNotEquals,
+  returnsNext,
+  stub,
+} from "../dev_deps.ts";
+import {
+  assertRedirect,
+  randomOAuthConfig,
+  randomOAuthSession,
+  randomTokens,
+} from "./_test_utils.ts";
+import {
+  getOAuthSession,
+  OAUTH_COOKIE_NAME,
+  setOAuthSession,
+} from "./_core.ts";
+import type { Handler } from "$fresh/server.ts";
 
 Deno.test("kvOAuthPlugin() works with default values", () => {
   const plugin = kvOAuthPlugin(randomOAuthConfig());
@@ -30,4 +48,68 @@ Deno.test("kvOAuthPlugin() works with defined values", () => {
     callbackPath,
     signOutPath,
   ]);
+});
+
+Deno.test("kvOAuthPlugin() correctly handles the sign-in path", async () => {
+  const request = new Request("http://example.com/oauth/signin");
+  const plugin = kvOAuthPlugin(randomOAuthConfig());
+  const handler = plugin.routes!.find((route) =>
+    route.path === "/oauth/signin"
+  )!.handler as Handler<undefined, undefined>;
+  // @ts-ignore Trust me
+  const response = await handler(request);
+
+  assertRedirect(response);
+});
+
+Deno.test("kvOAuthPlugin() correctly handles the callback path", async () => {
+  const newTokens = randomTokens();
+  const fetchStub = stub(
+    window,
+    "fetch",
+    returnsNext([Promise.resolve(Response.json({
+      access_token: newTokens.accessToken,
+      token_type: newTokens.tokenType,
+    }))]),
+  );
+
+  const oauthSessionId = crypto.randomUUID();
+  const oauthSession = randomOAuthSession();
+  await setOAuthSession(oauthSessionId, oauthSession);
+  const searchParams = new URLSearchParams({
+    "response_type": "code",
+    "client_id": "clientId",
+    "code_challenge_method": "S256",
+    code: "code",
+    state: oauthSession.state,
+  });
+  const request = new Request(
+    `http://example.com/oauth/callback?${searchParams}`,
+    {
+      headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
+    },
+  );
+  const plugin = kvOAuthPlugin(randomOAuthConfig());
+  const handler = plugin.routes!.find((route) =>
+    route.path === "/oauth/callback"
+  )!.handler as Handler<undefined, undefined>;
+  // @ts-ignore Trust me
+  const response = await handler(request);
+
+  fetchStub.restore();
+
+  assertRedirect(response);
+  assertEquals(await getOAuthSession(oauthSessionId), null);
+});
+
+Deno.test("kvOAuthPlugin() correctly handles the sign-out path", async () => {
+  const request = new Request("http://example.com/oauth/signout");
+  const plugin = kvOAuthPlugin(randomOAuthConfig());
+  const handler = plugin.routes!.find((route) =>
+    route.path === "/oauth/signout"
+  )!.handler as Handler<undefined, undefined>;
+  // @ts-ignore Trust me
+  const response = await handler(request);
+
+  assertRedirect(response);
 });
