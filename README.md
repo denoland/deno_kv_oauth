@@ -54,11 +54,48 @@ Github as the OAuth provider. Source code is located in [demo.ts](demo.ts).
 Check out the full documentation and API reference
 [here](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts).
 
-### Getting Started
+### Getting Started with [Fresh](https://fresh.deno.dev/)
 
-> Note: Fresh has a first party Plugin for Deno KV OAuth. Check out the
-> [Fresh](https://fresh.deno.dev/docs/examples/using-deno-kv-oauth)
-> documentation for more information.
+> Note: The minimum required version for plugins in Fresh is 1.3.0 If you're not
+> performing anything special in the sign-in, sign-out and callback handlers,
+> you can add the Fresh plugin to your project. This automatically handles
+> `GET /oauth/signin`, `GET /oauth/callback` and `GET /oauth/signout` routes.
+
+1. Create your OAuth 2.0 application for your given provider.
+
+1. Create your [pre-defined](#pre-defined-oauth-configurations) or
+   [custom](#custom-oauth-configuration) OAuth configuration and configure Fresh
+   to use the plugin.
+
+   ```ts
+   // main.ts
+   import { start } from "$fresh/server.ts";
+   import {
+     createGithubOAuthConfig,
+     kvOAuthPlugin,
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   import manifest from "./fresh.gen.ts";
+
+   await start(manifest, {
+     plugins: [
+       kvOAuthPlugin(createGithubOAuthConfig()),
+     ],
+   });
+   ```
+
+If you require more advanced setups, you can create your own plugin. For more
+information, see:
+
+- The [source code](src/fresh_plugin.ts) for `kvOAuthPlugin()`
+- The [Plugin documentation](https://fresh.deno.dev/docs/concepts/plugins) for
+  Fresh
+- The
+  [Fresh + Deno KV OAuth demo](https://github.com/denoland/fresh-deno-kv-oauth-demo)
+  which uses the Fresh plugin
+- [Deno SaaSKit](https://saaskit.deno.dev/)'s custom
+  [plugin implementation](https://github.com/denoland/saaskit/blob/3accffdc44c2d2eb6dba28126f8d4cb525eba340/plugins/kv_oauth.ts)
+
+### Getting Started with Other Frameworks
 
 This example uses GitHub as the OAuth provider. However, you can use any
 provider you like.
