@@ -49,7 +49,6 @@ export async function getSessionAccessToken(
     return tokens.accessToken;
   }
 
-  // This is as far as automated testing can go.
   let newTokens: Tokens;
   try {
     newTokens = await new OAuth2Client(oauthConfig)

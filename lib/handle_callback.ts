@@ -71,7 +71,6 @@ export async function handleCallback(
   assert(oauthSession, `OAuth session ${oauthSessionId} entry not found`);
   await deleteOAuthSession(oauthSessionId);
 
-  // This is as far as automated testing can go
   const tokens = await new OAuth2Client(oauthConfig)
     .code.getToken(request.url, oauthSession);
 
