@@ -1,12 +1,18 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { handleCallback } from "./handle_callback.ts";
-import { assertEquals, assertRejects } from "../dev_deps.ts";
+import { assertEquals, assertRejects, returnsNext, stub } from "../dev_deps.ts";
 import {
   getOAuthSession,
+  getTokens,
   OAUTH_COOKIE_NAME,
   setOAuthSession,
 } from "./_core.ts";
-import { randomOAuthConfig, randomOAuthSession } from "./_test_utils.ts";
+import {
+  assertRedirect,
+  randomOAuthConfig,
+  randomOAuthSession,
+  randomTokens,
+} from "./_test_utils.ts";
 
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
   const request = new Request("http://example.com");
@@ -28,5 +34,42 @@ Deno.test("handleCallback() deletes the OAuth session KV entry", async () => {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
   await assertRejects(() => handleCallback(request, randomOAuthConfig()));
-  await assertEquals(await getOAuthSession(oauthSessionId), null);
+  assertEquals(await getOAuthSession(oauthSessionId), null);
+});
+
+Deno.test("handleCallback() correctly handles the callback response", async () => {
+  const newTokens = randomTokens();
+  const fetchStub = stub(
+    window,
+    "fetch",
+    returnsNext([Promise.resolve(Response.json({
+      access_token: newTokens.accessToken,
+      token_type: newTokens.tokenType,
+    }))]),
+  );
+
+  const oauthSessionId = crypto.randomUUID();
+  const oauthSession = randomOAuthSession();
+  await setOAuthSession(oauthSessionId, oauthSession);
+  const searchParams = new URLSearchParams({
+    "response_type": "code",
+    "client_id": "clientId",
+    "code_challenge_method": "S256",
+    code: "code",
+    state: oauthSession.state,
+  });
+  const request = new Request(`http://example.com/callback?${searchParams}`, {
+    headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
+  });
+  const { accessToken, sessionId, response } = await handleCallback(
+    request,
+    randomOAuthConfig(),
+  );
+
+  fetchStub.restore();
+
+  assertEquals(accessToken, newTokens.accessToken);
+  assertEquals(await getTokens(sessionId), newTokens);
+  assertRedirect(response);
+  assertEquals(await getOAuthSession(oauthSessionId), null);
 });
