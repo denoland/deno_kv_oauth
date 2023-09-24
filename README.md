@@ -199,7 +199,7 @@ const oauthConfig: OAuth2ClientConfig = {
 
 ### Environment Variables
 
-- `KV_PATH` (optional) - defines the path that Deno KV uses. See
+- `DENO_KV_PATH` (optional) - defines the path that Deno KV uses. See
   [the API reference](https://deno.land/api?s=Deno.openKv&unstable=) for further
   details.
 - `${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` - required when
