@@ -1,5 +1,10 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { OAuth2Client, OAuth2ClientConfig, setCookie } from "../deps.ts";
+import {
+  OAuth2Client,
+  OAuth2ClientConfig,
+  SECOND,
+  setCookie,
+} from "../deps.ts";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -61,10 +66,7 @@ export async function signIn(
 
   const oauthSessionId = crypto.randomUUID();
   const successUrl = getSuccessUrl(request);
-  await setOAuthSession(oauthSessionId, { state, codeVerifier, successUrl });
-
-  const response = redirect(uri.toString());
-  setCookie(response.headers, {
+  const cookie = {
     ...COOKIE_BASE,
     name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
     value: oauthSessionId,
@@ -76,6 +78,12 @@ export async function signIn(
      * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
      */
     maxAge: 10 * 60,
+  };
+  await setOAuthSession(oauthSessionId, { state, codeVerifier, successUrl }, {
+    expireIn: cookie.maxAge * SECOND,
   });
+
+  const response = redirect(uri.toString());
+  setCookie(response.headers, cookie);
   return response;
 }

@@ -4,7 +4,6 @@ import {
   assertEquals,
   type OAuth2ClientConfig,
   Status,
-  type Tokens,
 } from "../dev_deps.ts";
 import type { OAuthSession } from "./_core.ts";
 
@@ -21,13 +20,6 @@ export function randomOAuthSession(): OAuthSession {
   return {
     state: crypto.randomUUID(),
     codeVerifier: crypto.randomUUID(),
-  };
-}
-
-export function randomTokens(): Tokens {
-  return {
-    accessToken: crypto.randomUUID(),
-    tokenType: crypto.randomUUID(),
   };
 }
 
