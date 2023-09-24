@@ -1,24 +1,15 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, assertEquals, type Tokens } from "../dev_deps.ts";
+import { assertEquals } from "../dev_deps.ts";
 import {
   deleteOAuthSession,
-  deleteTokens,
   getCookieName,
   getOAuthSession,
   getSuccessUrl,
-  getTokens,
   isSecure,
   redirect,
   setOAuthSession,
-  setTokens,
-  toStoredTokens,
-  toTokens,
 } from "./_core.ts";
-import {
-  assertRedirect,
-  randomOAuthSession,
-  randomTokens,
-} from "./_test_utils.ts";
+import { assertRedirect, randomOAuthSession } from "./_test_utils.ts";
 
 Deno.test("isSecure()", () => {
   assertEquals(isSecure("https://example.com"), true);
@@ -42,33 +33,6 @@ Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
 
   await deleteOAuthSession(id);
   assertEquals(await getOAuthSession(id), null);
-});
-
-Deno.test("toStoredTokens() + toTokens() work interchangeably", () => {
-  const tokens: Tokens = {
-    ...randomTokens(),
-    expiresIn: 42,
-  };
-  const currentTokens = toTokens(toStoredTokens(tokens));
-  assertEquals(currentTokens.accessToken, tokens.accessToken);
-  assertEquals(currentTokens.tokenType, tokens.tokenType);
-  // expiresIn should be both positive and less than tokens.expiresIn
-  assert(currentTokens.expiresIn! < tokens.expiresIn!);
-  assert(currentTokens.expiresIn! > 0);
-});
-
-Deno.test("(get/set/delete)Tokens() work interchangeably", async () => {
-  const sessionId = crypto.randomUUID();
-
-  // Tokens don't yet exist
-  assertEquals(await getTokens(sessionId), null);
-
-  const tokens = randomTokens();
-  await setTokens(sessionId, tokens);
-  assertEquals(await getTokens(sessionId), tokens);
-
-  await deleteTokens(sessionId);
-  assertEquals(await getTokens(sessionId), null);
 });
 
 Deno.test("redirect() returns a redirect response", () => {
