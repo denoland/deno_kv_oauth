@@ -60,7 +60,7 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   const request = new Request(`http://example.com/callback?${searchParams}`, {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
-  const { response, accessToken, sessionId } = await handleCallback(
+  const { response, tokens, sessionId } = await handleCallback(
     request,
     randomOAuthConfig(),
   );
@@ -68,7 +68,7 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   fetchStub.restore();
 
   assertRedirect(response);
-  assertEquals(accessToken, newTokens.accessToken);
+  assertEquals(tokens.accessToken, newTokens.accessToken);
   assertEquals(typeof sessionId, "string");
   assertEquals(await getOAuthSession(oauthSessionId), null);
 });

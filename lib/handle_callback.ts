@@ -88,6 +88,6 @@ export async function handleCallback(
   return {
     response,
     sessionId,
-    accessToken: tokens.accessToken,
+    tokens,
   };
 }
