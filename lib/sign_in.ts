@@ -66,7 +66,6 @@ export async function signIn(
   }
 
   const oauthSessionId = crypto.randomUUID();
-
   const cookie: Cookie = {
     ...COOKIE_BASE,
     name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
@@ -80,12 +79,10 @@ export async function signIn(
      */
     maxAge: 10 * 60,
   };
-
   const successUrl = getSuccessUrl(request);
   await setOAuthSession(oauthSessionId, { state, codeVerifier, successUrl }, {
     expireIn: cookie.maxAge! * SECOND,
   });
-
   const response = redirect(uri.toString());
   setCookie(response.headers, cookie);
   return response;
