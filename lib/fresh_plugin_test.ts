@@ -12,6 +12,7 @@ import {
   assertRedirect,
   randomOAuthConfig,
   randomOAuthSession,
+  randomTokenBody,
 } from "./_test_utils.ts";
 import {
   getAndDeleteOAuthSession,
@@ -62,13 +63,11 @@ Deno.test("kvOAuthPlugin() correctly handles the sign-in path", async () => {
 });
 
 Deno.test("kvOAuthPlugin() correctly handles the callback path", async () => {
+  const tokenBody = randomTokenBody();
   const fetchStub = stub(
     window,
     "fetch",
-    returnsNext([Promise.resolve(Response.json({
-      access_token: crypto.randomUUID(),
-      token_type: crypto.randomUUID(),
-    }))]),
+    returnsNext([Promise.resolve(Response.json(tokenBody))]),
   );
 
   const oauthSessionId = crypto.randomUUID();

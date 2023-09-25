@@ -23,6 +23,13 @@ export function randomOAuthSession(): OAuthSession {
   };
 }
 
+export function randomTokenBody() {
+  return {
+    access_token: crypto.randomUUID(),
+    token_type: crypto.randomUUID(),
+  };
+}
+
 export function assertRedirect(response: Response, location?: string) {
   assertEquals(response.status, Status.Found);
   if (location !== undefined) {
