@@ -1,10 +1,8 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { delay } from "https://deno.land/std@0.202.0/async/delay.ts";
-import { assert, assertEquals, type Tokens } from "../dev_deps.ts";
+import { assertEquals, assertRejects } from "../dev_deps.ts";
 import {
-  deleteOAuthSession,
+  getAndDeleteOAuthSession,
   getCookieName,
-  getOAuthSession,
   getSuccessUrl,
   isSecure,
   redirect,
@@ -22,28 +20,24 @@ Deno.test("getCookieName()", () => {
   assertEquals(getCookieName("hello", false), "hello");
 });
 
-Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
+Deno.test("(getAndDelete/set)OAuthSession()", async () => {
   const id = crypto.randomUUID();
+  const oauthSession = randomOAuthSession();
 
   // OAuth session doesn't yet exist
-  assertEquals(await getOAuthSession(id), null);
+  await assertRejects(
+    async () => await getAndDeleteOAuthSession(id),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 
-  const oauthSession = randomOAuthSession();
   await setOAuthSession(id, oauthSession);
-  assertEquals(await getOAuthSession(id), oauthSession);
-
-  await deleteOAuthSession(id);
-  assertEquals(await getOAuthSession(id), null);
-});
-
-Deno.test("setOAuthSession() applies key expiry", async () => {
-  const sessionId = crypto.randomUUID();
-  const oauthSession = randomOAuthSession();
-  await setOAuthSession(sessionId, oauthSession, { expireIn: 1_000 });
-
-  assertEquals(await getOAuthSession(sessionId), oauthSession);
-  await delay(10_000);
-  assertEquals(await getOAuthSession(sessionId), null);
+  assertEquals(await getAndDeleteOAuthSession(id), oauthSession);
+  await assertRejects(
+    async () => await getAndDeleteOAuthSession(id),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 });
 
 Deno.test("redirect() returns a redirect response", () => {

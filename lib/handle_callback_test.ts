@@ -2,7 +2,7 @@
 import { handleCallback } from "./handle_callback.ts";
 import { assertEquals, assertRejects, returnsNext, stub } from "../dev_deps.ts";
 import {
-  getOAuthSession,
+  getAndDeleteOAuthSession,
   OAUTH_COOKIE_NAME,
   setOAuthSession,
 } from "./_core.ts";
@@ -10,7 +10,6 @@ import {
   assertRedirect,
   randomOAuthConfig,
   randomOAuthSession,
-  randomTokens,
 } from "./_test_utils.ts";
 
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
@@ -33,17 +32,21 @@ Deno.test("handleCallback() deletes the OAuth session KV entry", async () => {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
   await assertRejects(() => handleCallback(request, randomOAuthConfig()));
-  assertEquals(await getOAuthSession(oauthSessionId), null);
+  await assertRejects(
+    async () => await getAndDeleteOAuthSession(oauthSessionId),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 });
 
 Deno.test("handleCallback() correctly handles the callback response", async () => {
-  const newTokens = randomTokens();
+  const newAccessToken = crypto.randomUUID();
   const fetchStub = stub(
     window,
     "fetch",
     returnsNext([Promise.resolve(Response.json({
-      access_token: newTokens.accessToken,
-      token_type: newTokens.tokenType,
+      access_token: newAccessToken,
+      token_type: crypto.randomUUID(),
     }))]),
   );
 
@@ -68,7 +71,11 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   fetchStub.restore();
 
   assertRedirect(response);
-  assertEquals(tokens.accessToken, newTokens.accessToken);
+  assertEquals(tokens.accessToken, newAccessToken);
   assertEquals(typeof sessionId, "string");
-  assertEquals(await getOAuthSession(oauthSessionId), null);
+  await assertRejects(
+    async () => await getAndDeleteOAuthSession(oauthSessionId),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 });
