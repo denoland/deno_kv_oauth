@@ -102,21 +102,10 @@ provider you like.
 
 1. Create your OAuth application for your given provider.
 
-1. Create your [pre-defined](#pre-defined-oauth-configurations) or
-   [custom](#custom-oauth-configuration) OAuth configuration.
+1. Create your web server using Deno KV OAuth's request handlers and helpers.
 
    ```ts
-   // Pre-configured OAuth client
-   import { createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
-
-   const oauthConfig = createGitHubOAuthConfig();
-   ```
-
-1. Using the OAuth client configuration, insert the authentication flow
-   functions into your authentication routes.
-
-   ```ts
-   // Sign-in, callback and sign-out handlers
+   // server.ts
    import {
      createGitHubOAuthConfig,
      handleCallback,
@@ -126,59 +115,26 @@ provider you like.
 
    const oauthConfig = createGitHubOAuthConfig();
 
-   async function handleSignIn(request: Request) {
-     return await signIn(request, oauthConfig);
-   }
-
-   async function handleOAuth2Callback(request: Request) {
-     return await handleCallback(request, oauthConfig);
-   }
-
-   async function handleSignOut(request: Request) {
-     return await signOut(request);
-   }
-   ```
-
-1. Use Deno KV OAuth's helper functions where needed.
-
-   ```ts
-   // Protected route
-   import {
-     createGitHubOAuthConfig,
-     getSessionAccessToken,
-     getSessionId,
-   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
-
-   const oauthConfig = createGitHubOAuthConfig();
-
-   async function getGitHubUser(accessToken: string): Promise<any> {
-     const response = await fetch("https://api.github.com/user", {
-       headers: { authorization: `Bearer ${accessToken}` },
-     });
-     if (!response.ok) {
-       const { message } = await response.json();
-       throw new Error(message);
-     }
-     return await response.json();
-   }
-
-   async function handleAccountPage(request: Request) {
-     const sessionId = getSessionId(request);
-     const hasSessionIdCookie = sessionId !== undefined;
-
-     if (!hasSessionIdCookie) return new Response(null, { status: 404 });
-
-     const accessToken = await getSessionAccessToken(oauthConfig, sessionId);
-     if (accessToken === null) return new Response(null, { status: 400 });
-
-     try {
-       const githubUser = await getGitHubUser(accessToken);
-       return Response.json(githubUser);
-     } catch (error) {
-       console.error(error);
-       return Response.error();
+   async function handler(request: Request) {
+     const { pathname } = new URL(request.url);
+     switch (pathname) {
+       case "/oauth/signin":
+         return await signIn(request, oauthConfig);
+       case "/oauth/callback":
+         const { response } = await handleCallback(request, oauthConfig);
+         return response;
+       case "/oauth/signout":
+         return signOut(request);
+       case "/protected-route":
+         return getSessionId(request) === undefined
+           ? new Response("Unauthorized", { status: 401 })
+           : new Response("You are allowed");
+       default:
+         return new Response(null, { status: 404 });
      }
    }
+
+   Deno.serve(handler);
    ```
 
 1. Start your server with the necessary

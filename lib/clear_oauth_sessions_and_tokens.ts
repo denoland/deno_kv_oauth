@@ -1,11 +1,11 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
-  deleteLegacyTokens,
+  deleteLegacyTokens1,
+  deleteLegacyTokens2,
   deleteOAuthSession,
-  deleteTokens,
-  listLegacyTokens,
+  listLegacyTokens1,
+  listLegacyTokens2,
   listOAuthSessions,
-  listTokens,
 } from "./_core.ts";
 
 /**
@@ -26,17 +26,17 @@ import {
  */
 export async function clearOAuthSessionsAndTokens() {
   const oauthSessionsIter = listOAuthSessions();
-  const legacyTokensIter = listLegacyTokens();
-  const tokensIter = listTokens();
+  const legacyTokensIter = listLegacyTokens1();
+  const tokensIter = listLegacyTokens2();
   const promises = [];
   for await (const { key } of oauthSessionsIter) {
     promises.push(deleteOAuthSession(key[1] as string));
   }
   for await (const { key } of legacyTokensIter) {
-    promises.push(deleteLegacyTokens(key[1] as string));
+    promises.push(deleteLegacyTokens1(key[1] as string));
   }
   for await (const { key } of tokensIter) {
-    promises.push(deleteTokens(key[1] as string));
+    promises.push(deleteLegacyTokens2(key[1] as string));
   }
   await Promise.all(promises);
 }

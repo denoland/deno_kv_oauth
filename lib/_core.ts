@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { type Cookie, SECOND, Status, type Tokens } from "../deps.ts";
+import { type Cookie, Status } from "../deps.ts";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
@@ -77,118 +77,89 @@ export async function deleteOAuthSession(id: string) {
 /**
  * Legacy stored tokens
  *
- * @deprecated To be removed from v1.0.0
+ * @deprecated To be removed once OAuth session expiration is implemented.
  */
-const LEGACY_TOKENS_PREFIX = "stored_tokens_by_session";
+const LEGACY_TOKENS_1_PREFIX = "stored_tokens_by_session";
 
 /**
- * Exported for testing purposes only.
+ * Legacy stored tokens
  *
- * @deprecated To be removed from v1.0.0
+ * @deprecated To be removed once OAuth session expiration is implemented.
  */
-export async function getLegacyTokens(sessionId: string) {
-  // deno-lint-ignore no-explicit-any
-  const res = await kv.get<any>([LEGACY_TOKENS_PREFIX, sessionId]);
-  return res.value;
+const LEGACY_TOKENS_2_PREFIX = "tokens";
+
+/**
+ * Lists all legacy tokens entries.
+ *
+ * @deprecated To be removed once OAuth session expiration is implemented.
+ */
+export function listLegacyTokens1() {
+  return kv.list({ prefix: [LEGACY_TOKENS_1_PREFIX] });
 }
 
 /**
  * Lists all legacy tokens entries.
  *
- * @deprecated To be removed from v1.0.0
+ * @deprecated To be removed once OAuth session expiration is implemented.
  */
-export function listLegacyTokens() {
-  // deno-lint-ignore no-explicit-any
-  return kv.list<any>({ prefix: [LEGACY_TOKENS_PREFIX] });
+export function listLegacyTokens2() {
+  return kv.list({ prefix: [LEGACY_TOKENS_2_PREFIX] });
 }
 
 /**
  * Exported for testing purposes only.
  *
- * @deprecated To be removed from v1.0.0
+ * @deprecated To be removed once OAuth session expiration is implemented.
  */
-// deno-lint-ignore no-explicit-any
-export async function setLegacyTokens(sessionId: string, tokens: any) {
-  await kv.set([LEGACY_TOKENS_PREFIX, sessionId], tokens);
-}
-
-/** @deprecated To be removed from v1.0.0 */
-export async function deleteLegacyTokens(sessionId: string) {
-  await kv.delete([LEGACY_TOKENS_PREFIX, sessionId]);
-}
-
-// Tokens
-
-// Token which has an expiry that's time-absolute, instead of time-relative.
-interface StoredTokens extends Omit<Tokens, "expiresIn"> {
-  expiresAt?: Date;
+export async function setLegacyTokens1(sessionId: string, tokens: unknown) {
+  await kv.set([LEGACY_TOKENS_1_PREFIX, sessionId], tokens);
 }
 
 /**
- * Converts a normal token, with a time-relative expiry, to a stored token,
- * with a time-absolute expiry. This is done by replacing the normal token's
- * `expiresIn` property with an `expiresAt` property.
+ * Exported for testing purposes only.
  *
- * Note: this is exported for testing purposes only.
+ * @deprecated To be removed once OAuth session expiration is implemented.
  */
-export function toStoredTokens(tokens: Tokens): StoredTokens {
-  if (tokens.expiresIn === undefined) return tokens;
-
-  const expiresAt = new Date(Date.now() + (tokens.expiresIn * SECOND));
-
-  const storedTokens = { ...tokens };
-  delete storedTokens.expiresIn;
-  return { ...storedTokens, expiresAt };
+export async function setLegacyTokens2(sessionId: string, tokens: unknown) {
+  await kv.set([LEGACY_TOKENS_2_PREFIX, sessionId], tokens);
 }
 
 /**
- * Converts a stored token, with a time-absolute expiry, to a normal token, with
- * a time-relative expiry. This is done by replacing the stored token's
- * `expiresAt` property with an `expiresIn` property.
+ * Exported for testing purposes only.
  *
- * Note: this is exported for testing purposes only.
+ * @deprecated To be removed once OAuth session expiration is implemented.
  */
-export function toTokens(storedTokens: StoredTokens): Tokens {
-  if (storedTokens.expiresAt === undefined) return storedTokens;
-
-  const expiresIn =
-    (Date.parse(storedTokens.expiresAt.toString()) - Date.now()) / SECOND;
-  const tokens = { ...storedTokens };
-  delete tokens.expiresAt;
-  return { ...tokens, expiresIn };
-}
-
-const TOKENS_PREFIX = "tokens";
-
-// Retrieves the token for the given session ID.
-export async function getTokens(
-  sessionId: string,
-  consistency?: Deno.KvConsistencyLevel,
-) {
-  const result = await kv.get<Tokens>([TOKENS_PREFIX, sessionId], {
-    consistency,
-  });
-  return result.value !== null ? toTokens(result.value) : null;
-}
-
-// Lists all tokens entries.
-export function listTokens() {
-  return kv.list<Tokens>({ prefix: [TOKENS_PREFIX] });
+export async function getLegacyTokens1(sessionId: string) {
+  const res = await kv.get([LEGACY_TOKENS_1_PREFIX, sessionId]);
+  return res.value;
 }
 
 /**
- * Stores the token for the given session ID.
- * Before storage, the token is converted to a stored token using
- * {@linkcode toStoredTokens}.
+ * Exported for testing purposes only.
+ *
+ * @deprecated To be removed once OAuth session expiration is implemented.
  */
-export async function setTokens(sessionId: string, tokens: Tokens) {
-  const storedTokens = toStoredTokens(tokens);
-  await kv.set([TOKENS_PREFIX, sessionId], storedTokens);
+export async function getLegacyTokens2(sessionId: string) {
+  const res = await kv.get([LEGACY_TOKENS_2_PREFIX, sessionId]);
+  return res.value;
 }
 
-// Deletes the token for the given session ID.
-export async function deleteTokens(sessionId: string) {
-  await kv.delete([TOKENS_PREFIX, sessionId]);
+/**
+ * Delete legacy token entry
+ *
+ * @deprecated To be removed once OAuth session expiration is implemented.
+ */
+export async function deleteLegacyTokens1(sessionId: string) {
+  await kv.delete([LEGACY_TOKENS_1_PREFIX, sessionId]);
+}
+
+/**
+ * Delete legacy token entry
+ *
+ * @deprecated To be removed once OAuth session expiration is implemented.
+ */
+export async function deleteLegacyTokens2(sessionId: string) {
+  await kv.delete([LEGACY_TOKENS_2_PREFIX, sessionId]);
 }
 
 /**

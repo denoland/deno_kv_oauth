@@ -14,7 +14,6 @@ import {
   isSecure,
   OAUTH_COOKIE_NAME,
   redirect,
-  setTokens,
   SITE_COOKIE_NAME,
 } from "./_core.ts";
 
@@ -75,7 +74,6 @@ export async function handleCallback(
     .code.getToken(request.url, oauthSession);
 
   const sessionId = crypto.randomUUID();
-  await setTokens(sessionId, tokens);
 
   const response = redirect(oauthSession.successUrl ?? "/");
   setCookie(
@@ -90,6 +88,6 @@ export async function handleCallback(
   return {
     response,
     sessionId,
-    accessToken: tokens.accessToken,
+    tokens,
   };
 }
