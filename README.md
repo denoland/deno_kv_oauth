@@ -121,7 +121,8 @@ provider you like.
        case "/oauth/signin":
          return await signIn(request, oauthConfig);
        case "/oauth/callback":
-         return await handleCallback(request, oauthConfig);
+         const { response } = await handleCallback(request, oauthConfig);
+         return response;
        case "/oauth/signout":
          return signOut(request);
        case "/protected-route":
