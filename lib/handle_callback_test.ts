@@ -3,7 +3,6 @@ import { handleCallback } from "./handle_callback.ts";
 import { assertEquals, assertRejects, returnsNext, stub } from "../dev_deps.ts";
 import {
   getOAuthSession,
-  getTokens,
   OAUTH_COOKIE_NAME,
   setOAuthSession,
 } from "./_core.ts";
@@ -61,15 +60,15 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   const request = new Request(`http://example.com/callback?${searchParams}`, {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
-  const { accessToken, sessionId, response } = await handleCallback(
+  const { response, tokens, sessionId } = await handleCallback(
     request,
     randomOAuthConfig(),
   );
 
   fetchStub.restore();
 
-  assertEquals(accessToken, newTokens.accessToken);
-  assertEquals(await getTokens(sessionId), newTokens);
   assertRedirect(response);
+  assertEquals(tokens.accessToken, newTokens.accessToken);
+  assertEquals(typeof sessionId, "string");
   assertEquals(await getOAuthSession(oauthSessionId), null);
 });

@@ -12,7 +12,7 @@
     "check:license": "deno run -A tools/check_license.ts --check",
     "check:types": "deno check --unstable **/*.ts",
     "check": "deno task check:license && deno task check:types",
-    "test": "KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --trace-ops --coverage=./cov",
+    "test": "DENO_KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --trace-ops --coverage=./cov",
     "ok": "deno fmt --check && deno lint && deno task check && deno task test",
     "cov:clean": "rm -rf cov html_cov cov.lcov",
     "cov:gen": "deno coverage ./cov/ --lcov --output=cov.lcov",

@@ -2,7 +2,6 @@
 import { loadSync, Status } from "./dev_deps.ts";
 import {
   createGitHubOAuthConfig,
-  getSessionAccessToken,
   getSessionId,
   handleCallback,
   signIn,
@@ -23,22 +22,15 @@ loadSync({ export: true });
  */
 const oauthConfig = createGitHubOAuthConfig();
 
-async function indexHandler(request: Request) {
+function indexHandler(request: Request) {
   const sessionId = getSessionId(request);
   const hasSessionIdCookie = sessionId !== undefined;
-  const accessToken = hasSessionIdCookie
-    ? await getSessionAccessToken(oauthConfig, sessionId)
-    : null;
 
-  const accessTokenInnerText = accessToken !== null
-    ? `<span style="filter:blur(3px)">${accessToken}</span> (intentionally blurred for security)`
-    : accessToken;
   const body = `
     <p>Authorization endpoint URI: ${oauthConfig.authorizationEndpointUri}</p>
     <p>Token URI: ${oauthConfig.tokenUri}</p>
     <p>Scope: ${oauthConfig.defaults?.scope}</p>
     <p>Signed in: ${hasSessionIdCookie}</p>
-    <p>Your access token: ${accessTokenInnerText}</p>
     <p>
       <a href="/signin">Sign in</a>
     </p>
