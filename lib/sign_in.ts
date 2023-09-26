@@ -13,8 +13,8 @@ import {
   isSecure,
   OAUTH_COOKIE_NAME,
   redirect,
-  setOAuthSession,
-} from "./_core.ts";
+} from "./_http.ts";
+import { setOAuthSession } from "./_kv.ts";
 
 export interface SignInOptions {
   /** URL parameters that are appended to the authorization URI, if defined. */

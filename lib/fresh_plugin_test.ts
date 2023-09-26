@@ -14,11 +14,8 @@ import {
   randomOAuthSession,
   randomTokensBody,
 } from "./_test_utils.ts";
-import {
-  getAndDeleteOAuthSession,
-  OAUTH_COOKIE_NAME,
-  setOAuthSession,
-} from "./_core.ts";
+import { getAndDeleteOAuthSession, setOAuthSession } from "./_kv.ts";
+import { OAUTH_COOKIE_NAME } from "./_http.ts";
 import type { Handler } from "$fresh/server.ts";
 
 Deno.test("kvOAuthPlugin() works with default values", () => {

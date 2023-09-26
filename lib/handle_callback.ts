@@ -8,13 +8,13 @@ import {
 } from "../deps.ts";
 import {
   COOKIE_BASE,
-  getAndDeleteOAuthSession,
   getCookieName,
   isSecure,
   OAUTH_COOKIE_NAME,
   redirect,
   SITE_COOKIE_NAME,
-} from "./_core.ts";
+} from "./_http.ts";
+import { getAndDeleteOAuthSession } from "./_kv.ts";
 
 /**
  * Handles the OAuth callback request for the given OAuth configuration, and
