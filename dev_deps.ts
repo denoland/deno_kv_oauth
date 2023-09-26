@@ -8,7 +8,6 @@ export {
   assertThrows,
 } from "https://deno.land/std@0.202.0/assert/mod.ts";
 export { walk } from "https://deno.land/std@0.202.0/fs/walk.ts";
-export { globToRegExp } from "https://deno.land/std@0.202.0/path/glob.ts";
 export { loadSync } from "https://deno.land/std@0.202.0/dotenv/mod.ts";
 export {
   returnsNext,

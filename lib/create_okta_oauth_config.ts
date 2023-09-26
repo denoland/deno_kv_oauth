@@ -1,5 +1,4 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-
 import type { OAuth2ClientConfig } from "../deps.ts";
 import { getRequiredEnv } from "./get_required_env.ts";
 
