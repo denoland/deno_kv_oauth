@@ -12,14 +12,22 @@ import {
 
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
   const request = new Request("http://example.com");
-  await assertRejects(() => handleCallback(request, randomOAuthConfig()));
+  await assertRejects(
+    async () => await handleCallback(request, randomOAuthConfig()),
+    Error,
+    "OAuth cookie not found",
+  );
 });
 
 Deno.test("handleCallback() rejects for non-existent OAuth session", async () => {
   const request = new Request("http://example.com", {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=xxx` },
   });
-  await assertRejects(() => handleCallback(request, randomOAuthConfig()));
+  await assertRejects(
+    async () => await handleCallback(request, randomOAuthConfig()),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 });
 
 Deno.test("handleCallback() deletes the OAuth session KV entry", async () => {
