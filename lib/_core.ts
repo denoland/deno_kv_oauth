@@ -65,8 +65,17 @@ export function listOAuthSessions() {
 }
 
 // Stores the OAuth session object for the given OAuth session ID.
-export async function setOAuthSession(id: string, value: OAuthSession) {
-  await kv.set([OAUTH_SESSIONS_PREFIX, id], value);
+export async function setOAuthSession(
+  id: string,
+  value: OAuthSession,
+  /**
+   * OAuth session entry expiration isn't included in unit tests as it'd
+   * require a persistent and restartable KV instance. This is difficult to do
+   * in this module, as the KV instance is initialized top-level.
+   */
+  options?: { expireIn?: number },
+) {
+  await kv.set([OAUTH_SESSIONS_PREFIX, id], value, options);
 }
 
 // Deletes the OAuth session object for the given OAuth session ID.
