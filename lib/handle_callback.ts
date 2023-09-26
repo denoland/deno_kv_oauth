@@ -28,9 +28,8 @@ import {
  * process.
  * 3. Getting the OAuth tokens from the given OAuth configuration using the
  * OAuth session object.
- * 4. Storing the OAuth tokens in KV using a generated session ID.
- * 5. Returning a response that sets a session cookie and redirects the client
- * to the success URL set in {@linkcode signIn}, the access token and the
+ * 4. Returning a response that sets a session cookie and redirects the client
+ * to the success URL set in {@linkcode signIn}, the OAuth tokens and the
  * session ID for processing during the callback handler.
  *
  * @param request The HTTP request from the client. The URL of the request must
@@ -43,12 +42,12 @@ import {
  * const oauthConfig = createGitHubOAuthConfig();
  *
  * export async function handleOAuthCallback(request: Request) {
- *   const { response, accessToken, sessionId } = await handleCallback(
+ *   const { response, tokens, sessionId } = await handleCallback(
  *     request,
  *     oauthConfig,
  *   );
  *
- *    // Perform some actions with the `accessToken` and `sessionId`.
+ *    // Perform some actions with the `tokens` and `sessionId`.
  *
  *    return response;
  * }
