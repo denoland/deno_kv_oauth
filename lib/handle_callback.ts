@@ -2,7 +2,7 @@
 import {
   getCookies,
   OAuth2Client,
-  OAuth2ClientConfig,
+  type OAuth2ClientConfig,
   setCookie,
 } from "../deps.ts";
 import {

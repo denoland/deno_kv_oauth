@@ -17,3 +17,4 @@ export * from "./lib/create_slack_oauth_config.ts";
 export * from "./lib/create_spotify_oauth_config.ts";
 export * from "./lib/create_twitter_oauth_config.ts";
 export * from "./lib/fresh_plugin.ts";
+export * from "./lib/types.ts";
