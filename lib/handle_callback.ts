@@ -8,9 +8,8 @@ import {
 } from "../deps.ts";
 import {
   COOKIE_BASE,
-  deleteOAuthSession,
+  getAndDeleteOAuthSession,
   getCookieName,
-  getOAuthSession,
   isSecure,
   OAUTH_COOKIE_NAME,
   redirect,
@@ -64,10 +63,7 @@ export async function handleCallback(
   );
   const oauthSessionId = getCookies(request.headers)[oauthCookieName];
   assert(oauthSessionId, `OAuth cookie not found`);
-
-  const oauthSession = await getOAuthSession(oauthSessionId);
-  assert(oauthSession, `OAuth session ${oauthSessionId} entry not found`);
-  await deleteOAuthSession(oauthSessionId);
+  const oauthSession = await getAndDeleteOAuthSession(oauthSessionId);
 
   const tokens = await new OAuth2Client(oauthConfig)
     .code.getToken(request.url, oauthSession);
