@@ -150,7 +150,7 @@ configurations.
    ```ts
    // server.ts
    import {
-     createGitHubOAuthConfig,
+     getRequiredEnv,
      handleCallback,
      signIn,
      signOut,
