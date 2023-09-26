@@ -9,6 +9,7 @@ import {
 import {
   COOKIE_BASE,
   getCookieName,
+  getDomain,
   getSuccessUrl,
   isSecure,
   OAUTH_COOKIE_NAME,
@@ -65,12 +66,14 @@ export async function signIn(
     );
   }
 
+  const url = new URL(request.url);
   const oauthSessionId = crypto.randomUUID();
   const cookie: Cookie = {
     ...COOKIE_BASE,
-    name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
+    name: getCookieName(OAUTH_COOKIE_NAME, isSecure(url)),
     value: oauthSessionId,
-    secure: isSecure(request.url),
+    secure: isSecure(url),
+    domain: getDomain(url),
     /**
      * A maximum authorization code lifetime of 10 minutes is recommended.
      * This cookie lifetime matches that value.

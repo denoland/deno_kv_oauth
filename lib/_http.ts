@@ -8,8 +8,8 @@ export const SITE_COOKIE_NAME = "site-session";
  * Determines whether the request URL is of a secure origin using the HTTPS
  * protocol.
  */
-export function isSecure(requestUrl: string) {
-  return new URL(requestUrl).protocol === "https:";
+export function isSecure(url: URL) {
+  return url.protocol === "https:";
 }
 
 /**
@@ -17,10 +17,17 @@ export function isSecure(requestUrl: string) {
  * origin (HTTPS).
  */
 export function getCookieName(name: string, isSecure: boolean) {
-  return isSecure ? "__Host-" + name : name;
+  return isSecure ? "__Secure-" + name : name;
 }
 
-/** @see {@link https://web.dev/first-party-cookie-recipes/#the-good-first-party-cookie-recipe} */
+export function getDomain(url: URL) {
+  return url.hostname
+    .split(".")
+    .slice(-2)
+    .join(".");
+}
+
+/** @see {@link https://web.dev/first-party-cookie-recipes/#first-party-cookie-recipe-for-sites-with-subdomains} */
 export const COOKIE_BASE = {
   path: "/",
   httpOnly: true,

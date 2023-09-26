@@ -24,6 +24,7 @@ import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./_http.ts";
  * ```
  */
 export function getSessionId(request: Request) {
-  const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
+  const url = new URL(request.url);
+  const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(url));
   return getCookies(request.headers)[cookieName] as string | undefined;
 }

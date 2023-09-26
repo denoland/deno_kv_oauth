@@ -1,16 +1,26 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "../dev_deps.ts";
-import { getCookieName, getSuccessUrl, isSecure, redirect } from "./_http.ts";
+import {
+  getCookieName,
+  getDomain,
+  getSuccessUrl,
+  isSecure,
+  redirect,
+} from "./_http.ts";
 import { assertRedirect } from "./_test_utils.ts";
 
 Deno.test("isSecure()", () => {
-  assertEquals(isSecure("https://example.com"), true);
-  assertEquals(isSecure("http://example.com"), false);
+  assertEquals(isSecure(new URL("https://example.com")), true);
+  assertEquals(isSecure(new URL("http://example.com")), false);
 });
 
 Deno.test("getCookieName()", () => {
-  assertEquals(getCookieName("hello", true), "__Host-hello");
+  assertEquals(getCookieName("hello", true), "__Secure-hello");
   assertEquals(getCookieName("hello", false), "hello");
+});
+
+Deno.test("getDomain()", () => {
+  assertEquals(getDomain(new URL("https://finance.news.site/")), "news.site");
 });
 
 Deno.test("redirect() returns a redirect response", () => {

@@ -37,8 +37,9 @@ export function signOut(request: Request) {
   const successUrl = getSuccessUrl(request);
   if (sessionId === undefined) return redirect(successUrl);
 
+  const url = new URL(request.url);
   const response = redirect(successUrl);
-  const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
+  const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(url));
   deleteCookie(response.headers, cookieName, { path: "/" });
   return response;
 }
