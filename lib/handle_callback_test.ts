@@ -1,11 +1,8 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { handleCallback } from "./handle_callback.ts";
 import { assertEquals, assertRejects, returnsNext, stub } from "../dev_deps.ts";
-import {
-  getAndDeleteOAuthSession,
-  OAUTH_COOKIE_NAME,
-  setOAuthSession,
-} from "./_core.ts";
+import { getAndDeleteOAuthSession, setOAuthSession } from "./_kv.ts";
+import { OAUTH_COOKIE_NAME } from "./_http.ts";
 import {
   assertRedirect,
   randomOAuthConfig,
@@ -15,14 +12,22 @@ import {
 
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
   const request = new Request("http://example.com");
-  await assertRejects(() => handleCallback(request, randomOAuthConfig()));
+  await assertRejects(
+    async () => await handleCallback(request, randomOAuthConfig()),
+    Error,
+    "OAuth cookie not found",
+  );
 });
 
 Deno.test("handleCallback() rejects for non-existent OAuth session", async () => {
   const request = new Request("http://example.com", {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=xxx` },
   });
-  await assertRejects(() => handleCallback(request, randomOAuthConfig()));
+  await assertRejects(
+    async () => await handleCallback(request, randomOAuthConfig()),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 });
 
 Deno.test("handleCallback() deletes the OAuth session KV entry", async () => {

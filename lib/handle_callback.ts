@@ -1,6 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
-  assert,
   getCookies,
   OAuth2Client,
   OAuth2ClientConfig,
@@ -8,13 +7,13 @@ import {
 } from "../deps.ts";
 import {
   COOKIE_BASE,
-  getAndDeleteOAuthSession,
   getCookieName,
   isSecure,
   OAUTH_COOKIE_NAME,
   redirect,
   SITE_COOKIE_NAME,
-} from "./_core.ts";
+} from "./_http.ts";
+import { getAndDeleteOAuthSession } from "./_kv.ts";
 
 /**
  * Handles the OAuth callback request for the given OAuth configuration, and
@@ -62,7 +61,7 @@ export async function handleCallback(
     isSecure(request.url),
   );
   const oauthSessionId = getCookies(request.headers)[oauthCookieName];
-  assert(oauthSessionId, `OAuth cookie not found`);
+  if (oauthSessionId === undefined) throw new Error("OAuth cookie not found");
   const oauthSession = await getAndDeleteOAuthSession(oauthSessionId);
 
   const tokens = await new OAuth2Client(oauthConfig)
