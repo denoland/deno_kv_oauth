@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getCookies } from "../deps.ts";
-import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./_core.ts";
+import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./_http.ts";
 
 /**
  * Gets the session ID for a given request. This is well-suited for checking
