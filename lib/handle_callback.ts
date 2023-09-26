@@ -28,7 +28,8 @@ import {
  * process.
  * 3. Getting the OAuth tokens from the given OAuth configuration using the
  * OAuth session object.
- * 4. Returning a response that sets a session cookie and redirects the client
+ * 4. Storing the OAuth tokens in KV using a generated session ID.
+ * 5. Returning a response that sets a session cookie and redirects the client
  * to the success URL set in {@linkcode signIn}, the access token and the
  * session ID for processing during the callback handler.
  *
@@ -42,12 +43,12 @@ import {
  * const oauthConfig = createGitHubOAuthConfig();
  *
  * export async function handleOAuthCallback(request: Request) {
- *   const { response, tokens, sessionId } = await handleCallback(
+ *   const { response, accessToken, sessionId } = await handleCallback(
  *     request,
  *     oauthConfig,
  *   );
  *
- *    // Perform some actions with the `tokens` and `sessionId`.
+ *    // Perform some actions with the `accessToken` and `sessionId`.
  *
  *    return response;
  * }
@@ -64,6 +65,7 @@ export async function handleCallback(
   );
   const oauthSessionId = getCookies(request.headers)[oauthCookieName];
   assert(oauthSessionId, `OAuth cookie not found`);
+
   const oauthSession = await getOAuthSession(oauthSessionId);
   assert(oauthSession, `OAuth session ${oauthSessionId} entry not found`);
   await deleteOAuthSession(oauthSessionId);
