@@ -10,7 +10,7 @@ import {
   assertRedirect,
   randomOAuthConfig,
   randomOAuthSession,
-  randomTokenBody,
+  randomTokens,
 } from "./_test_utils.ts";
 
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
@@ -37,11 +37,14 @@ Deno.test("handleCallback() deletes the OAuth session KV entry", async () => {
 });
 
 Deno.test("handleCallback() correctly handles the callback response", async () => {
-  const tokenBody = randomTokenBody();
+  const newTokens = randomTokens();
   const fetchStub = stub(
     window,
     "fetch",
-    returnsNext([Promise.resolve(Response.json(tokenBody))]),
+    returnsNext([Promise.resolve(Response.json({
+      access_token: newTokens.accessToken,
+      token_type: newTokens.tokenType,
+    }))]),
   );
 
   const oauthSessionId = crypto.randomUUID();
@@ -65,7 +68,7 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   fetchStub.restore();
 
   assertRedirect(response);
-  assertEquals(tokens.accessToken, tokenBody.access_token);
+  assertEquals(tokens.accessToken, newTokens.accessToken);
   assertEquals(typeof sessionId, "string");
   assertEquals(await getOAuthSession(oauthSessionId), null);
 });

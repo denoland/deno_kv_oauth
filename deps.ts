@@ -15,5 +15,6 @@ export { assert } from "https://deno.land/std@0.202.0/assert/assert.ts";
 export {
   OAuth2Client,
   type OAuth2ClientConfig,
+  type Tokens,
 } from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
 export { SECOND } from "https://deno.land/std@0.202.0/datetime/constants.ts";
