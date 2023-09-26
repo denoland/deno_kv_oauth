@@ -146,13 +146,6 @@ provider you like.
 
 > Check out a full implementation in the [demo source code](./demo.ts).
 
-When needed, you can delete all KV-stored OAuth sessions and tokens.
-
-```ts
-import { clearOAuthSessionsAndTokens } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
-await clearOAuthSessionsAndTokens();
-```
-
 ### Pre-Defined OAuth Configurations
 
 This module comes with a suite of pre-defined OAuth configurations for the

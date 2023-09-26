@@ -2,7 +2,6 @@
 import { type Cookie, Status } from "../deps.ts";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
-export const SITE_COOKIE_NAME = "site-session";
 
 /**
  * Determines whether the request URL is of a secure origin using the HTTPS
@@ -59,11 +58,6 @@ export async function getOAuthSession(id: string) {
   return result.value;
 }
 
-// Lists all OAuth session entries.
-export function listOAuthSessions() {
-  return kv.list<OAuthSession>({ prefix: [OAUTH_SESSIONS_PREFIX] });
-}
-
 // Stores the OAuth session object for the given OAuth session ID.
 export async function setOAuthSession(
   id: string,
@@ -81,94 +75,6 @@ export async function setOAuthSession(
 // Deletes the OAuth session object for the given OAuth session ID.
 export async function deleteOAuthSession(id: string) {
   await kv.delete([OAUTH_SESSIONS_PREFIX, id]);
-}
-
-/**
- * Legacy stored tokens
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-const LEGACY_TOKENS_1_PREFIX = "stored_tokens_by_session";
-
-/**
- * Legacy stored tokens
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-const LEGACY_TOKENS_2_PREFIX = "tokens";
-
-/**
- * Lists all legacy tokens entries.
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-export function listLegacyTokens1() {
-  return kv.list({ prefix: [LEGACY_TOKENS_1_PREFIX] });
-}
-
-/**
- * Lists all legacy tokens entries.
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-export function listLegacyTokens2() {
-  return kv.list({ prefix: [LEGACY_TOKENS_2_PREFIX] });
-}
-
-/**
- * Exported for testing purposes only.
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-export async function setLegacyTokens1(sessionId: string, tokens: unknown) {
-  await kv.set([LEGACY_TOKENS_1_PREFIX, sessionId], tokens);
-}
-
-/**
- * Exported for testing purposes only.
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-export async function setLegacyTokens2(sessionId: string, tokens: unknown) {
-  await kv.set([LEGACY_TOKENS_2_PREFIX, sessionId], tokens);
-}
-
-/**
- * Exported for testing purposes only.
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-export async function getLegacyTokens1(sessionId: string) {
-  const res = await kv.get([LEGACY_TOKENS_1_PREFIX, sessionId]);
-  return res.value;
-}
-
-/**
- * Exported for testing purposes only.
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-export async function getLegacyTokens2(sessionId: string) {
-  const res = await kv.get([LEGACY_TOKENS_2_PREFIX, sessionId]);
-  return res.value;
-}
-
-/**
- * Delete legacy token entry
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-export async function deleteLegacyTokens1(sessionId: string) {
-  await kv.delete([LEGACY_TOKENS_1_PREFIX, sessionId]);
-}
-
-/**
- * Delete legacy token entry
- *
- * @deprecated To be removed once OAuth session expiration is implemented.
- */
-export async function deleteLegacyTokens2(sessionId: string) {
-  await kv.delete([LEGACY_TOKENS_2_PREFIX, sessionId]);
 }
 
 /**
