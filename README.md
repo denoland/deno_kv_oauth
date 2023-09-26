@@ -152,10 +152,10 @@ configurations.
    import {
      getRequiredEnv,
      handleCallback,
+     type OAuth2ClientConfig,
      signIn,
      signOut,
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
-   import type { OAuth2ClientConfig } from "https://deno.land/x/oauth2_client/mod.ts";
 
    const oauthConfig: OAuth2ClientConfig = {
      clientId: getRequiredEnv("CUSTOM_CLIENT_ID"),
