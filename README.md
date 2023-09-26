@@ -4,68 +4,59 @@
     <source media="(prefers-color-scheme: light)" width="300" height="240" srcset="./logo-light.svg">
     <img alt="Deno KV OAuth logo" width="300" height="240" src="./logo-light.svg">
   </picture>
-
-<p>High-level OAuth 2.0 powered by <a href="https://deno.com/kv">Deno KV</a>.</p>
-
-<a href="https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts">
-  <img src="https://doc.deno.land/badge.svg" alt="Docs">
-</a>
-<a href="https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml">
-  <img src="https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml/badge.svg" alt="CI">
-</a>
-<a href="https://codecov.io/gh/denoland/deno_kv_oauth">
-  <img src="https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z" alt="codecov">
-</a>
-
+  <p>High-level OAuth 2.0 powered by <a href="https://deno.com/kv">Deno KV</a>.</p>
+  <a href="https://deno.land/x/deno_kv_oauth?doc">
+    <img src="https://doc.deno.land/badge.svg" alt="Docs">
+  </a>
+  <a href="https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml">
+    <img src="https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml/badge.svg" alt="CI">
+  </a>
+  <a href="https://codecov.io/gh/denoland/deno_kv_oauth">
+    <img src="https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z" alt="codecov">
+  </a>
 </div>
 
 # Deno KV OAuth (Beta)
 
 ## Features
 
-- Uses [oauth2_client](https://deno.land/x/oauth2_client@v1.0.0) for OAuth
-  workflows and [Deno KV](https://deno.com/kv) for persistent session storage.
+- Uses [Deno KV](https://deno.com/kv) for persistent session storage.
+- Uses [oauth2_client](https://deno.land/x/oauth2_client) for OAuth workflows.
 - Automatically handles the authorization code flow with
   [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/)
   and client redirection.
-- Comes with
-  [pre-defined OAuth configurations for popular providers](#pre-defined-oauth-configurations).
+- Provides [pre-defined OAuth configurations](#pre-defined-oauth-configurations)
+  for popular providers.
 - Works locally and in the cloud, including
   [Deno Deploy](https://deno.com/deploy).
-- Based on the
+- Based on the [Web API](https://developer.mozilla.org/en-US/docs/Web/API)'s
   [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) and
   [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response)
-  interfaces from the
-  [Web API](https://developer.mozilla.org/en-US/docs/Web/API).
-- Works with
-  [std/http's `serve()`](https://deno.land/std@0.192.0/http/mod.ts?s=serve) and
-  [`Deno.serve()`](https://deno.land/api?s=Deno.serve&unstable=) native HTTP
-  servers, and web frameworks such as [Fresh](https://fresh.deno.dev/) and
-  [Oak](https://oakserver.github.io/oak/). See the [In the Wild](#in-the-wild)
-  section below for examples and demos.
+  interfaces.
+- Works with [Fresh](https://fresh.deno.dev/),
+  [`Deno.serve()`](https://deno.land/api?s=Deno.serve&unstable=) and
+  [Oak](https://oakserver.github.io/oak/) and other web frameworks.
 
-## Live Demo
-
-You can also check out a live demo at https://kv-oauth.deno.dev, which uses
-Github as the OAuth provider. Source code is located in [demo.ts](demo.ts).
-
-## Usage
+## Documentation
 
 Check out the full documentation and API reference
-[here](https://doc.deno.land/https://deno.land/x/deno_kv_oauth/mod.ts).
+[here](https://deno.land/x/deno_kv_oauth?doc).
 
-### Getting Started with [Fresh](https://fresh.deno.dev/)
+## How-to
 
-> Note: The minimum required version for plugins in Fresh is 1.3.0 If you're not
-> performing anything special in the sign-in, sign-out and callback handlers,
-> you can add the Fresh plugin to your project. This automatically handles
-> `GET /oauth/signin`, `GET /oauth/callback` and `GET /oauth/signout` routes.
+### Get Started with [Fresh](https://fresh.deno.dev/)
+
+The minimum required version for plugins in Fresh is 1.3.0 If you're not
+performing anything special in the sign-in, sign-out and callback handlers, you
+can add the Fresh plugin to your project. This automatically handles
+`GET /oauth/signin`, `GET /oauth/callback` and `GET /oauth/signout` routes.
 
 1. Create your OAuth 2.0 application for your given provider.
 
-1. Create your [pre-defined](#pre-defined-oauth-configurations) or
-   [custom](#custom-oauth-configuration) OAuth configuration and configure Fresh
-   to use the plugin.
+1. Create your
+   [pre-defined](#get-started-with-a-pre-defined-oauth-configuration) or
+   [custom](#get-started-with-a-custom-oauth-configuration) OAuth configuration
+   and configure Fresh to use the plugin.
 
    ```ts
    // main.ts
@@ -83,26 +74,28 @@ Check out the full documentation and API reference
    });
    ```
 
-If you require more advanced setups, you can create your own plugin. For more
-information, see:
+1. Start your server with the necessary
+   [environment variables](#environment-variables).
 
-- The [source code](src/fresh_plugin.ts) for `kvOAuthPlugin()`
-- The [Plugin documentation](https://fresh.deno.dev/docs/concepts/plugins) for
-  Fresh
-- The
-  [Fresh + Deno KV OAuth demo](https://github.com/denoland/fresh-deno-kv-oauth-demo)
-  which uses the Fresh plugin
-- [Deno SaaSKit](https://saaskit.deno.dev/)'s custom
-  [plugin implementation](https://github.com/denoland/saaskit/blob/3accffdc44c2d2eb6dba28126f8d4cb525eba340/plugins/kv_oauth.ts)
+   ```bash
+   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   ```
 
-### Getting Started with Other Frameworks
+> See the
+> [Fresh + Deno KV OAuth demo](https://github.com/denoland/fresh-deno-kv-oauth-demo)
+> for an example and
+> [Fresh's plugin documentation](https://fresh.deno.dev/docs/concepts/plugins)
+> for more information on plugins.
 
-This example uses GitHub as the OAuth provider. However, you can use any
-provider you like.
+### Get Started with a Pre-Defined OAuth Configuration
+
+See [here](#providers) for the list of OAuth providers with pre-defined
+configurations.
 
 1. Create your OAuth application for your given provider.
 
-1. Create your web server using Deno KV OAuth's request handlers and helpers.
+1. Create your web server using Deno KV OAuth's request handlers, helpers and
+   pre-defined OAuth configuration.
 
    ```ts
    // server.ts
@@ -144,12 +137,102 @@ provider you like.
    GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
    ```
 
-> Check out a full implementation in the [demo source code](./demo.ts).
+> Check out a full implementation in the [demo source code](./demo.ts) which
+> runs https://kv-oauth.deno.dev.
+
+### Get Started with a Custom OAuth Configuration
+
+1. Create your OAuth application for your given provider.
+
+1. Create your web server using Deno KV OAuth's request handlers and helpers,
+   and custom OAuth configuration.
+
+   ```ts
+   // server.ts
+   import {
+     getRequiredEnv,
+     handleCallback,
+     signIn,
+     signOut,
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   import type { OAuth2ClientConfig } from "https://deno.land/x/oauth2_client/mod.ts";
+
+   const oauthConfig: OAuth2ClientConfig = {
+     clientId: getRequiredEnv("CUSTOM_CLIENT_ID"),
+     clientSecret: getRequiredEnv("CUSTOM_CLIENT_SECRET"),
+     authorizationEndpointUri: "https://custom.com/oauth/authorize",
+     tokenUri: "https://custom.com/oauth/token",
+     redirectUri: "https://my-site.com/another-dir/callback",
+   };
+
+   async function handler(request: Request) {
+     const { pathname } = new URL(request.url);
+     switch (pathname) {
+       case "/oauth/signin":
+         return await signIn(request, oauthConfig);
+       case "/another-dir/callback":
+         const { response } = await handleCallback(request, oauthConfig);
+         return response;
+       case "/oauth/signout":
+         return signOut(request);
+       case "/protected-route":
+         return getSessionId(request) === undefined
+           ? new Response("Unauthorized", { status: 401 })
+           : new Response("You are allowed");
+       default:
+         return new Response(null, { status: 404 });
+     }
+   }
+
+   Deno.serve(handler);
+   ```
+
+1. Start your server with the necessary
+   [environment variables](#environment-variables).
+
+   ```bash
+   CUSTOM_CLIENT_ID=xxx CUSTOM_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   ```
+
+### Run the Demo Locally
+
+The demo uses GitHub as the OAuth provider. You can change the OAuth
+configuration by setting the `oauthConfig` constant as mentioned above.
+
+1. Create your OAuth application for your given provider.
+
+1. Start the demo with the necessary
+   [environment variables](#environment-variables).
+
+   ```bash
+   TWITTER_CLIENT_ID=xxx TWITTER_CLIENT_SECRET=xxx deno task demo
+   ```
+
+## Concepts
+
+### Redirects after Sign-In and Sign-Out
+
+The URL that the client is redirected to upon successful sign-in or sign-out is
+determined by the request made to the sign-in or sign-out endpoint. This value
+is set in the following order of precedence:
+
+1. The value of the `success_url` URL parameter of the request URL, if defined.
+   E.g. a request to `http://example.com/signin?success_url=/success` redirects
+   the client to `/success` after successful sign-in.
+2. The value of the
+   [`Referer`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer)
+   header, if of the same origin as the request. E.g. a request to
+   `http://example.com/signin` with `Referer` header `http://example.com/about`
+   redirects the client to `http://example.com/about` after successful sign-in.
+3. The root path, "/". E.g. a request to `http://example.com/signin` without the
+   `Referer` header redirects the client to `http://example.com` after
+   successful sign-in.
 
 ### Pre-Defined OAuth Configurations
 
-This module comes with a suite of pre-defined OAuth configurations for the
-following providers:
+#### Providers
+
+The following providers have pre-defined OAuth configurations:
 
 1. [Auth0](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAuth0OAuthConfig)
 1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuthConfig)
@@ -165,97 +248,30 @@ following providers:
 1. [Spotify](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSpotifyOAuthConfig)
 1. [Twitter](https://deno.land/x/deno_kv_oauth/mod.ts?s=createTwitterOAuthConfig)
 
-Each function is typed so that their respective platform's requirements are met.
+#### Environment Variables
 
-> If there's a pre-configured OAuth client for a provider you'd like added,
-> please submit a pull request or
-> [create a new issue](https://github.com/denoland/deno_kv_oauth/issues/new).
+These must be set when starting a server with a pre-defined OAuth configuration.
+Replace the `PROVIDER` prefix with your given OAuth provider's name when
+starting your server. E.g. `DISCORD`, `GOOGLE`, or `SLACK`.
 
-### Custom OAuth Configuration
-
-Custom OAuth must be defined using
-[`OAuth2ClientConfig`](https://deno.land/x/oauth2_client/mod.ts?s=OAuth2ClientConfig)
-from the [`oauth2_client` module](https://deno.land/x/oauth2_client/mod.ts).
-E.g.:
-
-```ts
-import type { OAuth2ClientConfig } from "https://deno.land/x/oauth2_client/mod.ts";
-
-const oauthConfig: OAuth2ClientConfig = {
-  clientId: Deno.env.get("CUSTOM_CLIENT_ID")!,
-  clientSecret: Deno.env.get("CUSTOM_CLIENT_SECRET")!,
-  authorizationEndpointUri: "https://custom.com/oauth/authorize",
-  tokenUri: "https://custom.com/oauth/token",
-  redirectUri: "https://my-site.com",
-};
-```
-
-### Environment Variables
-
-- `DENO_KV_PATH` (optional) - defines the path that Deno KV uses. See
-  [the API reference](https://deno.land/api?s=Deno.openKv&unstable=) for further
-  details.
-- `${PROVIDER}_CLIENT_ID` and `${PROVIDER}_CLIENT_SECRET` - required when
-  creating a pre-configured OAuth client for a given provider. E.g. for Twitter,
-  the environment variable keys are `TWITTER_CLIENT_ID` and
-  `TWITTER_CLIENT_SECRET`. See
-  [the list below](#pre-defined-oauth-configurations) for specifics.
-- `OKTA_DOMAIN` or `AUTH0_DOMAIN` - required only when using the Okta or Auth0
-  provider to supply your own given domain.
+1. `PROVIDER_CLIENT_ID` -
+   [Client ID](https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/)
+   of a given OAuth application.
+1. `PROVIDER_CLIENT_SECRET` -
+   [Client secret](https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/)
+   of a given OAuth application.
+1. `PROVIDER_DOMAIN` (optional) - Server domain of a given OAuth application.
+   Only required for Okta and Auth0.
 
 > Note: reading environment variables requires the
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
 > [the manual](https://deno.com/manual/basics/permissions) for further details.
 
-### Running the Demo
+## Built with Deno KV OAuth
 
-Run `deno task demo` to start the demo application. The task uses environment
-variables defined in a `.env` file at the root of this folder.
-
-By default, the demo uses GitHub with a minimal scope. Use the `PROVIDER` and
-`SCOPE` environment variables, if you'd like to change this behavior. E.g. for
-Twitter:
-
-```bash
-PROVIDER=Twitter SCOPE=users.read deno task demo
-```
-
-### Redirect URL after Sign-In or Sign-Out
-
-The URL that the client is redirected to upon successful sign-in or sign-out is
-determined by the request made to the sign-in or sign-out endpoint. This value
-is set by the following order of precedence:
-
-1. The value of the `success_url` URL parameter of the request URL, if defined.
-   E.g. a request to `http://example.com/signin?success_url=/success` redirects
-   the client to `/success` after successful sign-in.
-2. The value of the
-   [`Referer`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer)
-   header, if of the same origin as the request. E.g. a request to
-   `http://example.com/signin` with `Referer` header `http://example.com/about`
-   redirects the client to `http://example.com/about` after successful sign-in.
-3. The root path, "/". E.g. a request to `http://example.com/signin` without the
-   `Referer` header redirects the client to `http://example.com` after
-   successful sign-in.
-
-The same applies to user sign-out.
-
-## Known Issues
-
-### Twitch Incompatibility
-
-This module is incompatible with [Twitch](https://www.twitch.tv/) as an OAuth
-2.0 provider, as the platform
-[doesn't support PKCE](https://twitch.uservoice.com/forums/310213-developers/suggestions/39785686-add-pkce-support-to-the-oauth2-0-authorization-cod).
-[PKCE](https://oauth.net/2/pkce/) is a requirement for all OAuth providers for
-this module.
-
-## In the Wild
-
-Check out these projects powered by Deno KV OAuth:
-
+1. [Deno KV OAuth live demo]()
 1. [Deno SaaSKit](https://saaskit.deno.dev/) - A modern SaaS template built on
-   Fresh.
+   Fresh and uses a custom Deno KV OAuth plugin.
 1. [KV SketchBook](https://hashrock-kv-sketchbook.deno.dev/) - Dead simple
    sketchbook app.
 1. [Fresh + Deno KV OAuth demo](https://github.com/denoland/fresh-deno-kv-oauth-demo) -
@@ -275,5 +291,12 @@ Check out these projects powered by Deno KV OAuth:
    [Cheetah web framework](https://cheetah.mod.land/).
 1. [Paquet](https://paquet.app) - A web app shop
 
-> Do you have a project powered by Deno KV OAuth that you'd like to share?
-> Please submit a pull request adding that project to this list.
+> Do you have a project powered by Deno KV OAuth that you'd like to share? Feel
+> free to let us know in a new issue.
+
+## Known Issues
+
+- Twitch is not supported as an OAuth provider because it does not support PKCE.
+  See #79 and
+  [this post](https://twitch.uservoice.com/forums/310213-developers/suggestions/39785686-add-pkce-support-to-the-oauth2-0-authorization-cod)
+  for more information.
