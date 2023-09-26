@@ -46,10 +46,10 @@ Check out the full documentation and API reference
 
 ### Get Started with [Fresh](https://fresh.deno.dev/)
 
-> Note: The minimum required version for plugins in Fresh is 1.3.0 If you're not
-> performing anything special in the sign-in, sign-out and callback handlers,
-> you can add the Fresh plugin to your project. This automatically handles
-> `GET /oauth/signin`, `GET /oauth/callback` and `GET /oauth/signout` routes.
+The minimum required version for plugins in Fresh is 1.3.0 If you're not
+performing anything special in the sign-in, sign-out and callback handlers, you
+can add the Fresh plugin to your project. This automatically handles
+`GET /oauth/signin`, `GET /oauth/callback` and `GET /oauth/signout` routes.
 
 1. Create your OAuth 2.0 application for your given provider.
 
@@ -294,7 +294,7 @@ starting your server. E.g. `DISCORD`, `GOOGLE`, or `SLACK`.
 > Do you have a project powered by Deno KV OAuth that you'd like to share? Feel
 > free to let us know in a new issue.
 
-## Known issues
+## Known Issues
 
 - Twitch is not supported as an OAuth provider because it does not support PKCE.
   See #79 and
