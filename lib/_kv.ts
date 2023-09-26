@@ -1,5 +1,4 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-
 const DENO_KV_PATH_KEY = "DENO_KV_PATH";
 let path = undefined;
 if (

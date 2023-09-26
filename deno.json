@@ -9,9 +9,9 @@
   },
   "tasks": {
     "demo": "deno run --allow-net --allow-env --allow-read --unstable --watch=demo.ts,mod.ts demo.ts",
-    "check:license": "deno run -A tools/check_license.ts --check",
+    "check:license": "deno run -A tools/check_license.ts",
     "check:types": "deno check --unstable **/*.ts",
-    "check": "deno task check:license && deno task check:types",
+    "check": "deno task check:license --check && deno task check:types",
     "test": "DENO_KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --trace-ops --coverage=./cov",
     "ok": "deno fmt --check && deno lint && deno task check && deno task test",
     "cov:clean": "rm -rf cov html_cov cov.lcov",
