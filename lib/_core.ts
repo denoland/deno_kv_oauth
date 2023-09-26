@@ -68,6 +68,12 @@ export function listOAuthSessions() {
 export async function setOAuthSession(
   id: string,
   value: OAuthSession,
+  /**
+   * OAuth session entry expiration isn't included in unit tests as it'd
+   * require a persistent KV instance and the ability to restart the KV
+   * instance. This is difficult to do in this module, as the KV instance is
+   * initialized top-level.
+   */
   options?: { expireIn?: number },
 ) {
   await kv.set([OAUTH_SESSIONS_PREFIX, id], value, options);
