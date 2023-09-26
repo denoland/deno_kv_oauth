@@ -1,9 +1,8 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assertEquals } from "../dev_deps.ts";
+import { assertEquals, assertRejects } from "../dev_deps.ts";
 import {
-  deleteOAuthSession,
+  getAndDeleteOAuthSession,
   getCookieName,
-  getOAuthSession,
   getSuccessUrl,
   isSecure,
   redirect,
@@ -25,14 +24,20 @@ Deno.test("(get/set/delete)OAuthSession() work interchangeably", async () => {
   const id = crypto.randomUUID();
 
   // OAuth session doesn't yet exist
-  assertEquals(await getOAuthSession(id), null);
+  await assertRejects(
+    async () => await getAndDeleteOAuthSession(id),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 
   const oauthSession = randomOAuthSession();
   await setOAuthSession(id, oauthSession);
-  assertEquals(await getOAuthSession(id), oauthSession);
-
-  await deleteOAuthSession(id);
-  assertEquals(await getOAuthSession(id), null);
+  assertEquals(await getAndDeleteOAuthSession(id), oauthSession);
+  await assertRejects(
+    async () => await getAndDeleteOAuthSession(id),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 });
 
 Deno.test("redirect() returns a redirect response", () => {

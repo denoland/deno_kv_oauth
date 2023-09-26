@@ -2,7 +2,7 @@
 import { handleCallback } from "./handle_callback.ts";
 import { assertEquals, assertRejects, returnsNext, stub } from "../dev_deps.ts";
 import {
-  getOAuthSession,
+  getAndDeleteOAuthSession,
   OAUTH_COOKIE_NAME,
   setOAuthSession,
 } from "./_core.ts";
@@ -33,7 +33,11 @@ Deno.test("handleCallback() deletes the OAuth session KV entry", async () => {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
   await assertRejects(() => handleCallback(request, randomOAuthConfig()));
-  assertEquals(await getOAuthSession(oauthSessionId), null);
+  await assertRejects(
+    async () => await getAndDeleteOAuthSession(oauthSessionId),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 });
 
 Deno.test("handleCallback() correctly handles the callback response", async () => {
@@ -67,5 +71,9 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   assertRedirect(response);
   assertEquals(tokens.accessToken, tokensBody.access_token);
   assertEquals(typeof sessionId, "string");
-  assertEquals(await getOAuthSession(oauthSessionId), null);
+  await assertRejects(
+    async () => await getAndDeleteOAuthSession(oauthSessionId),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
 });
