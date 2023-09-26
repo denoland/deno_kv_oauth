@@ -12,7 +12,7 @@ import {
   assertRedirect,
   randomOAuthConfig,
   randomOAuthSession,
-  randomTokens,
+  randomTokensBody,
 } from "./_test_utils.ts";
 import {
   getOAuthSession,
@@ -63,14 +63,10 @@ Deno.test("kvOAuthPlugin() correctly handles the sign-in path", async () => {
 });
 
 Deno.test("kvOAuthPlugin() correctly handles the callback path", async () => {
-  const newTokens = randomTokens();
   const fetchStub = stub(
     window,
     "fetch",
-    returnsNext([Promise.resolve(Response.json({
-      access_token: newTokens.accessToken,
-      token_type: newTokens.tokenType,
-    }))]),
+    returnsNext([Promise.resolve(Response.json(randomTokensBody()))]),
   );
 
   const oauthSessionId = crypto.randomUUID();
