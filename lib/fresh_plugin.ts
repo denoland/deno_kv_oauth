@@ -61,7 +61,7 @@ export function kvOAuthPlugin(
       {
         path: options?.callbackPath ?? "/oauth/callback",
         handler: async (req) => {
-          // Return object also includes `accessToken` and `sessionId` properties.
+          // Return object also includes `tokens` and `sessionId` properties.
           const { response } = await handleCallback(req, oauthConfig);
           return response;
         },

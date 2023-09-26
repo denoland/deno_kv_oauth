@@ -26,8 +26,8 @@
 - Uses [oauth2_client](https://deno.land/x/oauth2_client@v1.0.0) for OAuth
   workflows and [Deno KV](https://deno.com/kv) for persistent session storage.
 - Automatically handles the authorization code flow with
-  [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/),
-  access token refresh, and client redirection.
+  [Proof Key for Code Exchange (PKCE)](https://www.oauth.com/oauth2-servers/pkce/)
+  and client redirection.
 - Comes with
   [pre-defined OAuth configurations for popular providers](#pre-defined-oauth-configurations).
 - Works locally and in the cloud, including
@@ -146,13 +146,12 @@ provider you like.
 
 > Check out a full implementation in the [demo source code](./demo.ts).
 
-1. When needed, you can delete all KV-stored OAuth sessions and tokens.
+When needed, you can delete all KV-stored OAuth sessions and tokens.
 
-   ```ts
-   import { clearOAuthSessionsAndTokens } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
-
-   await clearOAuthSessionsAndTokens();
-   ```
+```ts
+import { clearOAuthSessionsAndTokens } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+await clearOAuthSessionsAndTokens();
+```
 
 ### Pre-Defined OAuth Configurations
 
