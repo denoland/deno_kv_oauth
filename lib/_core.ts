@@ -2,6 +2,7 @@
 import { type Cookie, Status } from "../deps.ts";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
+export const SITE_COOKIE_NAME = "site-session";
 
 /**
  * Determines whether the request URL is of a secure origin using the HTTPS
