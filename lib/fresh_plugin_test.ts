@@ -3,8 +3,8 @@ import { kvOAuthPlugin } from "./fresh_plugin.ts";
 import {
   assert,
   assertArrayIncludes,
+  assertEquals,
   assertNotEquals,
-  assertRejects,
   returnsNext,
   stub,
 } from "../dev_deps.ts";
@@ -15,7 +15,7 @@ import {
   randomTokenBody,
 } from "./_test_utils.ts";
 import {
-  getAndDeleteOAuthSession,
+  getOAuthSession,
   OAUTH_COOKIE_NAME,
   setOAuthSession,
 } from "./_core.ts";
@@ -96,11 +96,7 @@ Deno.test("kvOAuthPlugin() correctly handles the callback path", async () => {
   fetchStub.restore();
 
   assertRedirect(response);
-  await assertRejects(
-    async () => await getAndDeleteOAuthSession(oauthSessionId),
-    Deno.errors.NotFound,
-    "OAuth session not found",
-  );
+  assertEquals(await getOAuthSession(oauthSessionId), null);
 });
 
 Deno.test("kvOAuthPlugin() correctly handles the sign-out path", async () => {
