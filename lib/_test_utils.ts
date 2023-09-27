@@ -16,6 +16,7 @@ export function randomOAuthSession(): OAuthSession {
   return {
     state: crypto.randomUUID(),
     codeVerifier: crypto.randomUUID(),
+    successUrl: `http://${crypto.randomUUID()}.com`,
   };
 }
 
