@@ -36,7 +36,7 @@
 - Works with [Fresh](https://fresh.deno.dev/),
   [`Deno.serve()`](https://deno.land/api?s=Deno.serve&unstable=) and
   [Oak](https://oakserver.github.io/oak/) and other web frameworks.
-  - Supports [custom session cookie options](#get-started-with-cookie-options)
+- Supports [custom session cookie options](#get-started-with-cookie-options)
 
 ## Documentation
 
