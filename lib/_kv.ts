@@ -9,12 +9,11 @@ if (
 }
 const kv = await Deno.openKv(path);
 
-// For graceful shutdown after tests.
+// Gracefully shutdown after tests
 addEventListener("beforeunload", async () => {
   await kv.close();
 });
 
-// OAuth session
 export interface OAuthSession {
   state: string;
   codeVerifier: string;
@@ -23,7 +22,6 @@ export interface OAuthSession {
 
 const OAUTH_SESSIONS_PREFIX = "oauth_sessions";
 
-// Retrieves then deletes the OAuth session object for the given OAuth session ID.
 export async function getAndDeleteOAuthSession(id: string) {
   const key = [OAUTH_SESSIONS_PREFIX, id];
   const res = await kv.get<OAuthSession>(key);
@@ -34,7 +32,6 @@ export async function getAndDeleteOAuthSession(id: string) {
   return res.value;
 }
 
-// Stores the OAuth session object for the given OAuth session ID.
 export async function setOAuthSession(
   id: string,
   value: OAuthSession,
