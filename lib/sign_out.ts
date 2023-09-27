@@ -3,7 +3,7 @@ import { deleteCookie } from "../deps.ts";
 import {
   getCookieName,
   getSuccessUrl,
-  isSecure,
+  isHttps,
   redirect,
   SITE_COOKIE_NAME,
 } from "./_http.ts";
@@ -38,7 +38,9 @@ export function signOut(request: Request) {
   if (sessionId === undefined) return redirect(successUrl);
 
   const response = redirect(successUrl);
-  const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
+
+  const url = new URL(request.url);
+  const cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(url));
   deleteCookie(response.headers, cookieName, { path: "/" });
   return response;
 }
