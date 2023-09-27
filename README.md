@@ -101,6 +101,7 @@ configurations.
    // server.ts
    import {
      createGitHubOAuthConfig,
+     getSessionId,
      handleCallback,
      signIn,
      signOut,
@@ -151,6 +152,7 @@ configurations.
    // server.ts
    import {
      getRequiredEnv,
+     getSessionId,
      handleCallback,
      type OAuth2ClientConfig,
      signIn,
