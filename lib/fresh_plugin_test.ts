@@ -68,7 +68,7 @@ Deno.test("kvOAuthPlugin() correctly handles the callback path", async () => {
 
   const oauthSessionId = crypto.randomUUID();
   const oauthSession = randomOAuthSession();
-  await setOAuthSession(oauthSessionId, oauthSession);
+  await setOAuthSession(oauthSessionId, oauthSession, { expireIn: 1_000 });
   const searchParams = new URLSearchParams({
     "response_type": "code",
     "client_id": "clientId",
