@@ -1,13 +1,13 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { deleteCookie } from "../deps.ts";
 import {
+  COOKIE_BASE,
   getCookieName,
   getSuccessUrl,
   isHttps,
   redirect,
   SITE_COOKIE_NAME,
 } from "./_http.ts";
-import { getSessionId } from "./get_session_id.ts";
 
 /**
  * Handles the sign-out process, and then redirects the client to the given
@@ -25,13 +25,10 @@ import { getSessionId } from "./get_session_id.ts";
  * ```
  */
 export function signOut(request: Request) {
-  const sessionId = getSessionId(request);
   const successUrl = getSuccessUrl(request);
-  if (sessionId === undefined) return redirect(successUrl);
-
   const response = redirect(successUrl);
 
   const cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
-  deleteCookie(response.headers, cookieName, { path: "/" });
+  deleteCookie(response.headers, cookieName, { path: COOKIE_BASE.path });
   return response;
 }
