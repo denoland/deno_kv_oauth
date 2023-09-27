@@ -68,7 +68,7 @@ export function kvOAuthPlugin(
       },
       {
         path: options?.signOutPath ?? "/oauth/signout",
-        handler: signOut,
+        handler: async (request) => await signOut(request),
       },
     ],
   };

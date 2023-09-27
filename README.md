@@ -196,6 +196,63 @@ configurations.
    CUSTOM_CLIENT_ID=xxx CUSTOM_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
    ```
 
+### Get Started with Cookie Options
+
+This is required for OAuth solutions that span more than one sub-domain.
+
+1. Create your OAuth application for your given provider.
+
+1. Create your web server using Deno KV OAuth's request handlers and helpers
+   with cookie options defined.
+
+   ```ts
+   // server.ts
+   import {
+     createGitHubOAuthConfig,
+     getSessionId,
+     handleCallback,
+     signIn,
+     signOut,
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+
+   const oauthConfig = createGitHubOAuthConfig();
+
+   const cookieOptions = {
+     name: "__Secure-triple-choc",
+     domain: "news.site",
+   };
+
+   async function handler(request: Request) {
+     const { pathname } = new URL(request.url);
+     switch (pathname) {
+       case "/oauth/signin":
+         return await signIn(request, oauthConfig);
+       case "/oauth/callback":
+         const { response } = await handleCallback(request, oauthConfig, {
+           cookieOptions,
+         });
+         return response;
+       case "/oauth/signout":
+         return signOut(request, { cookieOptions });
+       case "/protected-route":
+         return getSessionId(request) === undefined
+           ? new Response("Unauthorized", { status: 401 })
+           : new Response("You are allowed");
+       default:
+         return new Response(null, { status: 404 });
+     }
+   }
+
+   Deno.serve(handler);
+   ```
+
+1. Start your server with the necessary
+   [environment variables](#environment-variables).
+
+   ```bash
+   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   ```
+
 ### Run the Demo Locally
 
 The demo uses GitHub as the OAuth provider. You can change the OAuth

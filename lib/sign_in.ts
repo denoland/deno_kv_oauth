@@ -40,7 +40,6 @@ export interface SignInOptions {
  */
 export async function signIn(
   request: Request,
-  /** @see {@linkcode OAuth2ClientConfig} */
   oauthConfig: OAuth2ClientConfig,
   options?: SignInOptions,
 ): Promise<Response> {

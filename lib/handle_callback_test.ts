@@ -9,6 +9,7 @@ import {
   randomOAuthSession,
   randomTokensBody,
 } from "./_test_utils.ts";
+import { Cookie } from "https://deno.land/x/deno_kv_oauth@$VERSION/deps.ts";
 
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
   const request = new Request("http://example.com");
@@ -52,7 +53,6 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
     "fetch",
     returnsNext([Promise.resolve(Response.json(tokensBody))]),
   );
-
   const oauthSessionId = crypto.randomUUID();
   const oauthSession = randomOAuthSession();
   await setOAuthSession(oauthSessionId, oauthSession);
@@ -70,10 +70,59 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
     request,
     randomOAuthConfig(),
   );
-
   fetchStub.restore();
 
   assertRedirect(response);
+  assertEquals(
+    response.headers.get("set-cookie"),
+    `site-session=${sessionId}; HttpOnly; Max-Age=7776000; SameSite=Lax; Path=/`,
+  );
+  assertEquals(tokens.accessToken, tokensBody.access_token);
+  assertEquals(typeof sessionId, "string");
+  await assertRejects(
+    async () => await getAndDeleteOAuthSession(oauthSessionId),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
+});
+
+Deno.test("handleCallback() correctly handles the callback response with options", async () => {
+  const tokensBody = randomTokensBody();
+  const fetchStub = stub(
+    window,
+    "fetch",
+    returnsNext([Promise.resolve(Response.json(tokensBody))]),
+  );
+  const oauthSessionId = crypto.randomUUID();
+  const oauthSession = randomOAuthSession();
+  await setOAuthSession(oauthSessionId, oauthSession);
+  const searchParams = new URLSearchParams({
+    "response_type": "code",
+    "client_id": "clientId",
+    "code_challenge_method": "S256",
+    code: "code",
+    state: oauthSession.state,
+  });
+  const request = new Request(`http://example.com/callback?${searchParams}`, {
+    headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
+  });
+  const cookieOptions: Partial<Cookie> = {
+    name: "triple-choc",
+    maxAge: 420,
+    domain: "example.com",
+  };
+  const { response, tokens, sessionId } = await handleCallback(
+    request,
+    randomOAuthConfig(),
+    { cookieOptions },
+  );
+  fetchStub.restore();
+
+  assertRedirect(response);
+  assertEquals(
+    response.headers.get("set-cookie"),
+    `${cookieOptions.name}=${sessionId}; HttpOnly; Max-Age=${cookieOptions.maxAge}; Domain=${cookieOptions.domain}; SameSite=Lax; Path=/`,
+  );
   assertEquals(tokens.accessToken, tokensBody.access_token);
   assertEquals(typeof sessionId, "string");
   await assertRejects(

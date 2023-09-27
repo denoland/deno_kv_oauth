@@ -1,5 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
+  Cookie,
   getCookies,
   OAuth2Client,
   type OAuth2ClientConfig,
@@ -14,6 +15,11 @@ import {
   SITE_COOKIE_NAME,
 } from "./_http.ts";
 import { getAndDeleteOAuthSession } from "./_kv.ts";
+
+export interface HandleCallbackOptions {
+  /** Overwrites cookie properties set in the response */
+  cookieOptions: Partial<Cookie>;
+}
 
 /**
  * Handles the OAuth callback request for the given OAuth configuration, and
@@ -40,8 +46,8 @@ import { getAndDeleteOAuthSession } from "./_kv.ts";
  */
 export async function handleCallback(
   request: Request,
-  /** @see {@linkcode OAuth2ClientConfig} */
   oauthConfig: OAuth2ClientConfig,
+  options?: HandleCallbackOptions,
 ) {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
@@ -64,6 +70,7 @@ export async function handleCallback(
       name: getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
       value: sessionId,
       secure: isHttps(request.url),
+      ...options?.cookieOptions,
     },
   );
   return {
