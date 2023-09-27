@@ -14,7 +14,7 @@ Deno.test("(getAndDelete/set)OAuthSession()", async () => {
   );
 
   const oauthSession = randomOAuthSession();
-  await setOAuthSession(id, oauthSession);
+  await setOAuthSession(id, oauthSession, { expireIn: 1_000 });
   assertEquals(await getAndDeleteOAuthSession(id), oauthSession);
   await assertRejects(
     async () => await getAndDeleteOAuthSession(id),
