@@ -39,8 +39,7 @@ export function signOut(request: Request) {
 
   const response = redirect(successUrl);
 
-  const url = new URL(request.url);
-  const cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(url));
+  const cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
   deleteCookie(response.headers, cookieName, { path: "/" });
   return response;
 }

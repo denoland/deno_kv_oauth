@@ -8,8 +8,8 @@ export const SITE_COOKIE_NAME = "site-session";
  * Determines whether the request URL is of a secure origin using the HTTPS
  * protocol.
  */
-export function isHttps(url: URL) {
-  return url.protocol === "https:";
+export function isHttps(url: string) {
+  return url.startsWith("https://");
 }
 
 /**

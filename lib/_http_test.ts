@@ -4,8 +4,8 @@ import { getCookieName, getSuccessUrl, isHttps, redirect } from "./_http.ts";
 import { assertRedirect } from "./_test_utils.ts";
 
 Deno.test("isHttps()", () => {
-  assertEquals(isHttps(new URL("https://example.com")), true);
-  assertEquals(isHttps(new URL("http://example.com")), false);
+  assertEquals(isHttps("https://example.com"), true);
+  assertEquals(isHttps("http://example.com"), false);
 });
 
 Deno.test("getCookieName()", () => {

@@ -65,13 +65,12 @@ export async function signIn(
     );
   }
 
-  const url = new URL(request.url);
   const oauthSessionId = crypto.randomUUID();
   const cookie: Cookie = {
     ...COOKIE_BASE,
-    name: getCookieName(OAUTH_COOKIE_NAME, isHttps(url)),
+    name: getCookieName(OAUTH_COOKIE_NAME, isHttps(request.url)),
     value: oauthSessionId,
-    secure: isHttps(url),
+    secure: isHttps(request.url),
     /**
      * A maximum authorization code lifetime of 10 minutes is recommended.
      * This cookie lifetime matches that value.
