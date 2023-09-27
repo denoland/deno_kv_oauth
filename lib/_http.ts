@@ -22,6 +22,7 @@ export function getCookieName(name: string, isSecure: boolean) {
 
 /** @see {@link https://web.dev/first-party-cookie-recipes/#the-good-first-party-cookie-recipe} */
 export const COOKIE_BASE = {
+  secure: true,
   path: "/",
   httpOnly: true,
   // 90 days
