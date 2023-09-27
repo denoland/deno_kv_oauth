@@ -56,10 +56,9 @@ export async function handleCallback(
   /** @see {@linkcode OAuth2ClientConfig} */
   oauthConfig: OAuth2ClientConfig,
 ) {
-  const url = new URL(request.url);
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
-    isHttps(url),
+    isHttps(request.url),
   );
   const oauthSessionId = getCookies(request.headers)[oauthCookieName];
   if (oauthSessionId === undefined) throw new Error("OAuth cookie not found");
@@ -75,9 +74,9 @@ export async function handleCallback(
     response.headers,
     {
       ...COOKIE_BASE,
-      name: getCookieName(SITE_COOKIE_NAME, isHttps(url)),
+      name: getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
       value: sessionId,
-      secure: isHttps(url),
+      secure: isHttps(request.url),
     },
   );
   return {
