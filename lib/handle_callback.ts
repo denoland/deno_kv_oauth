@@ -8,7 +8,7 @@ import {
 import {
   COOKIE_BASE,
   getCookieName,
-  isSecure,
+  isHttps,
   OAUTH_COOKIE_NAME,
   redirect,
   SITE_COOKIE_NAME,
@@ -58,7 +58,7 @@ export async function handleCallback(
 ) {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
-    isSecure(request.url),
+    isHttps(request.url),
   );
   const oauthSessionId = getCookies(request.headers)[oauthCookieName];
   if (oauthSessionId === undefined) throw new Error("OAuth cookie not found");
@@ -74,9 +74,9 @@ export async function handleCallback(
     response.headers,
     {
       ...COOKIE_BASE,
-      name: getCookieName(SITE_COOKIE_NAME, isSecure(request.url)),
+      name: getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
       value: sessionId,
-      secure: isSecure(request.url),
+      secure: isHttps(request.url),
     },
   );
   return {

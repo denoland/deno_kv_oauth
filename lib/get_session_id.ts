@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getCookies } from "../deps.ts";
-import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./_http.ts";
+import { getCookieName, isHttps, SITE_COOKIE_NAME } from "./_http.ts";
 
 /**
  * Gets the session ID for a given request. This is well-suited for checking
@@ -24,6 +24,6 @@ import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./_http.ts";
  * ```
  */
 export function getSessionId(request: Request) {
-  const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
+  const cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
   return getCookies(request.headers)[cookieName] as string | undefined;
 }
