@@ -13,15 +13,7 @@ import { getSessionId } from "./get_session_id.ts";
  * Handles the sign-out process, and then redirects the client to the given
  * success URL.
  *
- * It does this by:
- * 1. Getting the OAuth session ID from the cookie in the given request. If no
- * OAuth session cookie is found, a response that redirects the client to the
- * given redirect URL is returned.
- * 2. Returning a response that invalidates the client's session cookie and
- * redirects the client to the given success URL.
- *
- * See "Redirect URL after Sign-In or Sign-Out" section in the README for more
- * information on the success URL.
+ * @see {@link https://deno.land/x/deno_kv_oauth#redirects-after-sign-in-and-sign-out}
  *
  * @example
  * ```ts

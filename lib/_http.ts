@@ -4,10 +4,6 @@ import { type Cookie, Status } from "../deps.ts";
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
 
-/**
- * Determines whether the request URL is of a secure origin using the HTTPS
- * protocol.
- */
 export function isHttps(url: string) {
   return url.startsWith("https://");
 }
@@ -20,7 +16,9 @@ export function getCookieName(name: string, isHttps: boolean) {
   return isHttps ? "__Host-" + name : name;
 }
 
-/** @see {@link https://web.dev/first-party-cookie-recipes/#the-good-first-party-cookie-recipe} */
+/**
+ * @see {@link https://web.dev/first-party-cookie-recipes/#the-good-first-party-cookie-recipe}
+ */
 export const COOKIE_BASE = {
   secure: true,
   path: "/",
@@ -30,15 +28,6 @@ export const COOKIE_BASE = {
   sameSite: "Lax",
 } as Required<Pick<Cookie, "path" | "httpOnly" | "maxAge" | "sameSite">>;
 
-/**
- * Returns a response that redirects the client to the specified location.
- * The location can be a relative path or absolute URL.
- * This function differs from
- * [Response.redirect()]{@linkcode https://developer.mozilla.org/en-US/docs/Web/API/Response/redirect_static}
- * in that it allows for relative URLs to be specified.
- *
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Location}
- */
 export function redirect(location: string) {
   return new Response(null, {
     headers: {
@@ -49,8 +38,7 @@ export function redirect(location: string) {
 }
 
 /**
- * See "Redirect URL after Sign-In or Sign-Out" section in the README for more
- * information on the success URL.
+ * @see {@link https://deno.land/x/deno_kv_oauth@v0.9.0#redirects-after-sign-in-and-sign-out}
  */
 export function getSuccessUrl(request: Request) {
   const url = new URL(request.url);
