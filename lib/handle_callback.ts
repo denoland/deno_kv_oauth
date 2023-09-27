@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import {
-  Cookie,
+  type Cookie,
   getCookies,
   OAuth2Client,
   type OAuth2ClientConfig,

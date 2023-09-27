@@ -9,7 +9,7 @@ import {
   randomOAuthSession,
   randomTokensBody,
 } from "./_test_utils.ts";
-import { Cookie } from "https://deno.land/x/deno_kv_oauth@$VERSION/deps.ts";
+import type { Cookie } from "../deps.ts";
 
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
   const request = new Request("http://example.com");
