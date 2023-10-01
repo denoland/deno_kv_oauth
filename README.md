@@ -62,14 +62,14 @@ can add the Fresh plugin to your project. This automatically handles
    // main.ts
    import { start } from "$fresh/server.ts";
    import {
-     createGithubOAuthConfig,
+     createGitHubOAuthConfig,
      kvOAuthPlugin,
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
    import manifest from "./fresh.gen.ts";
 
    await start(manifest, {
      plugins: [
-       kvOAuthPlugin(createGithubOAuthConfig()),
+       kvOAuthPlugin(createGitHubOAuthConfig()),
      ],
    });
    ```
