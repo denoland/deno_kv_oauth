@@ -8,7 +8,7 @@ import {
 import {
   COOKIE_BASE,
   getCookieName,
-  isSecure,
+  isHttps,
   OAUTH_COOKIE_NAME,
   redirect,
   SITE_COOKIE_NAME,
@@ -17,21 +17,8 @@ import { getAndDeleteOAuthSession } from "./_kv.ts";
 
 /**
  * Handles the OAuth callback request for the given OAuth configuration, and
- * then redirects the client to the success URL set in {@linkcode signIn}.
- *
- * It does this by:
- * 1. Getting the OAuth session ID from the cookie in the given request.
- * 2. Getting, then deleting, the OAuth session object from KV using the
- * OAuth session ID. The OAuth session object was generated in the sign-in
- * process.
- * 3. Getting the OAuth tokens from the given OAuth configuration using the
- * OAuth session object.
- * 4. Returning a response that sets a session cookie and redirects the client
- * to the success URL set in {@linkcode signIn}, the OAuth tokens and the
- * session ID for processing during the callback handler.
- *
- * @param request The HTTP request from the client. The URL of the request must
- * match that of the OAuth redirect URL.
+ * then redirects the client to the success URL set in {@linkcode signIn}. The
+ * request URL must match the redirect URL of the OAuth application.
  *
  * @example
  * ```ts
@@ -58,7 +45,7 @@ export async function handleCallback(
 ) {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
-    isSecure(request.url),
+    isHttps(request.url),
   );
   const oauthSessionId = getCookies(request.headers)[oauthCookieName];
   if (oauthSessionId === undefined) throw new Error("OAuth cookie not found");
@@ -74,9 +61,9 @@ export async function handleCallback(
     response.headers,
     {
       ...COOKIE_BASE,
-      name: getCookieName(SITE_COOKIE_NAME, isSecure(request.url)),
+      name: getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
       value: sessionId,
-      secure: isSecure(request.url),
+      secure: isHttps(request.url),
     },
   );
   return {

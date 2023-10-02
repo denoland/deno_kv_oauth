@@ -10,7 +10,7 @@ import {
   COOKIE_BASE,
   getCookieName,
   getSuccessUrl,
-  isSecure,
+  isHttps,
   OAUTH_COOKIE_NAME,
   redirect,
 } from "./_http.ts";
@@ -22,21 +22,11 @@ export interface SignInOptions {
 }
 
 /**
- * Handles the sign-in process for the given OAuth configuration and redirects
- * the client to the authorization URL.
+ * Handles the sign-in request and process for the given OAuth configuration
+ * and redirects the client to the authorization URL.
  *
- * It does this by:
- * 1. Using a randomly generated state to construct the OAuth provider's
- * authorization URL and code verifier.
- * 2. Storing an OAuth session object that contains the state and code verifier
- * in KV. The OAuth session object will be used in the callback handler to get
- * the OAuth tokens from the given provider and define the success URL.
- * 3. Returning a response that sets the client's OAuth session cookie and
- * redirects the client to the OAuth provider's authorization URL.
+ * @see {@link https://deno.land/x/deno_kv_oauth#redirects-after-sign-in-and-sign-out}
  *
- * See "Redirect URL after Sign-In or Sign-Out" section in the README for more
- * information on the success URL.
- * *
  * @example
  * ```ts
  * import { signIn, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
@@ -49,7 +39,6 @@ export interface SignInOptions {
  * ```
  */
 export async function signIn(
-  /** HTTP request from the client */
   request: Request,
   /** @see {@linkcode OAuth2ClientConfig} */
   oauthConfig: OAuth2ClientConfig,
@@ -68,9 +57,9 @@ export async function signIn(
   const oauthSessionId = crypto.randomUUID();
   const cookie: Cookie = {
     ...COOKIE_BASE,
-    name: getCookieName(OAUTH_COOKIE_NAME, isSecure(request.url)),
+    name: getCookieName(OAUTH_COOKIE_NAME, isHttps(request.url)),
     value: oauthSessionId,
-    secure: isSecure(request.url),
+    secure: isHttps(request.url),
     /**
      * A maximum authorization code lifetime of 10 minutes is recommended.
      * This cookie lifetime matches that value.

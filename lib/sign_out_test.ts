@@ -11,11 +11,7 @@ Deno.test("signOut() returns a redirect response if the user is not signed-in", 
 });
 
 Deno.test("signOut() returns a response that signs out the signed-in user", async () => {
-  const sessionId = crypto.randomUUID();
-  const request = new Request(
-    "http://example.com/signout",
-    { headers: { cookie: `${SITE_COOKIE_NAME}=${sessionId}` } },
-  );
+  const request = new Request("http://example.com/signout");
   const response = await signOut(request);
   assertRedirect(response);
   assertEquals(

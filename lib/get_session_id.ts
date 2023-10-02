@@ -1,15 +1,11 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getCookies } from "../deps.ts";
-import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./_http.ts";
+import { getCookieName, isHttps, SITE_COOKIE_NAME } from "./_http.ts";
 
 /**
- * Gets the session ID for a given request. This is well-suited for checking
- * whether the client is signed in by checking if undefined.
- *
- * It does this by getting the session ID from the cookie in the given request.
- * If the request has no cookie, undefined is returned.
- *
- * @param request The HTTP request from the client.
+ * Gets the session ID from the cookie header of a request. This can be used to
+ * check whether the client is signed-in by checking if the return value is
+ * defined.
  *
  * @example
  * ```ts
@@ -24,6 +20,6 @@ import { getCookieName, isSecure, SITE_COOKIE_NAME } from "./_http.ts";
  * ```
  */
 export function getSessionId(request: Request) {
-  const cookieName = getCookieName(SITE_COOKIE_NAME, isSecure(request.url));
+  const cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
   return getCookies(request.headers)[cookieName] as string | undefined;
 }

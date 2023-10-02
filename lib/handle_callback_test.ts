@@ -33,7 +33,7 @@ Deno.test("handleCallback() rejects for non-existent OAuth session", async () =>
 Deno.test("handleCallback() deletes the OAuth session KV entry", async () => {
   const oauthSessionId = crypto.randomUUID();
   const oauthSession = randomOAuthSession();
-  await setOAuthSession(oauthSessionId, oauthSession);
+  await setOAuthSession(oauthSessionId, oauthSession, { expireIn: 1_000 });
   const request = new Request("http://example.com", {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
@@ -55,7 +55,7 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
 
   const oauthSessionId = crypto.randomUUID();
   const oauthSession = randomOAuthSession();
-  await setOAuthSession(oauthSessionId, oauthSession);
+  await setOAuthSession(oauthSessionId, oauthSession, { expireIn: 1_000 });
   const searchParams = new URLSearchParams({
     "response_type": "code",
     "client_id": "clientId",
