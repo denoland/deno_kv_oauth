@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { deleteCookie } from "../deps.ts";
+import { Cookie, deleteCookie } from "../deps.ts";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -8,6 +8,11 @@ import {
   redirect,
   SITE_COOKIE_NAME,
 } from "./_http.ts";
+
+export interface SignOutOptions {
+  /** Overwrites cookie properties set in the response */
+  cookieOptions: Pick<Cookie, "name" | "path" | "domain">;
+}
 
 /**
  * Handles the sign-out process, and then redirects the client to the given
@@ -24,11 +29,14 @@ import {
  * }
  * ```
  */
-export function signOut(request: Request) {
+export function signOut(request: Request, options?: SignOutOptions) {
   const successUrl = getSuccessUrl(request);
   const response = redirect(successUrl);
 
   const cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
-  deleteCookie(response.headers, cookieName, { path: COOKIE_BASE.path });
+  deleteCookie(response.headers, cookieName, {
+    path: COOKIE_BASE.path,
+    ...options?.cookieOptions,
+  });
   return response;
 }
