@@ -27,7 +27,11 @@ export function randomTokensBody() {
   };
 }
 
-export function assertRedirect(response: Response) {
+export function assertRedirect(response: Response, location?: string) {
   assertEquals(response.status, Status.Found);
-  assert(response.headers.has("location"));
+  if (location !== undefined) {
+    assertEquals(response.headers.get("location"), location);
+  } else {
+    assert(response.headers.has("location"));
+  }
 }

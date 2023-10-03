@@ -62,7 +62,7 @@ export async function handleCallback(
 
   const sessionId = crypto.randomUUID();
 
-  const response = redirect(oauthSession.successUrl ?? "/");
+  const response = redirect(oauthSession.successUrl);
   setCookie(
     response.headers,
     {
