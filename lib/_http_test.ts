@@ -16,7 +16,7 @@ Deno.test("getCookieName()", () => {
 Deno.test("redirect() returns a redirect response", () => {
   const location = "/hello-there";
   const response = redirect(location);
-  assertRedirect(response);
+  assertRedirect(response, location);
 });
 
 Deno.test("getSuccessUrl() returns `success_url` URL parameter, if defined", () => {

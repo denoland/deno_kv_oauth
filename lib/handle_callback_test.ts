@@ -72,7 +72,7 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   );
   fetchStub.restore();
 
-  assertRedirect(response);
+  assertRedirect(response, oauthSession.successUrl);
   assertEquals(
     response.headers.get("set-cookie"),
     `site-session=${sessionId}; HttpOnly; Max-Age=7776000; SameSite=Lax; Path=/`,
@@ -118,7 +118,7 @@ Deno.test("handleCallback() correctly handles the callback response with options
   );
   fetchStub.restore();
 
-  assertRedirect(response);
+  assertRedirect(response, oauthSession.successUrl);
   assertEquals(
     response.headers.get("set-cookie"),
     `${cookieOptions.name}=${sessionId}; HttpOnly; Max-Age=${cookieOptions.maxAge}; Domain=${cookieOptions.domain}; SameSite=Lax; Path=/`,

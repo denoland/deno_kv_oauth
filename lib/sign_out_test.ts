@@ -8,14 +8,14 @@ Deno.test("signOut() returns a redirect response if the user is not signed-in", 
   const request = new Request("http://example.com/signout");
   const response = await signOut(request);
 
-  assertRedirect(response);
+  assertRedirect(response, "/");
 });
 
 Deno.test("signOut() returns a response that signs out the signed-in user", async () => {
   const request = new Request("http://example.com/signout");
   const response = await signOut(request);
 
-  assertRedirect(response);
+  assertRedirect(response, "/");
   assertEquals(
     response.headers.get("set-cookie"),
     `${SITE_COOKIE_NAME}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
@@ -31,7 +31,7 @@ Deno.test("signOut() returns a response that signs out the signed-in user with c
   };
   const response = await signOut(request, { cookieOptions });
 
-  assertRedirect(response);
+  assertRedirect(response, "/");
   assertEquals(
     response.headers.get("set-cookie"),
     `${cookieOptions.name}=; Domain=${cookieOptions.domain}; Path=${cookieOptions.path}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
