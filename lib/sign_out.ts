@@ -33,7 +33,8 @@ export function signOut(request: Request, options?: SignOutOptions) {
   const successUrl = getSuccessUrl(request);
   const response = redirect(successUrl);
 
-  const cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
+  const cookieName = options?.cookieOptions?.name ??
+    getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
   deleteCookie(response.headers, cookieName, {
     path: COOKIE_BASE.path,
     ...options?.cookieOptions,
