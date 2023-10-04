@@ -172,34 +172,37 @@ This is required for OAuth solutions that span more than one sub-domain.
    ```ts
    // server.ts
    import {
+     Client,
      createGitHubOAuthConfig,
-     getSessionId,
-     handleCallback,
-     signIn,
-     signOut,
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
-   const oauthConfig = createGitHubOAuthConfig();
-
-   const cookieOptions = {
-     name: "__Secure-triple-choc",
-     domain: "news.site",
-   };
+   const kvOAuthClient = new Client(createGitHubOAuthConfig(), {
+     cookieOptions: {
+       name: "__Secure-triple-choc",
+       domain: "news.site",
+     },
+   });
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await signIn(request, oauthConfig);
+         return await kvOAuthClient.signIn(request, oauthConfig);
        case "/oauth/callback":
-         const { response } = await handleCallback(request, oauthConfig, {
-           cookieOptions,
-         });
+         const { response } = await kvOAuthClient.handleCallback(
+           request,
+           oauthConfig,
+           {
+             cookieOptions,
+           },
+         );
          return response;
        case "/oauth/signout":
-         return signOut(request, { cookieOptions });
+         return kvOAuthClient.signOut(request, { cookieOptions });
        case "/protected-route":
-         return getSessionId(request, { cookieName: cookieOptions.name }) ===
+         return kvOAuthClient.getSessionId(request, {
+             cookieName: cookieOptions.name,
+           }) ===
              undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");

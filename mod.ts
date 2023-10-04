@@ -18,3 +18,4 @@ export * from "./lib/create_spotify_oauth_config.ts";
 export * from "./lib/create_twitter_oauth_config.ts";
 export * from "./lib/get_required_env.ts";
 export * from "./lib/types.ts";
+export * from "./lib/client.ts";
