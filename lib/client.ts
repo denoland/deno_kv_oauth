@@ -1,3 +1,4 @@
+// Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { signIn, type SignInOptions } from "./sign_in.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signOut } from "./sign_out.ts";
