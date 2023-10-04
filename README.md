@@ -187,22 +187,14 @@ This is required for OAuth solutions that span more than one sub-domain.
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await kvOAuthClient.signIn(request, oauthConfig);
+         return await kvOAuthClient.signIn(request);
        case "/oauth/callback":
-         const { response } = await kvOAuthClient.handleCallback(
-           request,
-           oauthConfig,
-           {
-             cookieOptions,
-           },
-         );
+         const { response } = await kvOAuthClient.handleCallback(request);
          return response;
        case "/oauth/signout":
-         return kvOAuthClient.signOut(request, { cookieOptions });
+         return kvOAuthClient.signOut(request);
        case "/protected-route":
-         return kvOAuthClient.getSessionId(request, {
-             cookieName: cookieOptions.name,
-           }) ===
+         return kvOAuthClient.getSessionId(request) ===
              undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
