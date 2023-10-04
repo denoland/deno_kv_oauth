@@ -11,7 +11,7 @@ import {
 
 export interface SignOutOptions {
   /** Overwrites cookie properties set in the response */
-  cookieOptions: Partial<Pick<Cookie, "name" | "path" | "domain">>;
+  cookieOptions?: Partial<Pick<Cookie, "name" | "path" | "domain">>;
 }
 
 /**
