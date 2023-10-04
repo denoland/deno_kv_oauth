@@ -18,7 +18,7 @@ import { getAndDeleteOAuthSession } from "./_kv.ts";
 
 export interface HandleCallbackOptions {
   /** Overwrites cookie properties set in the response */
-  cookieOptions: Partial<Cookie>;
+  cookieOptions?: Partial<Cookie>;
 }
 
 /**
