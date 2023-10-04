@@ -10,7 +10,11 @@ import {
 } from "./_http.ts";
 
 export interface SignOutOptions {
-  /** Overwrites cookie properties set in the response */
+  /**
+   * Overwrites cookie properties set in the response. These must match the
+   * cookie properties used in {@linkcode getSessionId} and
+   * {@linkcode handleCallback}.
+   */
   cookieOptions?: Partial<Pick<Cookie, "name" | "path" | "domain">>;
 }
 

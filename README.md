@@ -199,7 +199,8 @@ This is required for OAuth solutions that span more than one sub-domain.
        case "/oauth/signout":
          return signOut(request, { cookieOptions });
        case "/protected-route":
-         return getSessionId(request) === undefined
+         return getSessionId(request, { cookieName: cookieOptions.name }) ===
+             undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
