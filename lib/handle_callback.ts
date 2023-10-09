@@ -31,7 +31,7 @@ export interface HandleCallbackOptions {
  *
  * @example
  * ```ts
- * import { handleCallback, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { handleCallback, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * const oauthConfig = createGitHubOAuthConfig();
  *

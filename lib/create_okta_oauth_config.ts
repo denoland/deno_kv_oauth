@@ -13,7 +13,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createOktaOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createOktaOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * const oauthConfig = createOktaOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",

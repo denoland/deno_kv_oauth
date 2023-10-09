@@ -1,7 +1,7 @@
 {
   "lock": false,
   "imports": {
-    "https://deno.land/x/deno_kv_oauth@$VERSION/": "./"
+    "https://deno.land/x/deno_kv_oauth/": "./"
   },
   "tasks": {
     "demo": "deno run --allow-net --allow-env --allow-read --unstable --watch=demo.ts,mod.ts demo.ts",
