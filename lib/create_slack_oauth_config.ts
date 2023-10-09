@@ -12,7 +12,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createSlackOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createSlackOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * const oauthConfig = createSlackOAuthConfig({
  *   scope: "users.profile:read",
