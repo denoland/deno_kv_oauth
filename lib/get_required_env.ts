@@ -6,7 +6,7 @@
  *
  * @example
  * ```ts
- * import { getRequiredEnv } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { getRequiredEnv } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * getRequiredEnv("HOME"); // Returns "/home/alice"
  * ```

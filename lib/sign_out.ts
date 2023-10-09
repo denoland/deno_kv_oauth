@@ -26,7 +26,7 @@ export interface SignOutOptions {
  *
  * @example
  * ```ts
- * import { signOut } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { signOut } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * export async function signOutHandler(request: Request) {
  *   return signOut(request);

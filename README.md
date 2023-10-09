@@ -69,7 +69,7 @@ configurations.
      handleCallback,
      signIn,
      signOut,
-   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauthConfig = createGitHubOAuthConfig();
 
@@ -121,7 +121,7 @@ configurations.
      type OAuth2ClientConfig,
      signIn,
      signOut,
-   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauthConfig: OAuth2ClientConfig = {
      clientId: getRequiredEnv("CUSTOM_CLIENT_ID"),
@@ -177,7 +177,7 @@ This is required for OAuth solutions that span more than one sub-domain.
      handleCallback,
      signIn,
      signOut,
-   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauthConfig = createGitHubOAuthConfig();
 

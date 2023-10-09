@@ -29,7 +29,7 @@ export interface SignInOptions {
  *
  * @example
  * ```ts
- * import { signIn, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { signIn, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * const oauthConfig = createGitHubOAuthConfig();
  *
