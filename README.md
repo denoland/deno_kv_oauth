@@ -128,7 +128,8 @@ configurations.
      clientSecret: getRequiredEnv("CUSTOM_CLIENT_SECRET"),
      authorizationEndpointUri: "https://custom.com/oauth/authorize",
      tokenUri: "https://custom.com/oauth/token",
-     redirectUri: "https://my-site.com/another-dir/callback",
+     // Note: the redirect URI can be absolute or relative
+     redirectUri: "/another-dir/callback",
    };
 
    async function handler(request: Request) {
