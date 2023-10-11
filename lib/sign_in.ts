@@ -25,6 +25,10 @@ export interface SignInOptions {
  * Handles the sign-in request and process for the given OAuth configuration
  * and redirects the client to the authorization URL.
  *
+ * If `oauthConfig.redirectUri` is a relative, it'll be automatically converted
+ * to an absolute URL, based on the request origin. Either way, the OAuth
+ * application's redirect URI must match that of the computed redirect URI.
+ *
  * @see {@link https://deno.land/x/deno_kv_oauth#redirects-after-sign-in-and-sign-out}
  *
  * @example
@@ -44,6 +48,14 @@ export async function signIn(
   options?: SignInOptions,
 ): Promise<Response> {
   const state = crypto.randomUUID();
+  oauthConfig =
+    oauthConfig.redirectUri && !URL.canParse(oauthConfig.redirectUri)
+      ? {
+        ...oauthConfig,
+        // Convert the relative URI to be absolute
+        redirectUri: new URL(oauthConfig.redirectUri, request.url).href,
+      }
+      : oauthConfig;
   const { uri, codeVerifier } = await new OAuth2Client(oauthConfig)
     .code.getAuthorizationUri({ state });
 
