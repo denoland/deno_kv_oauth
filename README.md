@@ -166,41 +166,40 @@ This is required for OAuth solutions that span more than one sub-domain.
 
 1. Create your OAuth application for your given provider.
 
-1. Create your web server using Deno KV OAuth's request handlers and helpers
-   with cookie options defined.
+1. Create your web server using Deno KV OAuth's helpers factory function with
+   cookie options defined.
 
    ```ts
    // server.ts
    import {
      createGitHubOAuthConfig,
-     getSessionId,
-     handleCallback,
-     signIn,
-     signOut,
+     createHelpers,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
-   const oauthConfig = createGitHubOAuthConfig();
-
-   const cookieOptions = {
-     name: "__Secure-triple-choc",
-     domain: "news.site",
-   };
+   const {
+     signIn,
+     handleCallback,
+     signOut,
+     getSessionId,
+   } = createHelpers(createGitHubOAuthConfig(), {
+     cookieOptions: {
+       name: "__Secure-triple-choc",
+       domain: "news.site",
+     },
+   });
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await signIn(request, oauthConfig);
+         return await signIn(request);
        case "/oauth/callback":
-         const { response } = await handleCallback(request, oauthConfig, {
-           cookieOptions,
-         });
+         const { response } = await handleCallback(request);
          return response;
        case "/oauth/signout":
-         return signOut(request, { cookieOptions });
+         return signOut(request);
        case "/protected-route":
-         return getSessionId(request, { cookieName: cookieOptions.name }) ===
-             undefined
+         return getSessionId(request) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
