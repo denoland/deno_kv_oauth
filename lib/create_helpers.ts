@@ -43,7 +43,7 @@ export interface CreateHelpersOptions {
  *       const { response } = await handleCallback(request);
  *       return response;
  *     case "/oauth/signout":
- *       return signOut(request);
+ *       return await signOut(request);
  *     case "/protected-route":
  *       return await getSessionId(request) === undefined
  *         ? new Response("Unauthorized", { status: 401 })
@@ -69,8 +69,8 @@ export function createHelpers(
         cookieOptions: options?.cookieOptions,
       });
     },
-    signOut(request: Request) {
-      return signOut(request, { cookieOptions: options?.cookieOptions });
+    async signOut(request: Request) {
+      return await signOut(request, { cookieOptions: options?.cookieOptions });
     },
     async getSessionId(request: Request) {
       return await getSessionId(request, {
