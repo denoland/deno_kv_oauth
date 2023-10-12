@@ -33,7 +33,7 @@ export interface SignOutOptions {
  * }
  * ```
  */
-export function signOut(request: Request, options?: SignOutOptions) {
+export function signOut(request: Request, options?: SignOutOptions): Response {
   const successUrl = getSuccessUrl(request);
   const response = redirect(successUrl);
 

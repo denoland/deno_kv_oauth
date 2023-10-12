@@ -22,7 +22,9 @@ export interface OAuthSession {
 
 const OAUTH_SESSIONS_PREFIX = "oauth_sessions";
 
-export async function getAndDeleteOAuthSession(id: string) {
+export async function getAndDeleteOAuthSession(
+  id: string,
+): Promise<OAuthSession> {
   const key = [OAUTH_SESSIONS_PREFIX, id];
   const oauthSessionRes = await kv.get<OAuthSession>(key);
   const oauthSession = oauthSessionRes.value;
