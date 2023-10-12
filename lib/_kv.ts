@@ -60,9 +60,15 @@ export async function setSession(id: string) {
 
 export async function deleteSession(id: string) {
   const key = [SITE_SESSION_PREFIX, id];
-  const res = await kv.get<SiteSession>(key);
-  if (res.value === null) {
+  const sessionRes = await kv.get<SiteSession>(key);
+  if (sessionRes.value === null) {
     throw new Deno.errors.NotFound("Site session not found");
   }
-  await kv.delete(key);
+
+  const res = await kv.atomic()
+    .check(sessionRes)
+    .delete(key)
+    .commit();
+
+  if (!res.ok) throw new Error("Failed to delete site session");
 }
