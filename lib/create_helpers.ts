@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 
-import { type Cookie, OAuth2ClientConfig } from "../deps.ts";
+import { type Cookie, OAuth2ClientConfig, type Tokens } from "../deps.ts";
 import { getSessionId } from "./get_session_id.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signIn, type SignInOptions } from "./sign_in.ts";
@@ -59,7 +59,16 @@ export interface CreateHelpersOptions {
 export function createHelpers(
   oauthConfig: OAuth2ClientConfig,
   options?: CreateHelpersOptions,
-) {
+): {
+  signIn(request: Request, options?: SignInOptions): Promise<Response>;
+  handleCallback(request: Request): Promise<{
+    response: Response;
+    sessionId: string;
+    tokens: Tokens;
+  }>;
+  signOut(request: Request): Response;
+  getSessionId(request: Request): string | undefined;
+} {
   return {
     async signIn(request: Request, options?: SignInOptions) {
       return await signIn(request, oauthConfig, options);

@@ -4,7 +4,7 @@ import { type Cookie, Status } from "../deps.ts";
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
 
-export function isHttps(url: string) {
+export function isHttps(url: string): boolean {
   return url.startsWith("https://");
 }
 
@@ -12,7 +12,7 @@ export function isHttps(url: string) {
  * Dynamically prefixes the cookie name, depending on whether it's for a secure
  * origin (HTTPS).
  */
-export function getCookieName(name: string, isHttps: boolean) {
+export function getCookieName(name: string, isHttps: boolean): string {
   return isHttps ? "__Host-" + name : name;
 }
 
@@ -28,7 +28,7 @@ export const COOKIE_BASE = {
   sameSite: "Lax",
 } as Required<Pick<Cookie, "path" | "httpOnly" | "maxAge" | "sameSite">>;
 
-export function redirect(location: string) {
+export function redirect(location: string): Response {
   return new Response(null, {
     headers: {
       location,
@@ -40,7 +40,7 @@ export function redirect(location: string) {
 /**
  * @see {@link https://deno.land/x/deno_kv_oauth@v0.9.0#redirects-after-sign-in-and-sign-out}
  */
-export function getSuccessUrl(request: Request) {
+export function getSuccessUrl(request: Request): string {
   const url = new URL(request.url);
 
   const successUrl = url.searchParams.get("success_url");

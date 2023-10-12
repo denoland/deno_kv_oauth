@@ -27,7 +27,10 @@ export interface GetSessionIdOptions {
  * }
  * ```
  */
-export function getSessionId(request: Request, options?: GetSessionIdOptions) {
+export function getSessionId(
+  request: Request,
+  options?: GetSessionIdOptions,
+): string | undefined {
   const cookieName = options?.cookieName ??
     getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
   return getCookies(request.headers)[cookieName] as string | undefined;
