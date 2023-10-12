@@ -66,8 +66,8 @@ export async function isSession(id: string) {
   return res.value !== null;
 }
 
-export async function setSession(id: string) {
-  await kv.set([SITE_SESSION_PREFIX, id], true);
+export async function setSession(id: string, expireIn?: number) {
+  await kv.set([SITE_SESSION_PREFIX, id], true, { expireIn });
 }
 
 export async function deleteSession(id: string) {

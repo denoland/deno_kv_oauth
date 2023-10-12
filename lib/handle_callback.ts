@@ -4,6 +4,7 @@ import {
   getCookies,
   OAuth2Client,
   type OAuth2ClientConfig,
+  SECOND,
   setCookie,
 } from "../deps.ts";
 import {
@@ -64,19 +65,20 @@ export async function handleCallback(
     .code.getToken(request.url, oauthSession);
 
   const sessionId = crypto.randomUUID();
-  await setSession(sessionId);
-
   const response = redirect(oauthSession.successUrl);
-  setCookie(
-    response.headers,
-    {
-      ...COOKIE_BASE,
-      name: getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
-      value: sessionId,
-      secure: isHttps(request.url),
-      ...options?.cookieOptions,
-    },
+  const cookie: Cookie = {
+    ...COOKIE_BASE,
+    name: getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
+    value: sessionId,
+    secure: isHttps(request.url),
+    ...options?.cookieOptions,
+  };
+  setCookie(response.headers, cookie);
+  await setSession(
+    sessionId,
+    cookie.maxAge ? cookie.maxAge * SECOND : undefined,
   );
+
   return {
     response,
     sessionId,
