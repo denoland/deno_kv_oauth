@@ -35,7 +35,10 @@ export interface SignOutOptions {
  * }
  * ```
  */
-export async function signOut(request: Request, options?: SignOutOptions): Promise<Response> {
+export async function signOut(
+  request: Request,
+  options?: SignOutOptions,
+): Promise<Response> {
   const successUrl = getSuccessUrl(request);
   const response = redirect(successUrl);
 
