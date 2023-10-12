@@ -3,11 +3,13 @@ import { Cookie, deleteCookie } from "../deps.ts";
 import {
   COOKIE_BASE,
   getCookieName,
+  getSessionIdCookie,
   getSuccessUrl,
   isHttps,
   redirect,
   SITE_COOKIE_NAME,
 } from "./_http.ts";
+import { deleteSession } from "./_kv.ts";
 
 export interface SignOutOptions {
   /**
@@ -33,9 +35,13 @@ export interface SignOutOptions {
  * }
  * ```
  */
-export function signOut(request: Request, options?: SignOutOptions) {
+export async function signOut(request: Request, options?: SignOutOptions) {
   const successUrl = getSuccessUrl(request);
   const response = redirect(successUrl);
+
+  const sessionId = getSessionIdCookie(request, options?.cookieOptions?.name);
+  if (sessionId === undefined) return response;
+  await deleteSession(sessionId);
 
   const cookieName = options?.cookieOptions?.name ??
     getCookieName(SITE_COOKIE_NAME, isHttps(request.url));

@@ -44,3 +44,25 @@ export async function setOAuthSession(
 ) {
   await kv.set([OAUTH_SESSIONS_PREFIX, id], value, options);
 }
+
+type SiteSession = true;
+
+const SITE_SESSION_PREFIX = "site_sessions";
+
+export async function isSession(id: string) {
+  const res = await kv.get<SiteSession>([SITE_SESSION_PREFIX, id]);
+  return res.value !== null;
+}
+
+export async function setSession(id: string) {
+  await kv.set([SITE_SESSION_PREFIX, id], true);
+}
+
+export async function deleteSession(id: string) {
+  const key = [SITE_SESSION_PREFIX, id];
+  const res = await kv.get<SiteSession>(key);
+  if (res.value === null) {
+    throw new Deno.errors.NotFound("Site session not found");
+  }
+  await kv.delete(key);
+}

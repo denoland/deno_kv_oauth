@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { getCookies } from "../deps.ts";
-import { getCookieName, isHttps, SITE_COOKIE_NAME } from "./_http.ts";
+import { getSessionIdCookie } from "./_http.ts";
+import { isSession } from "https://deno.land/x/deno_kv_oauth/lib/_kv.ts";
 
 export interface GetSessionIdOptions {
   /**
@@ -19,16 +19,20 @@ export interface GetSessionIdOptions {
  * ```ts
  * import { getSessionId } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
- * export function handler(request: Request) {
- *   const sessionId = getSessionId(request);
+ * export async function handler(request: Request) {
+ *   const sessionId = await getSessionId(request);
  *   const hasSessionIdCookie = sessionId !== undefined;
  *
  *   return Response.json({ sessionId, hasSessionIdCookie });
  * }
  * ```
  */
-export function getSessionId(request: Request, options?: GetSessionIdOptions) {
-  const cookieName = options?.cookieName ??
-    getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
-  return getCookies(request.headers)[cookieName] as string | undefined;
+export async function getSessionId(
+  request: Request,
+  options?: GetSessionIdOptions,
+) {
+  const sessionId = getSessionIdCookie(request, options?.cookieName);
+  return (sessionId !== undefined && await isSession(sessionId))
+    ? sessionId
+    : undefined;
 }

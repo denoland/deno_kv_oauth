@@ -23,8 +23,8 @@ loadSync({ export: true });
  */
 const oauthConfig = createGitHubOAuthConfig();
 
-function indexHandler(request: Request) {
-  const sessionId = getSessionId(request);
+async function indexHandler(request: Request) {
+  const sessionId = await getSessionId(request);
   const hasSessionIdCookie = sessionId !== undefined;
 
   const body = `

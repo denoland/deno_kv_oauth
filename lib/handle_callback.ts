@@ -14,7 +14,7 @@ import {
   redirect,
   SITE_COOKIE_NAME,
 } from "./_http.ts";
-import { getAndDeleteOAuthSession } from "./_kv.ts";
+import { getAndDeleteOAuthSession, setSession } from "./_kv.ts";
 
 export interface HandleCallbackOptions {
   /** Overwrites cookie properties set in the response. These must match the
@@ -64,6 +64,7 @@ export async function handleCallback(
     .code.getToken(request.url, oauthSession);
 
   const sessionId = crypto.randomUUID();
+  await setSession(sessionId);
 
   const response = redirect(oauthSession.successUrl);
   setCookie(
