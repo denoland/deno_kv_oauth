@@ -63,7 +63,7 @@ type SiteSession = true;
 
 const SITE_SESSION_PREFIX = "site_sessions";
 
-export async function isSiteSession(id: string) {
+export async function isSiteSession(id: string): Promise<boolean> {
   const res = await kv.get<SiteSession>([SITE_SESSION_PREFIX, id]);
   return res.value !== null;
 }

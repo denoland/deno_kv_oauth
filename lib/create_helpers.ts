@@ -66,8 +66,8 @@ export function createHelpers(
     sessionId: string;
     tokens: Tokens;
   }>;
-  signOut(request: Request): Response;
-  getSessionId(request: Request): string | undefined;
+  signOut(request: Request): Promise<Response>;
+  getSessionId(request: Request): Promise<string | undefined>;
 } {
   return {
     async signIn(request: Request, options?: SignInOptions) {

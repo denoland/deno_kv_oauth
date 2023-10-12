@@ -57,6 +57,6 @@ export function getSuccessUrl(request: Request): string {
 export function getSessionIdCookie(
   request: Request,
   cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
-) {
-  return getCookies(request.headers)[cookieName] as string | undefined;
+): string | undefined {
+  return getCookies(request.headers)[cookieName];
 }
