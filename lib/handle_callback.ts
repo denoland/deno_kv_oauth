@@ -6,6 +6,7 @@ import {
   type OAuth2ClientConfig,
   SECOND,
   setCookie,
+  Tokens,
 } from "../deps.ts";
 import {
   COOKIE_BASE,
@@ -52,7 +53,11 @@ export async function handleCallback(
   request: Request,
   oauthConfig: OAuth2ClientConfig,
   options?: HandleCallbackOptions,
-) {
+): Promise<{
+  response: Response;
+  sessionId: string;
+  tokens: Tokens;
+}> {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
     isHttps(request.url),

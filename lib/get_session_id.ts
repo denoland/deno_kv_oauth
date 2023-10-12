@@ -30,7 +30,7 @@ export interface GetSessionIdOptions {
 export async function getSessionId(
   request: Request,
   options?: GetSessionIdOptions,
-) {
+): Promise<string | undefined> {
   const sessionId = getSessionIdCookie(request, options?.cookieName);
   return (sessionId !== undefined && await isSiteSession(sessionId))
     ? sessionId
