@@ -24,12 +24,19 @@ const OAUTH_SESSIONS_PREFIX = "oauth_sessions";
 
 export async function getAndDeleteOAuthSession(id: string) {
   const key = [OAUTH_SESSIONS_PREFIX, id];
-  const res = await kv.get<OAuthSession>(key);
-  if (res.value === null) {
+  const oauthSessionRes = await kv.get<OAuthSession>(key);
+  const oauthSession = oauthSessionRes.value;
+  if (oauthSession === null) {
     throw new Deno.errors.NotFound("OAuth session not found");
   }
-  await kv.delete(key);
-  return res.value;
+
+  const res = await kv.atomic()
+    .check(oauthSessionRes)
+    .delete(key)
+    .commit();
+
+  if (!res.ok) throw new Error("Failed to delete OAuth session");
+  return oauthSession;
 }
 
 export async function setOAuthSession(
