@@ -61,16 +61,16 @@ type SiteSession = true;
 
 const SITE_SESSION_PREFIX = "site_sessions";
 
-export async function isSession(id: string) {
+export async function isSiteSession(id: string) {
   const res = await kv.get<SiteSession>([SITE_SESSION_PREFIX, id]);
   return res.value !== null;
 }
 
-export async function setSession(id: string, expireIn?: number) {
+export async function setSiteSession(id: string, expireIn?: number) {
   await kv.set([SITE_SESSION_PREFIX, id], true, { expireIn });
 }
 
-export async function deleteSession(id: string) {
+export async function deleteSiteSession(id: string) {
   const key = [SITE_SESSION_PREFIX, id];
   const sessionRes = await kv.get<SiteSession>(key);
   if (sessionRes.value === null) {

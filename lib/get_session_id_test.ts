@@ -2,7 +2,7 @@
 import { assertEquals } from "../dev_deps.ts";
 import { SITE_COOKIE_NAME } from "./_http.ts";
 import { getSessionId } from "./get_session_id.ts";
-import { setSession } from "./_kv.ts";
+import { setSiteSession } from "./_kv.ts";
 
 Deno.test("getSessionId() returns undefined when cookie is not defined", async () => {
   const request = new Request("http://example.com");
@@ -12,7 +12,7 @@ Deno.test("getSessionId() returns undefined when cookie is not defined", async (
 
 Deno.test("getSessionId() returns valid session ID", async () => {
   const sessionId = crypto.randomUUID();
-  await setSession(sessionId);
+  await setSiteSession(sessionId);
   const request = new Request("http://example.com", {
     headers: {
       cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
@@ -24,7 +24,7 @@ Deno.test("getSessionId() returns valid session ID", async () => {
 
 Deno.test("getSessionId() returns valid session ID when cookie name is defined", async () => {
   const sessionId = crypto.randomUUID();
-  await setSession(sessionId);
+  await setSiteSession(sessionId);
   const cookieName = "triple-choc";
   const request = new Request("http://example.com", {
     headers: {

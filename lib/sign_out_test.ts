@@ -3,7 +3,7 @@ import { assertEquals, assertRejects } from "../dev_deps.ts";
 import { signOut } from "./sign_out.ts";
 import { SITE_COOKIE_NAME } from "./_http.ts";
 import { assertRedirect } from "./_test_utils.ts";
-import { setSession } from "./_kv.ts";
+import { setSiteSession } from "./_kv.ts";
 
 Deno.test("signOut() returns a redirect response if the user is not signed-in", async () => {
   const request = new Request("http://example.com/signout");
@@ -14,7 +14,7 @@ Deno.test("signOut() returns a redirect response if the user is not signed-in", 
 
 Deno.test("signOut() returns a response that signs out the signed-in user", async () => {
   const sessionId = crypto.randomUUID();
-  await setSession(sessionId);
+  await setSiteSession(sessionId);
   const request = new Request("http://example.com/signout", {
     headers: {
       cookie: `${SITE_COOKIE_NAME}=${sessionId}`,
@@ -36,7 +36,7 @@ Deno.test("signOut() returns a response that signs out the signed-in user with c
     path: "/path",
   };
   const sessionId = crypto.randomUUID();
-  await setSession(sessionId);
+  await setSiteSession(sessionId);
   const request = new Request("http://example.com/signout", {
     headers: {
       cookie: `${cookieOptions.name}=${sessionId}`,

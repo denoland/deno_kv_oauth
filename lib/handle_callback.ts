@@ -15,7 +15,7 @@ import {
   redirect,
   SITE_COOKIE_NAME,
 } from "./_http.ts";
-import { getAndDeleteOAuthSession, setSession } from "./_kv.ts";
+import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.ts";
 
 export interface HandleCallbackOptions {
   /** Overwrites cookie properties set in the response. These must match the
@@ -74,7 +74,7 @@ export async function handleCallback(
     ...options?.cookieOptions,
   };
   setCookie(response.headers, cookie);
-  await setSession(
+  await setSiteSession(
     sessionId,
     cookie.maxAge ? cookie.maxAge * SECOND : undefined,
   );
