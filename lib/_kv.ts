@@ -49,7 +49,7 @@ export async function setOAuthSession(
    * require a persistent and restartable KV instance. This is difficult to do
    * in this module, as the KV instance is initialized top-level.
    */
-  options: { expireIn?: number },
+  options: { expireIn: number },
 ) {
   await kv.set([OAUTH_SESSIONS_PREFIX, id], value, options);
 }
