@@ -12,8 +12,8 @@ export interface GetSessionIdOptions {
 
 /**
  * Gets the session ID from the cookie header of a request. This can be used to
- * check whether the client is signed-in by checking if the return value is
- * defined.
+ * check whether the client is signed-in and whether the session ID was created
+ * on the server by checking if the return value is defined.
  *
  * @example
  * ```ts
