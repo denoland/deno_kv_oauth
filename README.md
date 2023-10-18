@@ -63,7 +63,7 @@ configurations.
      handleCallback,
      signIn,
      signOut,
-   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    const oauthConfig = createGitHubOAuthConfig();
 
@@ -115,7 +115,7 @@ configurations.
      type OAuth2ClientConfig,
      signIn,
      signOut,
-   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    const oauthConfig: OAuth2ClientConfig = {
      clientId: getRequiredEnv("CUSTOM_CLIENT_ID"),
@@ -168,7 +168,7 @@ This is required for OAuth solutions that span more than one sub-domain.
    import {
      createGitHubOAuthConfig,
      createHelpers,
-   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
 
    const {
      signIn,
@@ -222,7 +222,7 @@ This is required for OAuth solutions that span more than one sub-domain.
    import {
      createGitHubOAuthConfig,
      createHelpers,
-   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
    import type { Plugin } from "$fresh/server.ts";
 
    const { signIn, handleCallback, signOut, getSessionId } = createHelpers(
