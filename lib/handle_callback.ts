@@ -4,6 +4,7 @@ import {
   getCookies,
   OAuth2Client,
   type OAuth2ClientConfig,
+  SECOND,
   setCookie,
   Tokens,
 } from "../deps.ts";
@@ -15,7 +16,7 @@ import {
   redirect,
   SITE_COOKIE_NAME,
 } from "./_http.ts";
-import { getAndDeleteOAuthSession } from "./_kv.ts";
+import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.ts";
 
 export interface HandleCallbackOptions {
   /** Overwrites cookie properties set in the response. These must match the
@@ -69,18 +70,20 @@ export async function handleCallback(
     .code.getToken(request.url, oauthSession);
 
   const sessionId = crypto.randomUUID();
-
   const response = redirect(oauthSession.successUrl);
-  setCookie(
-    response.headers,
-    {
-      ...COOKIE_BASE,
-      name: getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
-      value: sessionId,
-      secure: isHttps(request.url),
-      ...options?.cookieOptions,
-    },
+  const cookie: Cookie = {
+    ...COOKIE_BASE,
+    name: getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
+    value: sessionId,
+    secure: isHttps(request.url),
+    ...options?.cookieOptions,
+  };
+  setCookie(response.headers, cookie);
+  await setSiteSession(
+    sessionId,
+    cookie.maxAge ? cookie.maxAge * SECOND : undefined,
   );
+
   return {
     response,
     sessionId,

@@ -76,9 +76,9 @@ configurations.
          const { response } = await handleCallback(request, oauthConfig);
          return response;
        case "/oauth/signout":
-         return signOut(request);
+         return await signOut(request);
        case "/protected-route":
-         return getSessionId(request) === undefined
+         return await getSessionId(request) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -134,9 +134,9 @@ configurations.
          const { response } = await handleCallback(request, oauthConfig);
          return response;
        case "/oauth/signout":
-         return signOut(request);
+         return await signOut(request);
        case "/protected-route":
-         return getSessionId(request) === undefined
+         return await getSessionId(request) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -191,9 +191,9 @@ This is required for OAuth solutions that span more than one sub-domain.
          const { response } = await handleCallback(request);
          return response;
        case "/oauth/signout":
-         return signOut(request);
+         return await signOut(request);
        case "/protected-route":
-         return getSessionId(request) === undefined
+         return await getSessionId(request) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:

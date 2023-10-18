@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { type Cookie, Status } from "../deps.ts";
+import { type Cookie, getCookies, Status } from "../deps.ts";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
@@ -52,4 +52,11 @@ export function getSuccessUrl(request: Request): string {
   }
 
   return "/";
+}
+
+export function getSessionIdCookie(
+  request: Request,
+  cookieName = getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
+): string | undefined {
+  return getCookies(request.headers)[cookieName];
 }

@@ -53,3 +53,25 @@ export async function setOAuthSession(
 ) {
   await kv.set([OAUTH_SESSIONS_PREFIX, id], value, options);
 }
+
+/**
+ * The site session is created on the server. It is stored in the database to
+ * later validate that a session was created on the server. It has no purpose
+ * beyond that. Hence, the value of the site session entry is arbitrary.
+ */
+type SiteSession = true;
+
+const SITE_SESSION_PREFIX = "site_sessions";
+
+export async function isSiteSession(id: string): Promise<boolean> {
+  const res = await kv.get<SiteSession>([SITE_SESSION_PREFIX, id]);
+  return res.value !== null;
+}
+
+export async function setSiteSession(id: string, expireIn?: number) {
+  await kv.set([SITE_SESSION_PREFIX, id], true, { expireIn });
+}
+
+export async function deleteSiteSession(id: string) {
+  await kv.delete([SITE_SESSION_PREFIX, id]);
+}
