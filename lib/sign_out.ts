@@ -3,11 +3,13 @@ import { Cookie, deleteCookie } from "../deps.ts";
 import {
   COOKIE_BASE,
   getCookieName,
+  getSessionIdCookie,
   getSuccessUrl,
   isHttps,
   redirect,
   SITE_COOKIE_NAME,
 } from "./_http.ts";
+import { deleteSiteSession } from "./_kv.ts";
 
 export interface SignOutOptions {
   /**
@@ -29,13 +31,20 @@ export interface SignOutOptions {
  * import { signOut } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * export async function signOutHandler(request: Request) {
- *   return signOut(request);
+ *   return await signOut(request);
  * }
  * ```
  */
-export function signOut(request: Request, options?: SignOutOptions): Response {
+export async function signOut(
+  request: Request,
+  options?: SignOutOptions,
+): Promise<Response> {
   const successUrl = getSuccessUrl(request);
   const response = redirect(successUrl);
+
+  const sessionId = getSessionIdCookie(request, options?.cookieOptions?.name);
+  if (sessionId === undefined) return response;
+  await deleteSiteSession(sessionId);
 
   const cookieName = options?.cookieOptions?.name ??
     getCookieName(SITE_COOKIE_NAME, isHttps(request.url));

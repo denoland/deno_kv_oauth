@@ -43,9 +43,9 @@ export interface CreateHelpersOptions {
  *       const { response } = await handleCallback(request);
  *       return response;
  *     case "/oauth/signout":
- *       return signOut(request);
+ *       return await signOut(request);
  *     case "/protected-route":
- *       return getSessionId(request) === undefined
+ *       return await getSessionId(request) === undefined
  *         ? new Response("Unauthorized", { status: 401 })
  *         : new Response("You are allowed");
  *     default:
@@ -66,8 +66,8 @@ export function createHelpers(
     sessionId: string;
     tokens: Tokens;
   }>;
-  signOut(request: Request): Response;
-  getSessionId(request: Request): string | undefined;
+  signOut(request: Request): Promise<Response>;
+  getSessionId(request: Request): Promise<string | undefined>;
 } {
   return {
     async signIn(request: Request, options?: SignInOptions) {
@@ -78,11 +78,11 @@ export function createHelpers(
         cookieOptions: options?.cookieOptions,
       });
     },
-    signOut(request: Request) {
-      return signOut(request, { cookieOptions: options?.cookieOptions });
+    async signOut(request: Request) {
+      return await signOut(request, { cookieOptions: options?.cookieOptions });
     },
-    getSessionId(request: Request) {
-      return getSessionId(request, {
+    async getSessionId(request: Request) {
+      return await getSessionId(request, {
         cookieName: options?.cookieOptions?.name,
       });
     },
