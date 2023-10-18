@@ -248,14 +248,14 @@ This is required for OAuth solutions that span more than one sub-domain.
        },
        {
          path: "/signout",
-         handler(req) {
-           return signOut(req);
+         async handler(req) {
+           return await signOut(req);
          },
        },
        {
          path: "/protected",
-         handler(req) {
-           return getSessionId(req) === undefined
+         async handler(req) {
+           return await getSessionId(req) === undefined
              ? new Response("Unauthorized", { status: 401 })
              : new Response("You are allowed");
          },
