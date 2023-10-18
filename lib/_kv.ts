@@ -20,12 +20,14 @@ export interface OAuthSession {
   successUrl: string;
 }
 
-const OAUTH_SESSIONS_PREFIX = "oauth_sessions";
+function oauthSessionKey(id: string): [string, string] {
+  return ["oauth_sessions", id];
+}
 
 export async function getAndDeleteOAuthSession(
   id: string,
 ): Promise<OAuthSession> {
-  const key = [OAUTH_SESSIONS_PREFIX, id];
+  const key = oauthSessionKey(id);
   const oauthSessionRes = await kv.get<OAuthSession>(key);
   const oauthSession = oauthSessionRes.value;
   if (oauthSession === null) {
@@ -51,7 +53,7 @@ export async function setOAuthSession(
    */
   options: { expireIn: number },
 ) {
-  await kv.set([OAUTH_SESSIONS_PREFIX, id], value, options);
+  await kv.set(oauthSessionKey(id), value, options);
 }
 
 /**
@@ -61,17 +63,19 @@ export async function setOAuthSession(
  */
 type SiteSession = true;
 
-const SITE_SESSION_PREFIX = "site_sessions";
+function siteSessionKey(id: string): [string, string] {
+  return ["site_sessions", id];
+}
 
 export async function isSiteSession(id: string): Promise<boolean> {
-  const res = await kv.get<SiteSession>([SITE_SESSION_PREFIX, id]);
+  const res = await kv.get<SiteSession>(siteSessionKey(id));
   return res.value !== null;
 }
 
 export async function setSiteSession(id: string, expireIn?: number) {
-  await kv.set([SITE_SESSION_PREFIX, id], true, { expireIn });
+  await kv.set(siteSessionKey(id), true, { expireIn });
 }
 
 export async function deleteSiteSession(id: string) {
-  await kv.delete([SITE_SESSION_PREFIX, id]);
+  await kv.delete(siteSessionKey(id));
 }
