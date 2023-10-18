@@ -19,7 +19,6 @@ async function checkLicense(path: string) {
 for await (
   const { path } of walk(new URL("../", import.meta.url), {
     exts: [".ts"],
-    skip: [/cov/g],
     includeDirs: false,
   })
 ) {

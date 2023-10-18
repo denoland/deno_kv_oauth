@@ -45,12 +45,6 @@ Check out the full documentation and API reference
 
 ## How-to
 
-### Get Started with [Fresh](https://fresh.deno.dev/)
-
-See
-[Fresh's documentation](https://fresh.deno.dev/docs/examples/using-deno-kv-oauth)
-on how to get started with the Deno KV OAuth Fresh plugin.
-
 ### Get Started with a Pre-Defined OAuth Configuration
 
 See [here](#providers) for the list of OAuth providers with pre-defined
@@ -215,6 +209,68 @@ This is required for OAuth solutions that span more than one sub-domain.
 
    ```bash
    GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   ```
+
+### Get Started with [Fresh](https://fresh.deno.dev/)
+
+1. Create your OAuth application for your given provider.
+
+1. Create your OAuth configuration and Fresh plugin.
+
+   ```ts
+   // plugins/kv_oauth.ts
+   import {
+     createGitHubOAuthConfig,
+     createHelpers,
+   } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+   import type { Plugin } from "$fresh/server.ts";
+
+   const { signIn, handleCallback, signOut, getSessionId } = createHelpers(
+     createGitHubOAuthConfig(),
+   );
+
+   export default {
+     name: "kv-oauth",
+     routes: [
+       {
+         path: "/signin",
+         async handler(req) {
+           return await signIn(req);
+         },
+       },
+       {
+         path: "/callback",
+         async handler(req) {
+           // Return object also includes `accessToken` and `sessionId` properties.
+           const { response } = await handleCallback(req);
+           return response;
+         },
+       },
+       {
+         path: "/signout",
+         async handler(req) {
+           return await signOut(req);
+         },
+       },
+       {
+         path: "/protected",
+         async handler(req) {
+           return await getSessionId(req) === undefined
+             ? new Response("Unauthorized", { status: 401 })
+             : new Response("You are allowed");
+         },
+       },
+     ],
+   } as Plugin;
+   ```
+
+1. [Add the plugin to your Fresh app.](https://fresh.deno.dev/docs/concepts/plugins)
+
+1. Start your Fresh server with the necessary
+   [environment variables](#environment-variables).
+
+   ```bash
+   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno task start
    ```
 
 ### Run the Demo Locally
