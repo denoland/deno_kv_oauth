@@ -12,7 +12,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createDropboxOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createDropboxOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauthConfig = createDropboxOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback"

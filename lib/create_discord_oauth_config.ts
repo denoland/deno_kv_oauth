@@ -12,7 +12,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createDiscordOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createDiscordOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * const oauthConfig = createDiscordOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",

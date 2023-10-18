@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { getSessionIdCookie } from "./_http.ts";
-import { isSiteSession } from "https://deno.land/x/deno_kv_oauth/lib/_kv.ts";
+import { isSiteSession } from "./_kv.ts";
 
 export interface GetSessionIdOptions {
   /**
@@ -17,7 +17,7 @@ export interface GetSessionIdOptions {
  *
  * @example
  * ```ts
- * import { getSessionId } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { getSessionId } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * export async function handler(request: Request) {
  *   const sessionId = await getSessionId(request);
