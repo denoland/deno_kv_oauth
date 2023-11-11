@@ -3,7 +3,7 @@ import type { OAuth2ClientConfig } from "../deps.ts";
 import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
- * Returns the OAuth configuration for Facebook.
+ * Returns the OAuth configuration for GitHub.
  *
  * Requires `--allow-env[=GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET]` permissions
  * and environment variables:

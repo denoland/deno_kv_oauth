@@ -3,7 +3,7 @@ import type { OAuth2ClientConfig } from "../deps.ts";
 import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
- * Returns the OAuth configuration for Google.
+ * Returns the OAuth configuration for Notion.
  *
  * Requires `--allow-env[=NOTION_CLIENT_ID,NOTION_CLIENT_SECRET]` permissions
  * and environment variables:
