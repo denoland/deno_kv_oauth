@@ -6,10 +6,10 @@ export {
   assertNotEquals,
   assertRejects,
   assertThrows,
-} from "https://deno.land/std@0.205.0/assert/mod.ts";
-export { walk } from "https://deno.land/std@0.205.0/fs/walk.ts";
-export { loadSync } from "https://deno.land/std@0.205.0/dotenv/mod.ts";
+} from "https://deno.land/std@0.206.0/assert/mod.ts";
+export { walk } from "https://deno.land/std@0.206.0/fs/walk.ts";
+export { loadSync } from "https://deno.land/std@0.206.0/dotenv/mod.ts";
 export {
   returnsNext,
   stub,
-} from "https://deno.land/std@0.205.0/testing/mock.ts";
+} from "https://deno.land/std@0.206.0/testing/mock.ts";
