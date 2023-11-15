@@ -369,6 +369,7 @@ starting your server. E.g. `DISCORD`, `GOOGLE`, or `SLACK`.
    A demo of Deno KV OAuth working in the
    [Cheetah web framework](https://cheetah.mod.land/).
 1. [Paquet](https://paquet.app) - A web app shop
+1. [Fastro + Deno KV OAuth live demo](https://fastro.dev/auth) - A simple, reusable fastro module that implements Deno KV.
 
 > Do you have a project powered by Deno KV OAuth that you'd like to share? Feel
 > free to let us know in a new issue.
