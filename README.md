@@ -381,3 +381,7 @@ starting your server. E.g. `DISCORD`, `GOOGLE`, or `SLACK`.
   See #79 and
   [this post](https://twitch.uservoice.com/forums/310213-developers/suggestions/39785686-add-pkce-support-to-the-oauth2-0-authorization-cod)
   for more information.
+
+## Contributing Guide
+
+Check out the contributing guide [here](.github/CONTRIBUTING.md).
