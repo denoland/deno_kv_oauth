@@ -1,6 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { handleCallback } from "./handle_callback.ts";
-import { assertEquals, assertRejects, returnsNext, stub } from "../dev_deps.ts";
+import { assertEquals, assertRejects } from "std/assert/mod.ts";
+import { returnsNext, stub } from "std/testing/mock.ts";
 import { getAndDeleteOAuthSession, setOAuthSession } from "./_kv.ts";
 import { OAUTH_COOKIE_NAME } from "./_http.ts";
 import {

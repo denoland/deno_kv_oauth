@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assert, assertEquals } from "../dev_deps.ts";
+import { assert, assertEquals } from "std/assert/mod.ts";
 import { type OAuth2ClientConfig, Status } from "../deps.ts";
 import type { OAuthSession } from "./_kv.ts";
 

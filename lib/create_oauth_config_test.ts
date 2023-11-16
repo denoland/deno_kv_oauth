@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assertEquals } from "../dev_deps.ts";
+import { assertEquals } from "std/assert/assert_equals.ts";
 import { createAuth0OAuthConfig } from "./create_auth0_oauth_config.ts";
 import { createDiscordOAuthConfig } from "./create_discord_oauth_config.ts";
 import { createDropboxOAuthConfig } from "./create_dropbox_oauth_config.ts";
