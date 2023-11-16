@@ -1,5 +1,4 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { loadSync } from "std/dotenv/mod.ts";
 import { Status } from "./deps.ts";
 import {
   createGitHubOAuthConfig,
@@ -8,8 +7,6 @@ import {
   signIn,
   signOut,
 } from "./mod.ts";
-
-loadSync({ export: true });
 
 /**
  * Modify the OAuth configuration creation function when testing for providers.
