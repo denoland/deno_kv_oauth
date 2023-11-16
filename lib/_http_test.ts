@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { assertEquals } from "../dev_deps.ts";
+import { assertEquals } from "std/assert/assert_equals.ts";
 import { getCookieName, getSuccessUrl, isHttps, redirect } from "./_http.ts";
 import { assertRedirect } from "./_test_utils.ts";
 

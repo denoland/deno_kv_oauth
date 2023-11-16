@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { loadSync } from "./dev_deps.ts";
+import { loadSync } from "std/dotenv/mod.ts";
 import { Status } from "./deps.ts";
 import {
   createGitHubOAuthConfig,
