@@ -385,3 +385,7 @@ starting your server. E.g. `DISCORD`, `GOOGLE`, or `SLACK`.
 ## Contributing Guide
 
 Check out the contributing guide [here](.github/CONTRIBUTING.md).
+
+## Security Policy
+
+Check out the security policy [here](.github/SECURITY.md).
