@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-export { Status } from "https://deno.land/std@0.208.0/http/status.ts";
+export { STATUS_CODE } from "https://deno.land/std@0.208.0/http/status.ts";
 export {
   type Cookie,
   deleteCookie,
