@@ -1,6 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { assert, assertEquals } from "std/assert/mod.ts";
-import { type OAuth2ClientConfig, Status } from "../deps.ts";
+import { type OAuth2ClientConfig, STATUS_CODE } from "../deps.ts";
 import type { OAuthSession } from "./_kv.ts";
 
 export function randomOAuthConfig(): OAuth2ClientConfig {
@@ -28,7 +28,7 @@ export function randomTokensBody() {
 }
 
 export function assertRedirect(response: Response, location?: string) {
-  assertEquals(response.status, Status.Found);
+  assertEquals(response.status, STATUS_CODE.Found);
   if (location !== undefined) {
     assertEquals(response.headers.get("location"), location);
   } else {
