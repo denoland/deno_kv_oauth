@@ -16,6 +16,7 @@ import {
 } from "./_http.ts";
 import { setOAuthSession } from "./_kv.ts";
 
+/** Options for {@linkcode signIn}. */
 export interface SignInOptions {
   /** URL parameters that are appended to the authorization URI, if defined. */
   urlParams?: Record<string, string>;

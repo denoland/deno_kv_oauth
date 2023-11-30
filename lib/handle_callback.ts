@@ -18,6 +18,7 @@ import {
 } from "./_http.ts";
 import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.ts";
 
+/** Options for {@linkcode handleCallback}. */
 export interface HandleCallbackOptions {
   /** Overwrites cookie properties set in the response. These must match the
    * cookie properties used in {@linkcode getSessionId} and
