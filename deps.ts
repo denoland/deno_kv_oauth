@@ -1,15 +1,15 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-export { STATUS_CODE } from "https://deno.land/std@0.208.0/http/status.ts";
+export { STATUS_CODE } from "https://deno.land/std@0.209.0/http/status.ts";
 export {
   type Cookie,
   deleteCookie,
   getCookies,
   getSetCookies,
   setCookie,
-} from "https://deno.land/std@0.208.0/http/cookie.ts";
+} from "https://deno.land/std@0.209.0/http/cookie.ts";
 export {
   OAuth2Client,
   type OAuth2ClientConfig,
   type Tokens,
 } from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
-export { SECOND } from "https://deno.land/std@0.208.0/datetime/constants.ts";
+export { SECOND } from "https://deno.land/std@0.209.0/datetime/constants.ts";
