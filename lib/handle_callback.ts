@@ -4,9 +4,10 @@ import {
   getCookies,
   OAuth2Client,
   type OAuth2ClientConfig,
+  type RequestOptions,
   SECOND,
   setCookie,
-  Tokens,
+  type Tokens,
 } from "../deps.ts";
 import {
   COOKIE_BASE,
@@ -24,6 +25,7 @@ export interface HandleCallbackOptions {
    * {@linkcode signOut}.
    */
   cookieOptions?: Partial<Cookie>;
+  requestOptions?: RequestOptions;
 }
 
 /**
@@ -67,7 +69,10 @@ export async function handleCallback(
   const oauthSession = await getAndDeleteOAuthSession(oauthSessionId);
 
   const tokens = await new OAuth2Client(oauthConfig)
-    .code.getToken(request.url, oauthSession);
+    .code.getToken(request.url, {
+      ...oauthSession,
+      ...options?.requestOptions,
+    });
 
   const sessionId = crypto.randomUUID();
   const response = redirect(oauthSession.successUrl);
