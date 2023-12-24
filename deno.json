@@ -15,15 +15,14 @@
     "check:license": "deno run -A tools/check_license.ts",
     "check:types": "deno check --unstable **/*.ts",
     "check": "deno task check:license --check && deno task check:types",
-    "test": "DENO_KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --trace-ops --coverage=./cov --doc",
+    "test": "DENO_KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --trace-ops --coverage --doc",
+    "coverage": "deno coverage coverage",
     "ok": "deno fmt --check && deno lint && deno task check && deno task test",
-    "cov:clean": "rm -rf cov html_cov cov.lcov",
     "cov:gen": "deno coverage ./cov/ --lcov --output=cov.lcov",
-    "cov:view": "genhtml -o html_cov cov.lcov && open html_cov/index.html",
     "update": "deno run -A https://deno.land/x/udd/main.ts --test=\"deno task test\" deps.ts dev_deps.ts",
     "update:fresh": "deno run -A -r https://fresh.deno.dev/update ."
   },
   "exclude": [
-    "cov/"
+    "coverage/"
   ]
 }
