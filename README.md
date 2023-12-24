@@ -320,6 +320,7 @@ The following providers have pre-defined OAuth configurations:
 1. [GitHub](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitHubOAuthConfig)
 1. [GitLab](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitLabOAuthConfig)
 1. [Google](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGoogleOAuthConfig)
+1. [LinkedIn](https://deno.land/x/deno_kv_oauth/mod.ts?s=createLinkedInOAuthConfig)
 1. [Notion](https://deno.land/x/deno_kv_oauth/mod.ts?s=createNotionOAuthConfig)
 1. [Okta](https://deno.land/x/deno_kv_oauth/mod.ts?s=createOktaOAuthConfig)
 1. [Patreon](https://deno.land/x/deno_kv_oauth/mod.ts?s=createPatreonOAuthConfig)
