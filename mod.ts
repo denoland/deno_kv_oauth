@@ -10,6 +10,7 @@ export * from "./lib/create_facebook_oauth_config.ts";
 export * from "./lib/create_github_oauth_config.ts";
 export * from "./lib/create_gitlab_oauth_config.ts";
 export * from "./lib/create_google_oauth_config.ts";
+export * from "./lib/create_linkedin_oauth_config.ts";
 export * from "./lib/create_notion_oauth_config.ts";
 export * from "./lib/create_okta_oauth_config.ts";
 export * from "./lib/create_patreon_oauth_config.ts";
