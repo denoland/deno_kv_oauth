@@ -18,7 +18,7 @@
     "test": "DENO_KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --trace-ops --coverage --doc",
     "coverage": "deno coverage coverage",
     "ok": "deno fmt --check && deno lint && deno task check && deno task test",
-    "cov:gen": "deno coverage ./cov/ --lcov --output=cov.lcov",
+    "cov:gen": "deno task coverage --lcov --output=cov.lcov",
     "update": "deno run -A https://deno.land/x/udd/main.ts --test=\"deno task test\" deps.ts dev_deps.ts",
     "update:fresh": "deno run -A -r https://fresh.deno.dev/update ."
   },
