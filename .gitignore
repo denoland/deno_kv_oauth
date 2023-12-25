@@ -1,6 +1,6 @@
 *.env
 *.DS_Store
-cov/
+coverage/
 cov.lcov
 dev.ts
 deno.lock
