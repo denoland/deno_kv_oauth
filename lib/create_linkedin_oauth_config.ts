@@ -28,12 +28,22 @@ export function createLinkedInOAuthConfig(config: {
   /** @see {@linkcode OAuth2ClientConfig.defaults}*/
   scope: string | string[];
 }): OAuth2ClientConfig {
+  const clientId = getRequiredEnv("LINKEDIN_CLIENT_ID");
+  const clientSecret = getRequiredEnv("LINKEDIN_CLIENT_SECRET");
   return {
-    clientId: getRequiredEnv("LINKEDIN_CLIENT_ID"),
-    clientSecret: getRequiredEnv("LINKEDIN_CLIENT_SECRET"),
+    clientId,
+    clientSecret,
     authorizationEndpointUri: "https://www.linkedin.com/oauth/v2/authorization",
     tokenUri: "https://www.linkedin.com/oauth/v2/accessToken",
     redirectUri: config.redirectUri,
-    defaults: { scope: config.scope },
+    defaults: {
+      requestOptions: {
+        body: {
+          client_id: clientId,
+          client_secret: clientSecret,
+        },
+      },
+      scope: config.scope,
+    },
   };
 }
