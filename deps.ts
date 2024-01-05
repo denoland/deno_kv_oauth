@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 export { STATUS_CODE } from "https://deno.land/std@0.211.0/http/status.ts";
 export {
   type Cookie,
