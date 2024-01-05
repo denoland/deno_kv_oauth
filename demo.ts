@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { Status } from "./deps.ts";
+import { STATUS_CODE } from "./deps.ts";
 import {
   createGitHubOAuthConfig,
   getSessionId,
@@ -47,7 +47,7 @@ async function indexHandler(request: Request) {
 
 export async function handler(request: Request): Promise<Response> {
   if (request.method !== "GET") {
-    return new Response(null, { status: Status.NotFound });
+    return new Response(null, { status: STATUS_CODE.NotFound });
   }
 
   switch (new URL(request.url).pathname) {
@@ -62,14 +62,14 @@ export async function handler(request: Request): Promise<Response> {
         const { response } = await handleCallback(request, oauthConfig);
         return response;
       } catch {
-        return new Response(null, { status: Status.InternalServerError });
+        return new Response(null, { status: STATUS_CODE.InternalServerError });
       }
     }
     case "/signout": {
       return await signOut(request);
     }
     default: {
-      return new Response(null, { status: Status.NotFound });
+      return new Response(null, { status: STATUS_CODE.NotFound });
     }
   }
 }

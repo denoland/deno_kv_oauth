@@ -1,5 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { type Cookie, getCookies, Status } from "../deps.ts";
+import { type Cookie, getCookies, STATUS_CODE } from "../deps.ts";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
@@ -33,7 +33,7 @@ export function redirect(location: string): Response {
     headers: {
       location,
     },
-    status: Status.Found,
+    status: STATUS_CODE.Found,
   });
 }
 
