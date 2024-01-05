@@ -6,7 +6,12 @@ import { handleCallback } from "./handle_callback.ts";
 import { signIn, type SignInOptions } from "./sign_in.ts";
 import { signOut } from "./sign_out.ts";
 
+/** Options for {@linkcode createHelpers}. */
 export interface CreateHelpersOptions {
+  /**
+   * Options for overwriting the default cookie options throughout each of the
+   * helpers.
+   */
   cookieOptions?: Partial<Cookie>;
 }
 

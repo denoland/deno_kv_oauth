@@ -2,6 +2,7 @@
 import { getSessionIdCookie } from "./_http.ts";
 import { isSiteSession } from "./_kv.ts";
 
+/** Options for {@linkcode getSessionId}. */
 export interface GetSessionIdOptions {
   /**
    * The name of the cookie in the request. This must match the cookie name

@@ -11,6 +11,7 @@ import {
 } from "./_http.ts";
 import { deleteSiteSession } from "./_kv.ts";
 
+/** Options for {@linkcode signOut}. */
 export interface SignOutOptions {
   /**
    * Overwrites cookie properties set in the response. These must match the
