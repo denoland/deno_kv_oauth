@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 
 import { type Cookie, OAuth2ClientConfig, type Tokens } from "../deps.ts";
 import { getSessionId } from "./get_session_id.ts";

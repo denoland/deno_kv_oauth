@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { STATUS_CODE } from "./deps.ts";
 import {
   createGitHubOAuthConfig,

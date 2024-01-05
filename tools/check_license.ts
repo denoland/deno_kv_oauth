@@ -1,10 +1,10 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { walk } from "std/fs/walk.ts";
 
 const CHECK = Deno.args.includes("--check");
 const CURRENT_YEAR = new Date().getFullYear();
 const COPYRIGHT =
-  `// Copyright ${CURRENT_YEAR} the Deno authors. All rights reserved. MIT license.\n`;
+  `// Copyright 2023-${CURRENT_YEAR} the Deno authors. All rights reserved. MIT license.\n`;
 
 async function checkLicense(path: string) {
   const content = await Deno.readTextFile(path);
