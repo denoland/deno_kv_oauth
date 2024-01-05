@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { assertEquals, assertRejects } from "std/assert/mod.ts";
 import { getAndDeleteOAuthSession, setOAuthSession } from "./_kv.ts";
 import { randomOAuthSession } from "./_test_utils.ts";
