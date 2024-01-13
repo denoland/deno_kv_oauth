@@ -79,10 +79,13 @@ export function createAzureOAuthConfig(config: {
 
   const clientId = getEnv("CLIENT_ID");
 
-  if (policy && Array.isArray(config.scope)) {
+  if (Array.isArray(config.scope) && config.scope.some((s) => s === "openid")) {
     config.scope.push(clientId);
     // config.scope.push(`https://${tenantId}/${clientId}//.default`);
-  } else {
+  } else if (
+    typeof config.scope === "string" &&
+    config.scope.includes("openid")
+  ) {
     config.scope = `${config.scope} ${clientId}`;
   }
 
