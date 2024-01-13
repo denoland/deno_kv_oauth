@@ -81,11 +81,8 @@ export function createAzureOAuthConfig(config: {
 
   if (policy) {
     config.scope.push(clientId);
+    // config.scope.push(`https://${tenantId}/${clientId}//.default`);
   }
-
-  // const urlParams: Record<string, string> | undefined = policy
-  //   ? { p: policy }
-  //   : undefined;
 
   return {
     clientId,
@@ -95,9 +92,6 @@ export function createAzureOAuthConfig(config: {
     redirectUri: config.redirectUri,
     defaults: {
       scope: config.scope,
-      // requestOptions: {
-      //   urlParams: urlParams,
-      // },
     },
   };
 }
