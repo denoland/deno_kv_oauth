@@ -53,10 +53,14 @@ export function createAzureOAuthConfig(config: {
   /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
   redirectUri?: string;
   /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
-  scope?: string | string[];
+  scope: string[];
 }): OAuth2ClientConfig {
   const getEnv = (key: string) => {
-    return getRequiredEnv(`${config.envPrefix || "AZURE"}_${key}`);
+    return getRequiredEnv(getEnvKey(key));
+  };
+
+  const getEnvKey = (key: string) => {
+    return `${config.envPrefix || "AZURE"}_${key}`;
   };
 
   let cloudInstance = getEnv("CLOUD_INSTANCE");
@@ -67,14 +71,33 @@ export function createAzureOAuthConfig(config: {
 
   const tenantId = getEnv("TENANT_ID");
 
-  const baseURL = `${cloudInstance}${tenantId}/oauth2`;
+  const policy = Deno.env.get(getEnvKey("POLICY"));
+
+  const path = policy ? `${tenantId}/${policy}` : tenantId;
+
+  const baseURL = `${cloudInstance}${path}/oauth2`;
+
+  const clientId = getEnv("CLIENT_ID");
+
+  if (policy) {
+    config.scope.push(clientId);
+  }
+
+  // const urlParams: Record<string, string> | undefined = policy
+  //   ? { p: policy }
+  //   : undefined;
 
   return {
-    clientId: getEnv("CLIENT_ID"),
+    clientId,
     clientSecret: getEnv("CLIENT_SECRET"),
     authorizationEndpointUri: `${baseURL}/v2.0/authorize`,
     tokenUri: `${baseURL}/v2.0/token`,
     redirectUri: config.redirectUri,
-    defaults: { scope: config.scope },
+    defaults: {
+      scope: config.scope,
+      // requestOptions: {
+      //   urlParams: urlParams,
+      // },
+    },
   };
 }

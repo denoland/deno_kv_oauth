@@ -67,8 +67,10 @@ export async function handleCallback(
   if (oauthSessionId === undefined) throw new Error("OAuth cookie not found");
   const oauthSession = await getAndDeleteOAuthSession(oauthSessionId);
 
-  const tokens = await new OAuth2Client(oauthConfig)
-    .code.getToken(request.url, oauthSession);
+  const tokens = await new OAuth2Client(oauthConfig).code.getToken(
+    request.url,
+    oauthSession,
+  );
 
   const sessionId = crypto.randomUUID();
   const response = redirect(oauthSession.successUrl);
