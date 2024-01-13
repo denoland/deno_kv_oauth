@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 export * from "./lib/handle_callback.ts";
 export * from "./lib/get_session_id.ts";
 export * from "./lib/sign_in.ts";

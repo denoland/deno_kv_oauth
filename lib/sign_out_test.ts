@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "std/assert/assert_equals.ts";
 import { signOut } from "./sign_out.ts";
 import { SITE_COOKIE_NAME } from "./_http.ts";

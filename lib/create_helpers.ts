@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 
 import { type Cookie, OAuth2ClientConfig, type Tokens } from "../deps.ts";
 import { getSessionId } from "./get_session_id.ts";
@@ -6,7 +6,12 @@ import { handleCallback } from "./handle_callback.ts";
 import { signIn, type SignInOptions } from "./sign_in.ts";
 import { signOut } from "./sign_out.ts";
 
+/** Options for {@linkcode createHelpers}. */
 export interface CreateHelpersOptions {
+  /**
+   * Options for overwriting the default cookie options throughout each of the
+   * helpers.
+   */
   cookieOptions?: Partial<Cookie>;
 }
 

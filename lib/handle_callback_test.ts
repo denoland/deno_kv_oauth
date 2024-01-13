@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { handleCallback } from "./handle_callback.ts";
 import { assertEquals, assertRejects } from "std/assert/mod.ts";
 import { returnsNext, stub } from "std/testing/mock.ts";
