@@ -314,6 +314,7 @@ is set in the following order of precedence:
 The following providers have pre-defined OAuth configurations:
 
 1. [Auth0](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAuth0OAuthConfig)
+1. [Azure](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAzureOAuthConfig)
 1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuthConfig)
 1. [Dropbox](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDropboxOAuthConfig)
 1. [Facebook](https://deno.land/x/deno_kv_oauth/mod.ts?s=createFacebookOAuthConfig)
