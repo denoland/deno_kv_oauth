@@ -1,6 +1,6 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import type { OAuth2ClientConfig } from "../deps.ts";
-import { getRequiredEnv } from "./get_required_env.ts";
+import type { OAuth2ClientConfig } from '../deps.ts';
+import { getRequiredEnv } from './get_required_env.ts';
 
 /**
  * Returns the OAuth configuration for Azure.
@@ -56,18 +56,22 @@ export function createAzureOAuthConfig(config: {
   scope?: string | string[];
 }): OAuth2ClientConfig {
   const getEnv = (key: string) => {
-    return getRequiredEnv(`${config.envPrefix || "AZURE"}_${key}`);
+    return getRequiredEnv(`${config.envPrefix || 'AZURE'}_${key}`);
   };
 
-  const cloudInstance = getEnv("CLOUD_INSTANCE");
+  let cloudInstance = getEnv('CLOUD_INSTANCE');
 
-  const tenantId = getEnv("TENANT_ID");
+  if (!cloudInstance.endsWith('/')) {
+    cloudInstance = `${cloudInstance}/`;
+  }
+
+  const tenantId = getEnv('TENANT_ID');
 
   const baseURL = `${cloudInstance}${tenantId}/oauth2`;
 
   return {
-    clientId: getEnv("CLIENT_ID"),
-    clientSecret: getEnv("CLIENT_SECRET"),
+    clientId: getEnv('CLIENT_ID'),
+    clientSecret: getEnv('CLIENT_SECRET'),
     authorizationEndpointUri: `${baseURL}/v2.0/authorize`,
     tokenUri: `${baseURL}/v2.0/token`,
     redirectUri: config.redirectUri,
