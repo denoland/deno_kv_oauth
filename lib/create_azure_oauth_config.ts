@@ -53,7 +53,7 @@ export function createAzureOAuthConfig(config: {
   /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
   redirectUri?: string;
   /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
-  scope: string[];
+  scope: string | string[];
 }): OAuth2ClientConfig {
   const getEnv = (key: string) => {
     return getRequiredEnv(getEnvKey(key));
@@ -79,9 +79,11 @@ export function createAzureOAuthConfig(config: {
 
   const clientId = getEnv("CLIENT_ID");
 
-  if (policy) {
+  if (policy && Array.isArray(config.scope)) {
     config.scope.push(clientId);
     // config.scope.push(`https://${tenantId}/${clientId}//.default`);
+  } else {
+    config.scope = `${config.scope} ${clientId}`;
   }
 
   return {
