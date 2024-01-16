@@ -7,7 +7,7 @@ import {
   SECOND,
   setCookie,
   Tokens,
-} from "../deps.ts";
+} from "../deps.js";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -15,8 +15,8 @@ import {
   OAUTH_COOKIE_NAME,
   redirect,
   SITE_COOKIE_NAME,
-} from "./_http.ts";
-import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.ts";
+} from "./_http.js";
+import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.js";
 
 /** Options for {@linkcode handleCallback}. */
 export interface HandleCallbackOptions {
@@ -67,10 +67,8 @@ export async function handleCallback(
   if (oauthSessionId === undefined) throw new Error("OAuth cookie not found");
   const oauthSession = await getAndDeleteOAuthSession(oauthSessionId);
 
-  const tokens = await new OAuth2Client(oauthConfig).code.getToken(
-    request.url,
-    oauthSession,
-  );
+  const tokens = await new OAuth2Client(oauthConfig)
+    .code.getToken(request.url, oauthSession);
 
   const sessionId = crypto.randomUUID();
   const response = redirect(oauthSession.successUrl);

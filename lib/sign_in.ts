@@ -45,9 +45,8 @@ export async function signIn(
   options?: SignInOptions,
 ): Promise<Response> {
   const state = crypto.randomUUID();
-  const { uri, codeVerifier } = await new OAuth2Client(
-    oauthConfig,
-  ).code.getAuthorizationUri({ state });
+  const { uri, codeVerifier } = await new OAuth2Client(oauthConfig)
+    .code.getAuthorizationUri({ state });
 
   if (options?.urlParams) {
     Object.entries(options.urlParams).forEach(([key, value]) =>
@@ -70,13 +69,9 @@ export async function signIn(
     maxAge: 10 * 60,
   };
   const successUrl = getSuccessUrl(request);
-  await setOAuthSession(
-    oauthSessionId,
-    { state, codeVerifier, successUrl },
-    {
-      expireIn: cookie.maxAge! * SECOND,
-    },
-  );
+  await setOAuthSession(oauthSessionId, { state, codeVerifier, successUrl }, {
+    expireIn: cookie.maxAge! * SECOND,
+  });
   const response = redirect(uri.toString());
   setCookie(response.headers, cookie);
   return response;
