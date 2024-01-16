@@ -56,37 +56,37 @@ export function createAzureOAuthConfig(config: {
   scope: string | string[];
 }): OAuth2ClientConfig {
   const getEnvKey = (key: string) => {
-    return `${config.envPrefix || 'AZURE'}_${key}`;
+    return `${config.envPrefix || "AZURE"}_${key}`;
   };
 
-  let cloudInstance = getRequiredEnv(getEnvKey('CLOUD_INSTANCE'));
+  let cloudInstance = getRequiredEnv(getEnvKey("CLOUD_INSTANCE"));
 
-  if (!cloudInstance.endsWith('/')) {
+  if (!cloudInstance.endsWith("/")) {
     cloudInstance = `${cloudInstance}/`;
   }
 
-  const tenantId = getRequiredEnv(getEnvKey('TENANT_ID'));
+  const tenantId = getRequiredEnv(getEnvKey("TENANT_ID"));
 
-  const policy = Deno.env.get(getEnvKey('POLICY'));
+  const policy = Deno.env.get(getEnvKey("POLICY"));
 
   const path = policy ? `${tenantId}/${policy}` : tenantId;
 
   const baseURL = `${cloudInstance}${path}/oauth2`;
 
-  const clientId = getRequiredEnv(getEnvKey('CLIENT_ID'));
+  const clientId = getRequiredEnv(getEnvKey("CLIENT_ID"));
 
-  if (Array.isArray(config.scope) && config.scope.some((s) => s === 'openid')) {
+  if (Array.isArray(config.scope) && config.scope.some((s) => s === "openid")) {
     config.scope.push(clientId);
   } else if (
-    typeof config.scope === 'string' &&
-    config.scope.includes('openid')
+    typeof config.scope === "string" &&
+    config.scope.includes("openid")
   ) {
     config.scope = `${config.scope} ${clientId}`;
   }
 
   return {
     clientId,
-    clientSecret: getRequiredEnv(getEnvKey('CLIENT_SECRET')),
+    clientSecret: getRequiredEnv(getEnvKey("CLIENT_SECRET")),
     authorizationEndpointUri: `${baseURL}/v2.0/authorize`,
     tokenUri: `${baseURL}/v2.0/token`,
     redirectUri: config.redirectUri,
