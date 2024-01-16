@@ -7,7 +7,7 @@ import {
   SECOND,
   setCookie,
   Tokens,
-} from "../deps.js";
+} from "../deps.ts";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -15,8 +15,8 @@ import {
   OAUTH_COOKIE_NAME,
   redirect,
   SITE_COOKIE_NAME,
-} from "./_http.js";
-import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.js";
+} from "./_http.ts";
+import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.ts";
 
 /** Options for {@linkcode handleCallback}. */
 export interface HandleCallbackOptions {
