@@ -1,6 +1,6 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import type { OAuth2ClientConfig } from '../deps.ts';
-import { getRequiredEnv } from './get_required_env.ts';
+import type { OAuth2ClientConfig } from "../deps.ts";
+import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
  * Returns the OAuth configuration for Azure.
@@ -31,23 +31,27 @@ export function createAzureADB2COAuthConfig(config: {
   /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
   scope: string | string[];
 }): OAuth2ClientConfig {
-  const baseUrl = `https://${getRequiredEnv(
-    'AZURE_ADB2C_DOMAIN'
-  )}/${getRequiredEnv('AZURE_ADB2C_TENANT_ID')}/${getRequiredEnv(
-    'AZURE_ADB2C_POLICY'
-  )}/oauth2/v2.0`;
+  const baseUrl = `https://${
+    getRequiredEnv(
+      "AZURE_ADB2C_DOMAIN",
+    )
+  }/${getRequiredEnv("AZURE_ADB2C_TENANT_ID")}/${
+    getRequiredEnv(
+      "AZURE_ADB2C_POLICY",
+    )
+  }/oauth2/v2.0`;
 
-  const clientId = getRequiredEnv('AZURE_ADB2C_CLIENT_ID');
+  const clientId = getRequiredEnv("AZURE_ADB2C_CLIENT_ID");
 
   if (
     Array.isArray(config.scope) &&
-    config.scope.some((s) => s === 'openid') &&
+    config.scope.some((s) => s === "openid") &&
     !config.scope.some((s) => s === clientId)
   ) {
     config.scope.push(clientId);
   } else if (
-    typeof config.scope === 'string' &&
-    config.scope.includes('openid') &&
+    typeof config.scope === "string" &&
+    config.scope.includes("openid") &&
     !config.scope.includes(clientId)
   ) {
     config.scope = `${config.scope} ${clientId}`;
@@ -55,7 +59,7 @@ export function createAzureADB2COAuthConfig(config: {
 
   return {
     clientId,
-    clientSecret: getRequiredEnv('AZURE_ADB2C_CLIENT_SECRET'),
+    clientSecret: getRequiredEnv("AZURE_ADB2C_CLIENT_SECRET"),
     authorizationEndpointUri: `${baseUrl}/authorize`,
     tokenUri: `${baseUrl}/token`,
     redirectUri: config.redirectUri,

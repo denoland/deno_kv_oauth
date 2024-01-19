@@ -1,80 +1,80 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "std/assert/assert_equals.ts";
 import { createAuth0OAuthConfig } from "./create_auth0_oauth_config.ts";
-import { createAzureADB2COAuthConfig } from './create_azure_adb2c_oauth_config.ts';
-import { createAzureADOAuthConfig } from './create_azure_ad_oauth_config.ts';
-import { createDiscordOAuthConfig } from './create_discord_oauth_config.ts';
-import { createDropboxOAuthConfig } from './create_dropbox_oauth_config.ts';
-import { createFacebookOAuthConfig } from './create_facebook_oauth_config.ts';
-import { createGitHubOAuthConfig } from './create_github_oauth_config.ts';
-import { createGitLabOAuthConfig } from './create_gitlab_oauth_config.ts';
-import { createGoogleOAuthConfig } from './create_google_oauth_config.ts';
-import { createNotionOAuthConfig } from './create_notion_oauth_config.ts';
-import { createOktaOAuthConfig } from './create_okta_oauth_config.ts';
-import { createPatreonOAuthConfig } from './create_patreon_oauth_config.ts';
-import { createSlackOAuthConfig } from './create_slack_oauth_config.ts';
-import { createSpotifyOAuthConfig } from './create_spotify_oauth_config.ts';
-import { createTwitterOAuthConfig } from './create_twitter_oauth_config.ts';
+import { createAzureADB2COAuthConfig } from "./create_azure_adb2c_oauth_config.ts";
+import { createAzureADOAuthConfig } from "./create_azure_ad_oauth_config.ts";
+import { createDiscordOAuthConfig } from "./create_discord_oauth_config.ts";
+import { createDropboxOAuthConfig } from "./create_dropbox_oauth_config.ts";
+import { createFacebookOAuthConfig } from "./create_facebook_oauth_config.ts";
+import { createGitHubOAuthConfig } from "./create_github_oauth_config.ts";
+import { createGitLabOAuthConfig } from "./create_gitlab_oauth_config.ts";
+import { createGoogleOAuthConfig } from "./create_google_oauth_config.ts";
+import { createNotionOAuthConfig } from "./create_notion_oauth_config.ts";
+import { createOktaOAuthConfig } from "./create_okta_oauth_config.ts";
+import { createPatreonOAuthConfig } from "./create_patreon_oauth_config.ts";
+import { createSlackOAuthConfig } from "./create_slack_oauth_config.ts";
+import { createSpotifyOAuthConfig } from "./create_spotify_oauth_config.ts";
+import { createTwitterOAuthConfig } from "./create_twitter_oauth_config.ts";
 
 [
   {
-    envPrefix: 'AUTH0',
+    envPrefix: "AUTH0",
     createOAuthConfigFn: createAuth0OAuthConfig,
   },
   {
-    envPrefix: 'AZURE_ADB2C',
+    envPrefix: "AZURE_ADB2C",
     createOAuthConfigFn: createAzureADB2COAuthConfig,
   },
   {
-    envPrefix: 'AZURE_AD',
+    envPrefix: "AZURE_AD",
     createOAuthConfigFn: createAzureADOAuthConfig,
   },
   {
-    envPrefix: 'DISCORD',
+    envPrefix: "DISCORD",
     createOAuthConfigFn: createDiscordOAuthConfig,
   },
   {
-    envPrefix: 'DROPBOX',
+    envPrefix: "DROPBOX",
     createOAuthConfigFn: createDropboxOAuthConfig,
   },
   {
-    envPrefix: 'FACEBOOK',
+    envPrefix: "FACEBOOK",
     createOAuthConfigFn: createFacebookOAuthConfig,
   },
   {
-    envPrefix: 'GITHUB',
+    envPrefix: "GITHUB",
     createOAuthConfigFn: createGitHubOAuthConfig,
   },
   {
-    envPrefix: 'GITLAB',
+    envPrefix: "GITLAB",
     createOAuthConfigFn: createGitLabOAuthConfig,
   },
   {
-    envPrefix: 'GOOGLE',
+    envPrefix: "GOOGLE",
     createOAuthConfigFn: createGoogleOAuthConfig,
   },
   {
-    envPrefix: 'NOTION',
+    envPrefix: "NOTION",
     createOAuthConfigFn: createNotionOAuthConfig,
   },
   {
-    envPrefix: 'OKTA',
+    envPrefix: "OKTA",
     createOAuthConfigFn: createOktaOAuthConfig,
   },
   {
-    envPrefix: 'PATREON',
+    envPrefix: "PATREON",
     createOAuthConfigFn: createPatreonOAuthConfig,
   },
   {
-    envPrefix: 'SLACK',
+    envPrefix: "SLACK",
     createOAuthConfigFn: createSlackOAuthConfig,
   },
   {
-    envPrefix: 'SPOTIFY',
+    envPrefix: "SPOTIFY",
     createOAuthConfigFn: createSpotifyOAuthConfig,
   },
   {
-    envPrefix: 'TWITTER',
+    envPrefix: "TWITTER",
     createOAuthConfigFn: createTwitterOAuthConfig,
   },
 ].map(({ envPrefix, createOAuthConfigFn }) =>
