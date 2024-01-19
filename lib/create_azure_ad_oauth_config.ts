@@ -1,15 +1,14 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import type { OAuth2ClientConfig } from '../deps.ts';
-import { getRequiredEnv } from './get_required_env.ts';
+import type { OAuth2ClientConfig } from "../deps.ts";
+import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
  * Returns the OAuth configuration for Azure.
  *
- * Requires `--allow-env[=AZURE_AD_CLIENT_ID,AZURE_AD_CLIENT_SECRET,AZURE_AD_CLOUD_INSTANCE,AZURE_AD_TENANT_ID]`
+ * Requires `--allow-env[=AZURE_AD_CLIENT_ID,AZURE_AD_CLIENT_SECRET,AZURE_AD_TENANT_ID]`
  * permissions and environment variables:
  * 1. `AZURE_AD_CLIENT_ID`
  * 2. `AZURE_AD_CLIENT_SECRET`
- * 3. `AZURE_AD_CLOUD_INSTANCE`
  * 4. `AZURE_AD_TENANT_ID`
  *
  * @example
@@ -30,31 +29,23 @@ export function createAzureADOAuthConfig(config: {
   /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
   scope: string | string[];
 }): OAuth2ClientConfig {
-  let cloudInstance = getRequiredEnv('AZURE_AD_CLOUD_INSTANCE');
+  const baseUrl = `https://login.microsoftonline.com/${
+    getRequiredEnv(
+      "AZURE_AD_TENANT_ID",
+    )
+  }/oauth2/v2.0`;
 
-  if (!cloudInstance.endsWith('/')) {
-    cloudInstance = `${cloudInstance}/`;
-  }
-
-  const tenantId = getRequiredEnv('AZURE_AD_TENANT_ID');
-
-  const policy = Deno.env.get('AZURE_AD_POLICY');
-
-  const path = policy ? `${tenantId}/${policy}` : tenantId;
-
-  const baseURL = `${cloudInstance}${path}/oauth2`;
-
-  const clientId = getRequiredEnv('AZURE_AD_CLIENT_ID');
+  const clientId = getRequiredEnv("AZURE_AD_CLIENT_ID");
 
   if (
     Array.isArray(config.scope) &&
-    config.scope.some((s) => s === 'openid') &&
+    config.scope.some((s) => s === "openid") &&
     !config.scope.some((s) => s === clientId)
   ) {
     config.scope.push(clientId);
   } else if (
-    typeof config.scope === 'string' &&
-    config.scope.includes('openid') &&
+    typeof config.scope === "string" &&
+    config.scope.includes("openid") &&
     !config.scope.includes(clientId)
   ) {
     config.scope = `${config.scope} ${clientId}`;
@@ -62,9 +53,9 @@ export function createAzureADOAuthConfig(config: {
 
   return {
     clientId,
-    clientSecret: getRequiredEnv('AZURE_AD_CLIENT_SECRET'),
-    authorizationEndpointUri: `${baseURL}/v2.0/authorize`,
-    tokenUri: `${baseURL}/v2.0/token`,
+    clientSecret: getRequiredEnv("AZURE_AD_CLIENT_SECRET"),
+    authorizationEndpointUri: `${baseUrl}/authorize`,
+    tokenUri: `${baseUrl}/token`,
     redirectUri: config.redirectUri,
     defaults: {
       scope: config.scope,
