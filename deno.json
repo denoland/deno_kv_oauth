@@ -25,5 +25,8 @@
   },
   "exclude": [
     "coverage/"
-  ]
+  ],
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": true
+  }
 }
