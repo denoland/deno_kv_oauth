@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "std/assert/assert_equals.ts";
 import { createAuth0OAuthConfig } from "./create_auth0_oauth_config.ts";
 import { createDiscordOAuthConfig } from "./create_discord_oauth_config.ts";
