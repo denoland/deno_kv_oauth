@@ -16,7 +16,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * const oauthConfig = createLinkedInOAuthConfig({
  *  redirectUri: "http://localhost:8000/callback",
- *  scope: "r_liteprofile r_emailaddress"
+ *  scope: ["profile", "email"],
  * });
  * ```
  *
