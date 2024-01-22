@@ -2,7 +2,7 @@
 import { STATUS_CODE } from "./deps.ts";
 import {
   createGitHubOAuthConfig,
-  getSessionId,
+  getSessionObject,
   handleCallback,
   signIn,
   signOut,
@@ -21,8 +21,8 @@ import {
 const oauthConfig = createGitHubOAuthConfig();
 
 async function indexHandler(request: Request) {
-  const sessionId = await getSessionId(request);
-  const hasSessionIdCookie = sessionId !== undefined;
+  const sesionObject = await getSessionObject(request);
+  const hasSessionIdCookie = sesionObject !== null;
 
   const body = `
     <p>Authorization endpoint URI: ${oauthConfig.authorizationEndpointUri}</p>
@@ -59,8 +59,7 @@ export async function handler(request: Request): Promise<Response> {
     }
     case "/callback": {
       try {
-        const { response } = await handleCallback(request, oauthConfig);
-        return response;
+        return await handleCallback(request, oauthConfig);
       } catch {
         return new Response(null, { status: STATUS_CODE.InternalServerError });
       }

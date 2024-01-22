@@ -1,6 +1,12 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { assertEquals, assertRejects } from "std/assert/mod.ts";
-import { getAndDeleteOAuthSession, setOAuthSession } from "./_kv.ts";
+import {
+  deleteSiteSession,
+  getAndDeleteOAuthSession,
+  getSiteSession,
+  setOAuthSession,
+  setSiteSession,
+} from "./_kv.ts";
 import { randomOAuthSession } from "./_test_utils.ts";
 
 Deno.test("(getAndDelete/set)OAuthSession()", async () => {
@@ -21,4 +27,17 @@ Deno.test("(getAndDelete/set)OAuthSession()", async () => {
     Deno.errors.NotFound,
     "OAuth session not found",
   );
+});
+
+Deno.test("(get/set/delete)SiteSession()", async () => {
+  const id = crypto.randomUUID();
+
+  assertEquals(await getSiteSession(id), null);
+
+  const siteSession = { foo: "bar" };
+  await setSiteSession(id, siteSession);
+  assertEquals(await getSiteSession(id), siteSession);
+
+  await deleteSiteSession(id);
+  assertEquals(await getSiteSession(id), null);
 });

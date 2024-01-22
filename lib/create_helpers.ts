@@ -1,7 +1,7 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 
-import { type Cookie, OAuth2ClientConfig, type Tokens } from "../deps.ts";
-import { getSessionId } from "./get_session_id.ts";
+import { type Cookie, OAuth2ClientConfig } from "../deps.ts";
+import { getSessionObject } from "./get_session_object.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signIn, type SignInOptions } from "./sign_in.ts";
 import { signOut } from "./sign_out.ts";
@@ -31,7 +31,7 @@ export interface CreateHelpersOptions {
  *   signIn,
  *   handleCallback,
  *   signOut,
- *   getSessionId,
+ *   getSessionObject,
  * } = createHelpers(createGitHubOAuthConfig(), {
  *   cookieOptions: {
  *     name: "__Secure-triple-choc",
@@ -45,12 +45,11 @@ export interface CreateHelpersOptions {
  *     case "/oauth/signin":
  *       return await signIn(request);
  *     case "/oauth/callback":
- *       const { response } = await handleCallback(request);
- *       return response;
+ *       return await handleCallback(request);
  *     case "/oauth/signout":
  *       return await signOut(request);
  *     case "/protected-route":
- *       return await getSessionId(request) === undefined
+ *       return await getSessionObject(request) === null
  *         ? new Response("Unauthorized", { status: 401 })
  *         : new Response("You are allowed");
  *     default:
@@ -61,18 +60,14 @@ export interface CreateHelpersOptions {
  * Deno.serve(handler);
  * ```
  */
-export function createHelpers(
+export function createHelpers<T>(
   oauthConfig: OAuth2ClientConfig,
   options?: CreateHelpersOptions,
 ): {
   signIn(request: Request, options?: SignInOptions): Promise<Response>;
-  handleCallback(request: Request): Promise<{
-    response: Response;
-    sessionId: string;
-    tokens: Tokens;
-  }>;
+  handleCallback(request: Request): Promise<Response>;
   signOut(request: Request): Promise<Response>;
-  getSessionId(request: Request): Promise<string | undefined>;
+  getSessionObject(request: Request): Promise<T | null>;
 } {
   return {
     async signIn(request: Request, options?: SignInOptions) {
@@ -86,8 +81,8 @@ export function createHelpers(
     async signOut(request: Request) {
       return await signOut(request, { cookieOptions: options?.cookieOptions });
     },
-    async getSessionId(request: Request) {
-      return await getSessionId(request, {
+    async getSessionObject(request: Request) {
+      return await getSessionObject<T>(request, {
         cookieName: options?.cookieOptions?.name,
       });
     },

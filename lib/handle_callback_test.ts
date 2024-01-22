@@ -1,6 +1,12 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { handleCallback } from "./handle_callback.ts";
-import { assertEquals, assertRejects } from "std/assert/mod.ts";
+import {
+  assert,
+  assertEquals,
+  assertNotEquals,
+  assertRejects,
+} from "std/assert/mod.ts";
+import { getSetCookies } from "std/http/cookie.ts";
 import { returnsNext, stub } from "std/testing/mock.ts";
 import { getAndDeleteOAuthSession, setOAuthSession } from "./_kv.ts";
 import { OAUTH_COOKIE_NAME } from "./_http.ts";
@@ -67,19 +73,22 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   const request = new Request(`http://example.com/callback?${searchParams}`, {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
-  const { response, tokens, sessionId } = await handleCallback(
+  const response = await handleCallback(
     request,
     randomOAuthConfig(),
   );
   fetchStub.restore();
 
   assertRedirect(response, oauthSession.successUrl);
-  assertEquals(
-    response.headers.get("set-cookie"),
-    `site-session=${sessionId}; HttpOnly; Max-Age=7776000; SameSite=Lax; Path=/`,
-  );
-  assertEquals(tokens.accessToken, tokensBody.access_token);
-  assertEquals(typeof sessionId, "string");
+  const [cookie] = getSetCookies(response.headers);
+  assert(cookie !== undefined);
+  assertEquals(cookie.name, "site-session");
+  assertEquals(cookie.maxAge, 7776000);
+  assertEquals(cookie.sameSite, "Lax");
+  assertEquals(cookie.path, "/");
+
+  const sessionId = cookie.value;
+  assertNotEquals(sessionId, undefined);
   await assertRejects(
     async () => await getAndDeleteOAuthSession(oauthSessionId),
     Deno.errors.NotFound,
@@ -112,7 +121,7 @@ Deno.test("handleCallback() correctly handles the callback response with options
     maxAge: 420,
     domain: "example.com",
   };
-  const { response, tokens, sessionId } = await handleCallback(
+  const response = await handleCallback(
     request,
     randomOAuthConfig(),
     { cookieOptions },
@@ -120,12 +129,16 @@ Deno.test("handleCallback() correctly handles the callback response with options
   fetchStub.restore();
 
   assertRedirect(response, oauthSession.successUrl);
-  assertEquals(
-    response.headers.get("set-cookie"),
-    `${cookieOptions.name}=${sessionId}; HttpOnly; Max-Age=${cookieOptions.maxAge}; Domain=${cookieOptions.domain}; SameSite=Lax; Path=/`,
-  );
-  assertEquals(tokens.accessToken, tokensBody.access_token);
-  assertEquals(typeof sessionId, "string");
+  const [cookie] = getSetCookies(response.headers);
+  assert(cookie !== undefined);
+  assertEquals(cookie.name, cookieOptions.name);
+  assertEquals(cookie.maxAge, cookieOptions.maxAge);
+  assertEquals(cookie.domain, cookieOptions.domain);
+  assertEquals(cookie.sameSite, "Lax");
+  assertEquals(cookie.path, "/");
+
+  const sessionId = cookie.value;
+  assertNotEquals(sessionId, undefined);
   await assertRejects(
     async () => await getAndDeleteOAuthSession(oauthSessionId),
     Deno.errors.NotFound,

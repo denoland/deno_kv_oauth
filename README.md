@@ -59,7 +59,7 @@ configurations.
    // server.ts
    import {
      createGitHubOAuthConfig,
-     getSessionId,
+     getSessionObject,
      handleCallback,
      signIn,
      signOut,
@@ -73,12 +73,11 @@ configurations.
        case "/oauth/signin":
          return await signIn(request, oauthConfig);
        case "/oauth/callback":
-         const { response } = await handleCallback(request, oauthConfig);
-         return response;
+         return await handleCallback(request, oauthConfig);
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return await getSessionObject(request) === null
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -110,7 +109,7 @@ configurations.
    // server.ts
    import {
      getRequiredEnv,
-     getSessionId,
+     getSessionObject,
      handleCallback,
      type OAuth2ClientConfig,
      signIn,
@@ -131,12 +130,11 @@ configurations.
        case "/oauth/signin":
          return await signIn(request, oauthConfig);
        case "/another-dir/callback":
-         const { response } = await handleCallback(request, oauthConfig);
-         return response;
+         return await handleCallback(request, oauthConfig);
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return await getSessionObject(request) === null
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -174,7 +172,7 @@ This is required for OAuth solutions that span more than one sub-domain.
      signIn,
      handleCallback,
      signOut,
-     getSessionId,
+     getSessionObject,
    } = createHelpers(createGitHubOAuthConfig(), {
      cookieOptions: {
        name: "__Secure-triple-choc",
@@ -188,12 +186,11 @@ This is required for OAuth solutions that span more than one sub-domain.
        case "/oauth/signin":
          return await signIn(request);
        case "/oauth/callback":
-         const { response } = await handleCallback(request);
-         return response;
+         return await handleCallback(request);
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return await getSessionObject(request) === null
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -225,7 +222,7 @@ This is required for OAuth solutions that span more than one sub-domain.
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
    import type { Plugin } from "$fresh/server.ts";
 
-   const { signIn, handleCallback, signOut, getSessionId } = createHelpers(
+   const { signIn, handleCallback, signOut, getSessionObject } = createHelpers(
      createGitHubOAuthConfig(),
    );
 
@@ -241,9 +238,7 @@ This is required for OAuth solutions that span more than one sub-domain.
        {
          path: "/callback",
          async handler(req) {
-           // Return object also includes `accessToken` and `sessionId` properties.
-           const { response } = await handleCallback(req);
-           return response;
+           return await handleCallback(req);
          },
        },
        {
@@ -255,7 +250,7 @@ This is required for OAuth solutions that span more than one sub-domain.
        {
          path: "/protected",
          async handler(req) {
-           return await getSessionId(req) === undefined
+           return await getSessionObject(req) === null
              ? new Response("Unauthorized", { status: 401 })
              : new Response("You are allowed");
          },

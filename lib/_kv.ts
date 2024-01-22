@@ -67,13 +67,17 @@ function siteSessionKey(id: string): [string, string] {
   return ["site_sessions", id];
 }
 
-export async function isSiteSession(id: string): Promise<boolean> {
-  const res = await kv.get<SiteSession>(siteSessionKey(id));
-  return res.value !== null;
+export async function getSiteSession<T>(id: string): Promise<T | null> {
+  const res = await kv.get<T>(siteSessionKey(id));
+  return res.value;
 }
 
-export async function setSiteSession(id: string, expireIn?: number) {
-  await kv.set(siteSessionKey(id), true, { expireIn });
+export async function setSiteSession(
+  id: string,
+  value?: unknown,
+  expireIn?: number,
+) {
+  await kv.set(siteSessionKey(id), value, { expireIn });
 }
 
 export async function deleteSiteSession(id: string) {

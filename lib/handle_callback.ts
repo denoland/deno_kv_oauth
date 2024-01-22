@@ -6,7 +6,6 @@ import {
   type OAuth2ClientConfig,
   SECOND,
   setCookie,
-  Tokens,
 } from "../deps.ts";
 import {
   COOKIE_BASE,
@@ -19,12 +18,44 @@ import {
 import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.ts";
 
 /** Options for {@linkcode handleCallback}. */
-export interface HandleCallbackOptions {
-  /** Overwrites cookie properties set in the response. These must match the
+export interface HandleCallbackOptions<T extends unknown = unknown> {
+  /**
+   * Overwrites cookie properties set in the response. These must match the
    * cookie properties used in {@linkcode getSessionId} and
    * {@linkcode signOut}.
    */
   cookieOptions?: Partial<Cookie>;
+  /**
+   * Function that uses the access token to get the session object. This is
+   * useful for fetching the user's profile from the OAuth provider. If
+   * undefined, the session object will be set to `undefined`.
+   *
+   * @example
+   * ```ts
+   * import { handleCallback, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   *
+   * const oauthConfig = createGitHubOAuthConfig();
+   *
+   * async function getGitHubUser(accessToken: string) {
+   *   const response = await fetch("https://api.github.com/user", {
+   *     headers: {
+   *       Authorization: `bearer ${accessToken}`,
+   *     },
+   *   });
+   *   if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+   *   return await response.json();
+   * }
+   *
+   * export async function handleOAuthCallback(request: Request) {
+   *   return await handleCallback(
+   *     request,
+   *     oauthConfig,
+   *     { sessionObjectGetter: getGitHubUser},
+   *  );
+   * }
+   * ```
+   */
+  sessionObjectGetter?: (accessToken: string) => Promise<T>;
 }
 
 /**
@@ -39,26 +70,18 @@ export interface HandleCallbackOptions {
  * const oauthConfig = createGitHubOAuthConfig();
  *
  * export async function handleOAuthCallback(request: Request) {
- *   const { response, tokens, sessionId } = await handleCallback(
+ *   return await handleCallback(
  *     request,
  *     oauthConfig,
  *   );
- *
- *    // Perform some actions with the `tokens` and `sessionId`.
- *
- *    return response;
  * }
  * ```
  */
-export async function handleCallback(
+export async function handleCallback<T>(
   request: Request,
   oauthConfig: OAuth2ClientConfig,
-  options?: HandleCallbackOptions,
-): Promise<{
-  response: Response;
-  sessionId: string;
-  tokens: Tokens;
-}> {
+  options?: HandleCallbackOptions<T>,
+): Promise<Response> {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
     isHttps(request.url),
@@ -80,14 +103,12 @@ export async function handleCallback(
     ...options?.cookieOptions,
   };
   setCookie(response.headers, cookie);
+  const session = await options?.sessionObjectGetter?.(tokens.accessToken);
   await setSiteSession(
     sessionId,
+    session,
     cookie.maxAge ? cookie.maxAge * SECOND : undefined,
   );
 
-  return {
-    response,
-    sessionId,
-    tokens,
-  };
+  return response;
 }
