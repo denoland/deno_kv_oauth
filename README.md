@@ -93,7 +93,7 @@ configurations.
    [environment variables](#environment-variables).
 
    ```bash
-   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable-kv --allow-env --allow-net server.ts
    ```
 
 > Check out a full implementation in the [demo source code](./demo.ts) which
@@ -151,7 +151,7 @@ configurations.
    [environment variables](#environment-variables).
 
    ```bash
-   CUSTOM_CLIENT_ID=xxx CUSTOM_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   CUSTOM_CLIENT_ID=xxx CUSTOM_CLIENT_SECRET=xxx deno run --unstable-kv --allow-env --allow-net server.ts
    ```
 
 ### Get Started with Cookie Options
@@ -208,7 +208,7 @@ This is required for OAuth solutions that span more than one sub-domain.
    [environment variables](#environment-variables).
 
    ```bash
-   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable-kv --allow-env --allow-net server.ts
    ```
 
 ### Get Started with [Fresh](https://fresh.deno.dev/)

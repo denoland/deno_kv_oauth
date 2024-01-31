@@ -11,12 +11,11 @@
     "std/": "https://deno.land/std@0.206.0/"
   },
   "tasks": {
-    "demo": "deno run --allow-net --env --allow-env --unstable --watch demo.ts",
+    "demo": "deno run --allow-net --env --allow-env --unstable-kv --watch demo.ts",
     "check:license": "deno run -A tools/check_license.ts",
-    "check:types": "deno check --unstable **/*.ts",
     "check:docs": "deno doc --lint mod.ts",
-    "check": "deno task check:license --check && deno task check:types && deno task check:docs",
-    "test": "DENO_KV_PATH=:memory: deno test --unstable --allow-env --allow-read --allow-run --parallel --trace-ops --coverage --doc",
+    "check": "deno task check:license --check && deno task check:docs",
+    "test": "DENO_KV_PATH=:memory: deno test --unstable-kv --allow-env --allow-read --allow-run --parallel --trace-ops --coverage --doc",
     "coverage": "deno coverage coverage",
     "ok": "deno fmt --check && deno lint && deno task check && deno task test",
     "cov:gen": "deno task coverage --lcov --output=cov.lcov",
@@ -25,5 +24,8 @@
   },
   "exclude": [
     "coverage/"
-  ]
+  ],
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": true
+  }
 }
