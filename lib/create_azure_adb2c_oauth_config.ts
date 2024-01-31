@@ -42,8 +42,8 @@ export function createAzureADB2COAuthConfig(config: {
   }/oauth2/v2.0`;
 
   return {
-    clientId: getRequiredEnv('AZURE_ADB2C_CLIENT_ID'),
-    clientSecret: getRequiredEnv('AZURE_ADB2C_CLIENT_SECRET'),
+    clientId: getRequiredEnv("AZURE_ADB2C_CLIENT_ID"),
+    clientSecret: getRequiredEnv("AZURE_ADB2C_CLIENT_SECRET"),
     authorizationEndpointUri: `${baseUrl}/authorize`,
     tokenUri: `${baseUrl}/token`,
     redirectUri: config.redirectUri,
