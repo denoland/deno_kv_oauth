@@ -35,25 +35,9 @@ export function createAzureADOAuthConfig(config: {
     )
   }/oauth2/v2.0`;
 
-  const clientId = getRequiredEnv("AZURE_AD_CLIENT_ID");
-
-  if (
-    Array.isArray(config.scope) &&
-    config.scope.some((s) => s === "openid") &&
-    !config.scope.some((s) => s === clientId)
-  ) {
-    config.scope.push(clientId);
-  } else if (
-    typeof config.scope === "string" &&
-    config.scope.includes("openid") &&
-    !config.scope.includes(clientId)
-  ) {
-    config.scope = `${config.scope} ${clientId}`;
-  }
-
   return {
-    clientId,
-    clientSecret: getRequiredEnv("AZURE_AD_CLIENT_SECRET"),
+    clientId: getRequiredEnv('AZURE_AD_CLIENT_ID'),
+    clientSecret: getRequiredEnv('AZURE_AD_CLIENT_SECRET'),
     authorizationEndpointUri: `${baseUrl}/authorize`,
     tokenUri: `${baseUrl}/token`,
     redirectUri: config.redirectUri,
