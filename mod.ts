@@ -18,5 +18,5 @@ export * from "./lib/get_required_env.ts";
 export * from "./lib/handle_callback.ts";
 export * from "./lib/sign_in.ts";
 export * from "./lib/sign_out.ts";
-export * from "./lib/get_session_object.ts";
+export * from "./lib/get_session_data.ts";
 export * from "./lib/types.ts";

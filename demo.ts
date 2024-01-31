@@ -2,7 +2,7 @@
 import { STATUS_CODE } from "./deps.ts";
 import {
   createGitHubOAuthConfig,
-  getSessionObject,
+  getSessionData,
   handleCallback,
   signIn,
   signOut,
@@ -21,7 +21,7 @@ import {
 const oauthConfig = createGitHubOAuthConfig();
 
 async function indexHandler(request: Request) {
-  const sesionObject = await getSessionObject(request);
+  const sesionObject = await getSessionData(request);
   const hasSessionIdCookie = sesionObject !== null;
 
   const body = `

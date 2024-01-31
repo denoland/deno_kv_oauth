@@ -18,15 +18,15 @@ export interface GetSessionIdOptions {
  *
  * @example
  * ```ts
- * import { getSessionObject } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { getSessionData } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * export async function handler(request: Request) {
- *   const sessionObject = await getSessionObject(request);
+ *   const sessionObject = await getSessionData(request);
  *   return Response.json(sessionObject);
  * }
  * ```
  */
-export async function getSessionObject<T>(
+export async function getSessionData<T>(
   request: Request,
   options?: GetSessionIdOptions,
 ): Promise<T | null> {

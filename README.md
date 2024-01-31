@@ -59,7 +59,7 @@ configurations.
    // server.ts
    import {
      createGitHubOAuthConfig,
-     getSessionObject,
+     getSessionData,
      handleCallback,
      signIn,
      signOut,
@@ -77,7 +77,7 @@ configurations.
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionObject(request) === null
+         return await getSessionData(request) === null
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -109,7 +109,7 @@ configurations.
    // server.ts
    import {
      getRequiredEnv,
-     getSessionObject,
+     getSessionData,
      handleCallback,
      type OAuth2ClientConfig,
      signIn,
@@ -134,7 +134,7 @@ configurations.
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionObject(request) === null
+         return await getSessionData(request) === null
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -172,7 +172,7 @@ This is required for OAuth solutions that span more than one sub-domain.
      signIn,
      handleCallback,
      signOut,
-     getSessionObject,
+     getSessionData,
    } = createHelpers(createGitHubOAuthConfig(), {
      cookieOptions: {
        name: "__Secure-triple-choc",
@@ -190,7 +190,7 @@ This is required for OAuth solutions that span more than one sub-domain.
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionObject(request) === null
+         return await getSessionData(request) === null
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -222,7 +222,7 @@ This is required for OAuth solutions that span more than one sub-domain.
    } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
    import type { Plugin } from "$fresh/server.ts";
 
-   const { signIn, handleCallback, signOut, getSessionObject } = createHelpers(
+   const { signIn, handleCallback, signOut, getSessionData } = createHelpers(
      createGitHubOAuthConfig(),
    );
 
@@ -250,7 +250,7 @@ This is required for OAuth solutions that span more than one sub-domain.
        {
          path: "/protected",
          async handler(req) {
-           return await getSessionObject(req) === null
+           return await getSessionData(req) === null
              ? new Response("Unauthorized", { status: 401 })
              : new Response("You are allowed");
          },

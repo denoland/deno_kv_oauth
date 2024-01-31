@@ -56,13 +56,6 @@ export async function setOAuthSession(
   await kv.set(oauthSessionKey(id), value, options);
 }
 
-/**
- * The site session is created on the server. It is stored in the database to
- * later validate that a session was created on the server. It has no purpose
- * beyond that. Hence, the value of the site session entry is arbitrary.
- */
-type SiteSession = true;
-
 function siteSessionKey(id: string): [string, string] {
   return ["site_sessions", id];
 }

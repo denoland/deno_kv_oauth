@@ -1,7 +1,7 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 
 import { type Cookie, OAuth2ClientConfig } from "../deps.ts";
-import { getSessionObject } from "./get_session_object.ts";
+import { getSessionData } from "./get_session_data.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signIn, type SignInOptions } from "./sign_in.ts";
 import { signOut } from "./sign_out.ts";
@@ -31,7 +31,7 @@ export interface CreateHelpersOptions {
  *   signIn,
  *   handleCallback,
  *   signOut,
- *   getSessionObject,
+ *   getSessionData,
  * } = createHelpers(createGitHubOAuthConfig(), {
  *   cookieOptions: {
  *     name: "__Secure-triple-choc",
@@ -49,7 +49,7 @@ export interface CreateHelpersOptions {
  *     case "/oauth/signout":
  *       return await signOut(request);
  *     case "/protected-route":
- *       return await getSessionObject(request) === null
+ *       return await getSessionData(request) === null
  *         ? new Response("Unauthorized", { status: 401 })
  *         : new Response("You are allowed");
  *     default:
@@ -67,7 +67,7 @@ export function createHelpers<T>(
   signIn(request: Request, options?: SignInOptions): Promise<Response>;
   handleCallback(request: Request): Promise<Response>;
   signOut(request: Request): Promise<Response>;
-  getSessionObject(request: Request): Promise<T | null>;
+  getSessionData(request: Request): Promise<T | null>;
 } {
   return {
     async signIn(request: Request, options?: SignInOptions) {
@@ -81,8 +81,8 @@ export function createHelpers<T>(
     async signOut(request: Request) {
       return await signOut(request, { cookieOptions: options?.cookieOptions });
     },
-    async getSessionObject(request: Request) {
-      return await getSessionObject<T>(request, {
+    async getSessionData(request: Request) {
+      return await getSessionData<T>(request, {
         cookieName: options?.cookieOptions?.name,
       });
     },
