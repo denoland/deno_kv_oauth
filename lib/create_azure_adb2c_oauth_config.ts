@@ -19,7 +19,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * const oauthConfig = createAzureADB2COAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",
- *   ["openid", Deno.env.get("AZURE_ADB2C_CLIENT_ID")!]
+ *   scope: ["openid", Deno.env.get("AZURE_ADB2C_CLIENT_ID")!]
  * });
  * ```
  *
