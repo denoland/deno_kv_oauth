@@ -17,7 +17,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * const oauthConfig = createAzureAdOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",
- *   scope: ["openid", Deno.env.get("AZURE_AD_CLIENT_ID")!]
+ *   scope: ["openid"]
  * });
  * ```
  *

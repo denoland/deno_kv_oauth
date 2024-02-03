@@ -1,12 +1,14 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { STATUS_CODE } from "./deps.ts";
+import { STATUS_CODE } from './deps.ts';
 import {
+  createAzureAdOAuthConfig,
+  createAzureAdb2cOAuthConfig,
   createGitHubOAuthConfig,
   getSessionId,
   handleCallback,
   signIn,
   signOut,
-} from "./mod.ts";
+} from './mod.ts';
 
 /**
  * Modify the OAuth configuration creation function when testing for providers.
@@ -18,7 +20,10 @@ import {
  * const oauthConfig = createNotionOAuthConfig();
  * ```
  */
-const oauthConfig = createGitHubOAuthConfig();
+const oauthConfig = createAzureAdb2cOAuthConfig({
+  redirectUri: 'http://localhost:8000/callback',
+  scope: ['openid', Deno.env.get('AZURE_ADB2C_CLIENT_ID')!],
+});
 
 async function indexHandler(request: Request) {
   const sessionId = await getSessionId(request);
@@ -41,23 +46,23 @@ async function indexHandler(request: Request) {
   `;
 
   return new Response(body, {
-    headers: { "content-type": "text/html; charset=utf-8" },
+    headers: { 'content-type': 'text/html; charset=utf-8' },
   });
 }
 
 export async function handler(request: Request): Promise<Response> {
-  if (request.method !== "GET") {
+  if (request.method !== 'GET') {
     return new Response(null, { status: STATUS_CODE.NotFound });
   }
 
   switch (new URL(request.url).pathname) {
-    case "/": {
+    case '/': {
       return await indexHandler(request);
     }
-    case "/signin": {
+    case '/signin': {
       return await signIn(request, oauthConfig);
     }
-    case "/callback": {
+    case '/callback': {
       try {
         const { response } = await handleCallback(request, oauthConfig);
         return response;
@@ -65,7 +70,7 @@ export async function handler(request: Request): Promise<Response> {
         return new Response(null, { status: STATUS_CODE.InternalServerError });
       }
     }
-    case "/signout": {
+    case '/signout': {
       return await signOut(request);
     }
     default: {
