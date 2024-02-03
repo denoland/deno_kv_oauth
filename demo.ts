@@ -1,8 +1,6 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { STATUS_CODE } from './deps.ts';
 import {
-  createAzureAdOAuthConfig,
-  createAzureAdb2cOAuthConfig,
   createGitHubOAuthConfig,
   getSessionId,
   handleCallback,
@@ -20,10 +18,7 @@ import {
  * const oauthConfig = createNotionOAuthConfig();
  * ```
  */
-const oauthConfig = createAzureAdb2cOAuthConfig({
-  redirectUri: 'http://localhost:8000/callback',
-  scope: ['openid', Deno.env.get('AZURE_ADB2C_CLIENT_ID')!],
-});
+const oauthConfig = createGitHubOAuthConfig();
 
 async function indexHandler(request: Request) {
   const sessionId = await getSessionId(request);
