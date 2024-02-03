@@ -15,9 +15,9 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createAzureADB2COAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createAzureAdb2cOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
- * const oauthConfig = createAzureADB2COAuthConfig({
+ * const oauthConfig = createAzureAdb2cOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",
  *   scope: ["openid", Deno.env.get("AZURE_ADB2C_CLIENT_ID")!]
  * });
@@ -25,7 +25,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @see {@link https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc}
  */
-export function createAzureADB2COAuthConfig(config: {
+export function createAzureAdb2cOAuthConfig(config: {
   /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
   redirectUri?: string;
   /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
