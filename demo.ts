@@ -21,8 +21,8 @@ import {
 const oauthConfig = createGitHubOAuthConfig();
 
 async function indexHandler(request: Request) {
-  const sesionObject = await getSessionData(request);
-  const hasSessionIdCookie = sesionObject !== null;
+  const sessionData = await getSessionData(request);
+  const hasSessionIdCookie = sessionData !== null;
 
   const body = `
     <p>Authorization endpoint URI: ${oauthConfig.authorizationEndpointUri}</p>
