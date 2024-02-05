@@ -2,13 +2,19 @@
 import { getSessionIdCookie } from "./_http.ts";
 import { getSiteSession } from "./_kv.ts";
 
-/** Options for {@linkcode getSessionId}. */
-export interface GetSessionIdOptions {
+/** Options for {@linkcode getSessionData}. */
+export interface GetSessionDataOptions {
   /**
    * The name of the cookie in the request. This must match the cookie name
    * used in {@linkcode handleCallback} and {@linkcode signOut}.
    */
   cookieName?: string;
+  /**
+   * Consistency level when reading the session data from the database.
+   *
+   * @default {"strong"}
+   */
+  consistency?: Deno.KvConsistencyLevel;
 }
 
 /**
@@ -16,21 +22,27 @@ export interface GetSessionIdOptions {
  * check whether the client is signed-in and whether the session ID was created
  * on the server by checking if the return value is defined.
  *
+ * @returns The session data object returned from {@linkcode sessionDataGetter}
+ * in {@linkcode handleCallback} or `null` if the session cookie either doesn't
+ * exist or the session entry doesn't exist in the database.
+ *
  * @example
  * ```ts
  * import { getSessionData } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
  *
  * export async function handler(request: Request) {
- *   const sessionObject = await getSessionData(request);
- *   return Response.json(sessionObject);
+ *   const sessionData = await getSessionData(request);
+ *   return sessionData === null
+ *     ? new Response("Unauthorized", { status: 401 })
+ *     : Response.json(sessionData);
  * }
  * ```
  */
 export async function getSessionData<T>(
   request: Request,
-  options?: GetSessionIdOptions,
+  options?: GetSessionDataOptions,
 ): Promise<T | null> {
   const sessionId = getSessionIdCookie(request, options?.cookieName);
   if (sessionId === undefined) return null;
-  return await getSiteSession<T>(sessionId);
+  return await getSiteSession<T>(sessionId, options?.consistency);
 }
