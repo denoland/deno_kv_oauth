@@ -29,6 +29,7 @@ async function indexHandler(request: Request) {
     <p>Token URI: ${oauthConfig.tokenUri}</p>
     <p>Scope: ${oauthConfig.defaults?.scope}</p>
     <p>Signed in: ${hasSessionIdCookie}</p>
+    <pre>${JSON.stringify(sessionData, null, 2)}</pre>
     <p>
       <a href="/signin">Sign in</a>
     </p>
@@ -45,6 +46,29 @@ async function indexHandler(request: Request) {
   });
 }
 
+interface GitHubUser {
+  login: string;
+  avatarUrl: string;
+}
+
+async function getGitHubUser(accessToken: string) {
+  const response = await fetch("https://api.github.com/user", {
+    headers: {
+      authorization: `token ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to get GitHub user");
+  }
+
+  const data = await response.json();
+  return {
+    login: data.login,
+    avatarUrl: data.avatar_url,
+  } as GitHubUser;
+}
+
 export async function handler(request: Request): Promise<Response> {
   if (request.method !== "GET") {
     return new Response(null, { status: STATUS_CODE.NotFound });
@@ -59,7 +83,9 @@ export async function handler(request: Request): Promise<Response> {
     }
     case "/callback": {
       try {
-        return await handleCallback(request, oauthConfig);
+        return await handleCallback<GitHubUser>(request, oauthConfig, {
+          sessionDataGetter: getGitHubUser,
+        });
       } catch {
         return new Response(null, { status: STATUS_CODE.InternalServerError });
       }
