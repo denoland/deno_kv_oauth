@@ -1,6 +1,8 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 
 export * from "./lib/create_auth0_oauth_config.ts";
+export * from "./lib/create_azure_ad_oauth_config.ts";
+export * from "./lib/create_azure_adb2c_oauth_config.ts";
 export * from "./lib/create_discord_oauth_config.ts";
 export * from "./lib/create_dropbox_oauth_config.ts";
 export * from "./lib/create_facebook_oauth_config.ts";

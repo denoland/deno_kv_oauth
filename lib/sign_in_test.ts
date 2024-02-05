@@ -1,6 +1,6 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { signIn } from "./sign_in.ts";
-import { assertEquals, assertNotEquals } from "std/assert/mod.ts";
+import { assert, assertEquals, assertNotEquals } from "std/assert/mod.ts";
 import { getSetCookies } from "../deps.ts";
 import { OAUTH_COOKIE_NAME } from "./_http.ts";
 import { getAndDeleteOAuthSession } from "./_kv.ts";
@@ -12,6 +12,7 @@ Deno.test("signIn() returns a response that signs-in the user", async () => {
   assertRedirect(response);
 
   const [setCookie] = getSetCookies(response.headers);
+  assert(setCookie !== undefined);
   assertEquals(setCookie.name, OAUTH_COOKIE_NAME);
   assertEquals(setCookie.httpOnly, true);
   assertEquals(setCookie.maxAge, 10 * 60);

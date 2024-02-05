@@ -1,6 +1,8 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { assertEquals } from "std/assert/assert_equals.ts";
 import { createAuth0OAuthConfig } from "./create_auth0_oauth_config.ts";
+import { createAzureAdb2cOAuthConfig } from "./create_azure_adb2c_oauth_config.ts";
+import { createAzureAdOAuthConfig } from "./create_azure_ad_oauth_config.ts";
 import { createDiscordOAuthConfig } from "./create_discord_oauth_config.ts";
 import { createDropboxOAuthConfig } from "./create_dropbox_oauth_config.ts";
 import { createFacebookOAuthConfig } from "./create_facebook_oauth_config.ts";
@@ -18,6 +20,14 @@ import { createTwitterOAuthConfig } from "./create_twitter_oauth_config.ts";
   {
     envPrefix: "AUTH0",
     createOAuthConfigFn: createAuth0OAuthConfig,
+  },
+  {
+    envPrefix: "AZURE_ADB2C",
+    createOAuthConfigFn: createAzureAdb2cOAuthConfig,
+  },
+  {
+    envPrefix: "AZURE_AD",
+    createOAuthConfigFn: createAzureAdOAuthConfig,
   },
   {
     envPrefix: "DISCORD",
@@ -76,8 +86,12 @@ import { createTwitterOAuthConfig } from "./create_twitter_oauth_config.ts";
 
     Deno.env.set(`${envPrefix}_CLIENT_ID`, clientId);
     Deno.env.set(`${envPrefix}_CLIENT_SECRET`, clientSecret);
-    // Only needed for Okta and Auth0 but set for all providers anyway
+    // Only needed for Okta, Auth0, and AzureADB2C but set for all providers anyway
     Deno.env.set(`${envPrefix}_DOMAIN`, crypto.randomUUID());
+    // Only needed for Azure and AzureADB2C but set for all providers anyway
+    Deno.env.set(`${envPrefix}_TENANT_ID`, crypto.randomUUID());
+    // Only needed for AzureADB2C but set for all providers anyway
+    Deno.env.set(`${envPrefix}_POLICY`, crypto.randomUUID());
 
     const oauthConfig = createOAuthConfigFn({ redirectUri, scope });
     assertEquals(oauthConfig.clientId, clientId);
