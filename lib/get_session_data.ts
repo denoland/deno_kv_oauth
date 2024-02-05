@@ -9,12 +9,6 @@ export interface GetSessionDataOptions {
    * used in {@linkcode handleCallback} and {@linkcode signOut}.
    */
   cookieName?: string;
-  /**
-   * Consistency level when reading the session data from the database.
-   *
-   * @default {"strong"}
-   */
-  consistency?: Deno.KvConsistencyLevel;
 }
 
 /**
@@ -44,5 +38,5 @@ export async function getSessionData<T>(
 ): Promise<T | null> {
   const sessionId = getSessionIdCookie(request, options?.cookieName);
   if (sessionId === undefined) return null;
-  return await getSiteSession<T>(sessionId, options?.consistency);
+  return await getSiteSession<T>(sessionId);
 }

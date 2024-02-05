@@ -60,11 +60,8 @@ function siteSessionKey(id: string): [string, string] {
   return ["site_sessions", id];
 }
 
-export async function getSiteSession<T>(
-  id: string,
-  consistency?: Deno.KvConsistencyLevel,
-): Promise<T | null> {
-  const res = await kv.get<T>(siteSessionKey(id), { consistency });
+export async function getSiteSession<T>(id: string): Promise<T | null> {
+  const res = await kv.get<T>(siteSessionKey(id));
   return res.value;
 }
 
