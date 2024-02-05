@@ -31,7 +31,7 @@ jobs:
           files: cov.lcov
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           title: "chore: update dependencies"
           delete-branch: true
