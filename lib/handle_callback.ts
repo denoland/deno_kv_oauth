@@ -50,12 +50,12 @@ export interface HandleCallbackOptions<T extends unknown = unknown> {
    *   return await handleCallback(
    *     request,
    *     oauthConfig,
-   *     { sessionObjectGetter: getGitHubUser},
+   *     { sessionDataGetter: getGitHubUser},
    *  );
    * }
    * ```
    */
-  sessionObjectGetter?: (accessToken: string) => Promise<T>;
+  sessionDataGetter?: (accessToken: string) => Promise<T>;
 }
 
 /**
@@ -103,7 +103,7 @@ export async function handleCallback<T>(
     ...options?.cookieOptions,
   };
   setCookie(response.headers, cookie);
-  const session = await options?.sessionObjectGetter?.(tokens.accessToken);
+  const session = await options?.sessionDataGetter?.(tokens.accessToken);
   await setSiteSession(
     sessionId,
     session,
