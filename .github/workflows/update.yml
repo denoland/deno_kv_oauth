@@ -29,6 +29,7 @@ jobs:
         with:
           name: ${{ matrix.os }}
           files: cov.lcov
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
