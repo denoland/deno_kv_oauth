@@ -11,6 +11,9 @@ jobs:
     strategy:
       fail-fast: false
 
+    permissions:
+      contents: write
+
     steps:
       - name: Setup repo
         uses: actions/checkout@v4
