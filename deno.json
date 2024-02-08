@@ -1,4 +1,6 @@
 {
+  "name": "@denoland/deno_kv_oauth",
+  "version": "0.10.0",
   "lock": false,
   "imports": {
     "https://deno.land/x/deno_kv_oauth@$VERSION/": "./",
