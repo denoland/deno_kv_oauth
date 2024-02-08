@@ -1,0 +1,38 @@
+name: Publish to JSR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up Deno
+        uses: denoland/setup-deno@v1
+
+      - name: Convert to JSR package
+        run: deno run -A tools/convert_to_jsr.ts
+
+      - name: Check formatting, linting, types and run tests
+        run: deno task ok
+
+      - name: Publish (dry run)
+        if: startsWith(github.ref, 'refs/tags/') == false
+        run: deno publish --dry-run
+
+      - name: Publish (real)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: deno publish
