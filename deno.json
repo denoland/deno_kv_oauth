@@ -1,7 +1,7 @@
 {
   "lock": false,
   "imports": {
-    "https://deno.land/x/deno_kv_oauth@$VERSION/": "./",
+    "https://deno.land/x/deno_kv_oauth/": "./",
     "$fresh/": "https://deno.land/x/fresh@1.5.2/",
     "preact": "https://esm.sh/preact@10.18.1",
     "preact/": "https://esm.sh/preact@10.18.1/",
