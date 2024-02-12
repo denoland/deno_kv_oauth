@@ -25,7 +25,7 @@ export interface CreateHelpersOptions {
  * import {
  *   createGitHubOAuthConfig,
  *   createHelpers,
- * } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * const {
  *   signIn,

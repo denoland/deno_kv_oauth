@@ -11,6 +11,10 @@ jobs:
     strategy:
       fail-fast: false
 
+    permissions:
+      contents: write
+      pull-requests: write
+
     steps:
       - name: Setup repo
         uses: actions/checkout@v4
@@ -25,13 +29,14 @@ jobs:
         run: deno task cov:gen
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           name: ${{ matrix.os }}
           files: cov.lcov
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           title: "chore: update dependencies"
           delete-branch: true
