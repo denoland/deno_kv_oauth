@@ -22,7 +22,7 @@ export interface GetSessionDataOptions {
  *
  * @example
  * ```ts
- * import { getSessionData } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { getSessionData } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * export async function handler(request: Request) {
  *   const sessionData = await getSessionData(request);
