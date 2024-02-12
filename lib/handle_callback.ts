@@ -30,6 +30,10 @@ export interface HandleCallbackOptions<T extends unknown = unknown> {
    * useful for fetching the user's profile from the OAuth provider. If
    * undefined, the session object will be set to `undefined`.
    *
+   * An {@linkcode Error} will be thrown if this function resolves to a `null`
+   * value. `null` is a value reserved for checking for the existence of a
+   * session data object in {@linkcode getSessionData}.
+   *
    * @example
    * ```ts
    * import { handleCallback, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
