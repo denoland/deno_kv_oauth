@@ -104,6 +104,10 @@ export async function handleCallback<T>(
   };
   setCookie(response.headers, cookie);
   const session = await options?.sessionDataGetter?.(tokens.accessToken);
+  if (session === null) {
+    throw new Error("options.sessionDataGetter() must return a non-null value");
+  }
+
   await setSiteSession(
     sessionId,
     session,
