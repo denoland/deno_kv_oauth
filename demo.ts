@@ -1,12 +1,6 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { STATUS_CODE } from "./deps.ts";
-import {
-  createGitHubOAuthConfig,
-  getSessionData,
-  handleCallback,
-  signIn,
-  signOut,
-} from "./mod.ts";
+import { createGitHubOAuthConfig, createHelpers } from "./mod.ts";
 
 /**
  * Modify the OAuth configuration creation function when testing for providers.
@@ -19,6 +13,11 @@ import {
  * ```
  */
 const oauthConfig = createGitHubOAuthConfig();
+const { getSessionData, handleCallback, signIn, signOut } = createHelpers<
+  GitHubUser
+>(
+  oauthConfig,
+);
 
 async function indexHandler(request: Request) {
   const sessionData = await getSessionData(request);
@@ -79,13 +78,14 @@ export async function handler(request: Request): Promise<Response> {
       return await indexHandler(request);
     }
     case "/signin": {
-      return await signIn(request, oauthConfig);
+      return await signIn(request);
     }
     case "/callback": {
       try {
-        return await handleCallback<GitHubUser>(request, oauthConfig, {
-          sessionDataGetter: getGitHubUser,
-        });
+        return await handleCallback(
+          request,
+          getGitHubUser,
+        );
       } catch {
         return new Response(null, { status: STATUS_CODE.InternalServerError });
       }

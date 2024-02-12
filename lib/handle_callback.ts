@@ -25,41 +25,6 @@ export interface HandleCallbackOptions<T extends unknown = unknown> {
    * {@linkcode signOut}.
    */
   cookieOptions?: Partial<Cookie>;
-  /**
-   * Function that uses the access token to get the session object. This is
-   * useful for fetching the user's profile from the OAuth provider. If
-   * undefined, the session object will be set to `undefined`.
-   *
-   * An {@linkcode Error} will be thrown if this function resolves to a `null`
-   * value. `null` is a value reserved for checking for the existence of a
-   * session data object in {@linkcode getSessionData}.
-   *
-   * @example
-   * ```ts
-   * import { handleCallback, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
-   *
-   * const oauthConfig = createGitHubOAuthConfig();
-   *
-   * async function getGitHubUser(accessToken: string) {
-   *   const response = await fetch("https://api.github.com/user", {
-   *     headers: {
-   *       Authorization: `bearer ${accessToken}`,
-   *     },
-   *   });
-   *   if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
-   *   return await response.json();
-   * }
-   *
-   * export async function handleOAuthCallback(request: Request) {
-   *   return await handleCallback(
-   *     request,
-   *     oauthConfig,
-   *     { sessionDataGetter: getGitHubUser},
-   *  );
-   * }
-   * ```
-   */
-  sessionDataGetter?: (accessToken: string) => Promise<T>;
 }
 
 /**
@@ -67,23 +32,43 @@ export interface HandleCallbackOptions<T extends unknown = unknown> {
  * then redirects the client to the success URL set in {@linkcode signIn}. The
  * request URL must match the redirect URL of the OAuth application.
  *
+ *  Function that uses the access token to get the session object. This is
+ * useful for fetching the user's profile from the OAuth provider. If
+ * undefined, the session object will be set to `undefined`.
+ *
+ * An {@linkcode Error} will be thrown if this function resolves to a `null`
+ * value. `null` is a value reserved for checking for the existence of a
+ * session data object in {@linkcode getSessionData}.
+ *
  * @example
  * ```ts
  * import { handleCallback, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * const oauthConfig = createGitHubOAuthConfig();
  *
+ * async function getGitHubUser(accessToken: string) {
+ *   const response = await fetch("https://api.github.com/user", {
+ *     headers: {
+ *       Authorization: `bearer ${accessToken}`,
+ *     },
+ *   });
+ *   if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+ *   return await response.json();
+ * }
+ *
  * export async function handleOAuthCallback(request: Request) {
  *   return await handleCallback(
  *     request,
  *     oauthConfig,
- *   );
+ *     getGitHubUser,
+ *  );
  * }
  * ```
  */
-export async function handleCallback<T>(
+export async function handleCallback<T extends unknown = unknown>(
   request: Request,
   oauthConfig: OAuth2ClientConfig,
+  tokenCallback: (accessToken: string) => T | Promise<T>,
   options?: HandleCallbackOptions<T>,
 ): Promise<Response> {
   const oauthCookieName = getCookieName(
@@ -107,14 +92,15 @@ export async function handleCallback<T>(
     ...options?.cookieOptions,
   };
   setCookie(response.headers, cookie);
-  const session = await options?.sessionDataGetter?.(tokens.accessToken);
-  if (session === null) {
-    throw new Error("options.sessionDataGetter() must return a non-null value");
+
+  const sessionData = await tokenCallback(tokens.accessToken);
+  if (sessionData === null) {
+    throw new Error("tokenCallback() must resolve to a non-null value");
   }
 
   await setSiteSession(
     sessionId,
-    session,
+    sessionData,
     cookie.maxAge ? cookie.maxAge * SECOND : undefined,
   );
 

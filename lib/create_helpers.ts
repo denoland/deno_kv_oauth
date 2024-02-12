@@ -65,7 +65,10 @@ export function createHelpers<T>(
   options?: CreateHelpersOptions,
 ): {
   signIn(request: Request, options?: SignInOptions): Promise<Response>;
-  handleCallback(request: Request): Promise<Response>;
+  handleCallback(
+    request: Request,
+    tokenHandler: (accessToken: string) => T | Promise<T>,
+  ): Promise<Response>;
   signOut(request: Request): Promise<Response>;
   getSessionData(request: Request): Promise<T | null>;
 } {
@@ -73,8 +76,11 @@ export function createHelpers<T>(
     async signIn(request: Request, options?: SignInOptions) {
       return await signIn(request, oauthConfig, options);
     },
-    async handleCallback(request: Request) {
-      return await handleCallback(request, oauthConfig, {
+    async handleCallback(
+      request: Request,
+      tokenHandler: (accessToken: string) => T | Promise<T>,
+    ) {
+      return await handleCallback(request, oauthConfig, tokenHandler, {
         cookieOptions: options?.cookieOptions,
       });
     },

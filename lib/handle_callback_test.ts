@@ -21,7 +21,8 @@ import type { Cookie } from "../deps.ts";
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
   const request = new Request("http://example.com");
   await assertRejects(
-    async () => await handleCallback(request, randomOAuthConfig()),
+    async () =>
+      await handleCallback(request, randomOAuthConfig(), () => undefined),
     Error,
     "OAuth cookie not found",
   );
@@ -32,7 +33,20 @@ Deno.test("handleCallback() rejects for non-existent OAuth session", async () =>
     headers: { cookie: `${OAUTH_COOKIE_NAME}=xxx` },
   });
   await assertRejects(
-    async () => await handleCallback(request, randomOAuthConfig()),
+    async () =>
+      await handleCallback(request, randomOAuthConfig(), () => undefined),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
+});
+
+Deno.test("handleCallback() rejects for non-existent OAuth session", async () => {
+  const request = new Request("http://example.com", {
+    headers: { cookie: `${OAUTH_COOKIE_NAME}=xxx` },
+  });
+  await assertRejects(
+    async () =>
+      await handleCallback(request, randomOAuthConfig(), () => undefined),
     Deno.errors.NotFound,
     "OAuth session not found",
   );
@@ -45,7 +59,9 @@ Deno.test("handleCallback() deletes the OAuth session KV entry", async () => {
   const request = new Request("http://example.com", {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
-  await assertRejects(() => handleCallback(request, randomOAuthConfig()));
+  await assertRejects(async () =>
+    await handleCallback(request, randomOAuthConfig(), () => undefined)
+  );
   await assertRejects(
     async () => await getAndDeleteOAuthSession(oauthSessionId),
     Deno.errors.NotFound,
@@ -76,6 +92,7 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   const response = await handleCallback(
     request,
     randomOAuthConfig(),
+    () => undefined,
   );
   fetchStub.restore();
 
@@ -124,6 +141,7 @@ Deno.test("handleCallback() correctly handles the callback response with options
   const response = await handleCallback(
     request,
     randomOAuthConfig(),
+    () => undefined,
     { cookieOptions },
   );
   fetchStub.restore();
