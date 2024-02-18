@@ -39,13 +39,23 @@ export interface CreateHelpersOptions {
  *   },
  * });
  *
+ * async function getGitHubUser(accessToken: string) {
+ *   const response = await fetch("https://api.github.com/user", {
+ *     headers: {
+ *       Authorization: `bearer ${accessToken}`,
+ *     },
+ *   });
+ *   if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+ *   return await response.json();
+ * }
+ *
  * async function handler(request: Request) {
  *   const { pathname } = new URL(request.url);
  *   switch (pathname) {
  *     case "/oauth/signin":
  *       return await signIn(request);
  *     case "/oauth/callback":
- *       return await handleCallback(request);
+ *       return await handleCallback(request, getGitHubUser);
  *     case "/oauth/signout":
  *       return await signOut(request);
  *     case "/protected-route":

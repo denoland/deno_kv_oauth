@@ -67,13 +67,23 @@ configurations.
 
    const oauthConfig = createGitHubOAuthConfig();
 
+   async function getGitHubUser(accessToken: string) {
+     const response = await fetch("https://api.github.com/user", {
+       headers: {
+         Authorization: `bearer ${accessToken}`,
+       },
+     });
+     if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+     return await response.json();
+   }
+
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
          return await signIn(request, oauthConfig);
        case "/oauth/callback":
-         return await handleCallback(request, oauthConfig);
+         return await handleCallback(request, oauthConfig, getGitHubUser);
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
@@ -124,13 +134,23 @@ configurations.
      redirectUri: "https://my-site.com/another-dir/callback",
    };
 
+   async function getGitHubUser(accessToken: string) {
+     const response = await fetch("https://api.github.com/user", {
+       headers: {
+         Authorization: `bearer ${accessToken}`,
+       },
+     });
+     if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+     return await response.json();
+   }
+
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
          return await signIn(request, oauthConfig);
        case "/another-dir/callback":
-         return await handleCallback(request, oauthConfig);
+         return await handleCallback(request, oauthConfig, getGitHubUser);
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
@@ -180,13 +200,23 @@ This is required for OAuth solutions that span more than one sub-domain.
      },
    });
 
+   async function getGitHubUser(accessToken: string) {
+     const response = await fetch("https://api.github.com/user", {
+       headers: {
+         Authorization: `bearer ${accessToken}`,
+       },
+     });
+     if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+     return await response.json();
+   }
+
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
          return await signIn(request);
        case "/oauth/callback":
-         return await handleCallback(request);
+         return await handleCallback(request, getGitHubUser);
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
@@ -226,6 +256,16 @@ This is required for OAuth solutions that span more than one sub-domain.
      createGitHubOAuthConfig(),
    );
 
+   async function getGitHubUser(accessToken: string) {
+     const response = await fetch("https://api.github.com/user", {
+       headers: {
+         Authorization: `bearer ${accessToken}`,
+       },
+     });
+     if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+     return await response.json();
+   }
+
    export default {
      name: "kv-oauth",
      routes: [
@@ -238,7 +278,7 @@ This is required for OAuth solutions that span more than one sub-domain.
        {
          path: "/callback",
          async handler(req) {
-           return await handleCallback(req);
+           return await handleCallback(req, getGitHubUser);
          },
        },
        {
