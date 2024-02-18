@@ -32,9 +32,8 @@ export interface HandleCallbackOptions<T extends unknown = unknown> {
  * then redirects the client to the success URL set in {@linkcode signIn}. The
  * request URL must match the redirect URL of the OAuth application.
  *
- *  Function that uses the access token to get the session object. This is
- * useful for fetching the user's profile from the OAuth provider. If
- * undefined, the session object will be set to `undefined`.
+ * Function that uses the access token to get the session object. This is
+ * useful for fetching the user's profile from the OAuth provider.
  *
  * An {@linkcode Error} will be thrown if this function resolves to a `null`
  * value. `null` is a value reserved for checking for the existence of a
