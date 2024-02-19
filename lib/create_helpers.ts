@@ -70,7 +70,8 @@ export interface CreateHelpersOptions {
  * Deno.serve(handler);
  * ```
  */
-export function createHelpers<T>(
+// deno-lint-ignore ban-types
+export function createHelpers<T extends NonNullable<{}> = {}>(
   oauthConfig: OAuth2ClientConfig,
   options?: CreateHelpersOptions,
 ): {

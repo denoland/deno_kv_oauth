@@ -32,12 +32,12 @@ export interface HandleCallbackOptions<T extends unknown = unknown> {
  * then redirects the client to the success URL set in {@linkcode signIn}. The
  * request URL must match the redirect URL of the OAuth application.
  *
- * Function that uses the access token to get the session object. This is
- * useful for fetching the user's profile from the OAuth provider.
- *
- * An {@linkcode Error} will be thrown if this function resolves to a `null`
- * value. `null` is a value reserved for checking for the existence of a
- * session data object in {@linkcode getSessionData}.
+ * @param tokenCallback Function that uses the access token to get the session
+ * object. This is used for fetching the user's profile from the OAuth
+ * provider. An {@linkcode Error} will be thrown if this function resolves to a
+ * `null` or `undefined` value. This is because `null` represents a non-existent
+ * session object and `undefined` is too similar, and may be confusing, from
+ * {@linkcode getSessionData}.
  *
  * @example
  * ```ts
@@ -64,7 +64,8 @@ export interface HandleCallbackOptions<T extends unknown = unknown> {
  * }
  * ```
  */
-export async function handleCallback<T extends unknown = unknown>(
+// deno-lint-ignore ban-types
+export async function handleCallback<T extends NonNullable<{}> = {}>(
   request: Request,
   oauthConfig: OAuth2ClientConfig,
   tokenCallback: (accessToken: string) => T | Promise<T>,
@@ -93,8 +94,8 @@ export async function handleCallback<T extends unknown = unknown>(
   setCookie(response.headers, cookie);
 
   const sessionData = await tokenCallback(tokens.accessToken);
-  if (sessionData === null) {
-    throw new Error("tokenCallback() must resolve to a non-null value");
+  if (sessionData === null || sessionData === undefined) {
+    throw new Error("tokenCallback() must resolve to a non-nullable value");
   }
 
   await setSiteSession(
