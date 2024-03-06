@@ -343,7 +343,7 @@ starting your server. E.g. `DISCORD`, `GOOGLE`, or `SLACK`.
    [Client secret](https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/)
    of a given OAuth application.
 1. `PROVIDER_DOMAIN` (optional) - Server domain of a given OAuth application.
-   Only required for Okta and Auth0.
+   Required for Auth0, AzureADB2C, Cognito User Pool, and Okta.
 
 > Note: reading environment variables requires the
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
