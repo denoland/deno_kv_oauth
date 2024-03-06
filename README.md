@@ -316,6 +316,7 @@ The following providers have pre-defined OAuth configurations:
 1. [Auth0](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAuth0OAuthConfig)
 1. [AzureAD](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAzureADAuthConfig)
 1. [AzureADB2C](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAzureADB2CAuthConfig)
+1. [Cognito User Pool](https://deno.land/x/deno_kv_oauth/mod.ts?s=createCognitoUserPoolOAuthConfig)
 1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuthConfig)
 1. [Dropbox](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDropboxOAuthConfig)
 1. [Facebook](https://deno.land/x/deno_kv_oauth/mod.ts?s=createFacebookOAuthConfig)
