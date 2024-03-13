@@ -2,7 +2,11 @@
 import { getSessionIdCookie } from "./_http.ts";
 import { isSiteSession } from "./_kv.ts";
 
-/** Options for {@linkcode getSessionId}. */
+/**
+ * Options for {@linkcode getSessionId}.
+ *
+ * @deprecated Use {@linkcode KvOAuth.getSessionId} instead. This will be removed in v0.12.0.
+ */
 export interface GetSessionIdOptions {
   /**
    * The name of the cookie in the request. This must match the cookie name
@@ -27,6 +31,8 @@ export interface GetSessionIdOptions {
  *   return Response.json({ sessionId, hasSessionIdCookie });
  * }
  * ```
+ *
+ * @deprecated Use {@linkcode KvOAuth.getSessionId} instead. This will be removed in v0.12.0.
  */
 export async function getSessionId(
   request: Request,

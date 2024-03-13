@@ -52,33 +52,31 @@ configurations.
 
 1. Create your OAuth application for your given provider.
 
-1. Create your web server using Deno KV OAuth's request handlers, helpers and
-   pre-defined OAuth configuration.
+1. Create your web server using a KV OAuth instance and pre-defined OAuth
+   configuration.
 
    ```ts
    // server.ts
    import {
      createGitHubOAuthConfig,
-     getSessionId,
-     handleCallback,
-     signIn,
-     signOut,
+     KvOAuth,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauthConfig = createGitHubOAuthConfig();
+   const kvOAuth = new KvOAuth(oauthConfig);
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await signIn(request, oauthConfig);
+         return await kvOAuth.signIn(request);
        case "/oauth/callback":
-         const { response } = await handleCallback(request, oauthConfig);
+         const { response } = await kvOAuth.handleCallback(request);
          return response;
        case "/oauth/signout":
-         return await signOut(request);
+         return await kvOAuth.signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return await kvOAuth.getSessionId(request) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -103,18 +101,15 @@ configurations.
 
 1. Create your OAuth application for your given provider.
 
-1. Create your web server using Deno KV OAuth's request handlers and helpers,
-   and custom OAuth configuration.
+1. Create your web server using a KV OAuth instance and custom OAuth
+   configuration.
 
    ```ts
    // server.ts
    import {
      getRequiredEnv,
-     getSessionId,
-     handleCallback,
+     KvOAuth,
      type OAuth2ClientConfig,
-     signIn,
-     signOut,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauthConfig: OAuth2ClientConfig = {
@@ -124,19 +119,20 @@ configurations.
      tokenUri: "https://custom.com/oauth/token",
      redirectUri: "https://my-site.com/another-dir/callback",
    };
+   const kvOAuth = new KvOAuth(oauthConfig);
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await signIn(request, oauthConfig);
+         return await kvOAuth.signIn(request);
        case "/another-dir/callback":
-         const { response } = await handleCallback(request, oauthConfig);
+         const { response } = await kvOAuth.handleCallback(request);
          return response;
        case "/oauth/signout":
-         return await signOut(request);
+         return await kvOAuth.signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return await kvOAuth.getSessionId(request) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -160,22 +156,17 @@ This is required for OAuth solutions that span more than one sub-domain.
 
 1. Create your OAuth application for your given provider.
 
-1. Create your web server using Deno KV OAuth's helpers factory function with
-   cookie options defined.
+1. Create your web server using a KV OAuth instance with cookie options defined.
 
    ```ts
    // server.ts
    import {
      createGitHubOAuthConfig,
-     createHelpers,
+     KvOAuth,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
-   const {
-     signIn,
-     handleCallback,
-     signOut,
-     getSessionId,
-   } = createHelpers(createGitHubOAuthConfig(), {
+   const oauthConfig = createGitHubOAuthConfig();
+   const kvOAuth = new KvOAuth(oauthConfig, {
      cookieOptions: {
        name: "__Secure-triple-choc",
        domain: "news.site",
@@ -186,14 +177,14 @@ This is required for OAuth solutions that span more than one sub-domain.
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await signIn(request);
+         return await kvOAuth.signIn(request);
        case "/oauth/callback":
-         const { response } = await handleCallback(request);
+         const { response } = await kvOAuth.handleCallback(request);
          return response;
        case "/oauth/signout":
-         return await signOut(request);
+         return await kvOAuth.signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return await kvOAuth.getSessionId(request) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -221,13 +212,12 @@ This is required for OAuth solutions that span more than one sub-domain.
    // plugins/kv_oauth.ts
    import {
      createGitHubOAuthConfig,
-     createHelpers,
+     KvOAuth,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
    import type { Plugin } from "$fresh/server.ts";
 
-   const { signIn, handleCallback, signOut, getSessionId } = createHelpers(
-     createGitHubOAuthConfig(),
-   );
+   const oauthConfig = createGitHubOAuthConfig();
+   const kvOAuth = new KvOAuth(oauthConfig);
 
    export default {
      name: "kv-oauth",
@@ -235,27 +225,27 @@ This is required for OAuth solutions that span more than one sub-domain.
        {
          path: "/signin",
          async handler(req) {
-           return await signIn(req);
+           return await kvOAuth.signIn(req);
          },
        },
        {
          path: "/callback",
          async handler(req) {
            // Return object also includes `accessToken` and `sessionId` properties.
-           const { response } = await handleCallback(req);
+           const { response } = await kvOAuth.handleCallback(req);
            return response;
          },
        },
        {
          path: "/signout",
          async handler(req) {
-           return await signOut(req);
+           return await kvOAuth.signOut(req);
          },
        },
        {
          path: "/protected",
          async handler(req) {
-           return await getSessionId(req) === undefined
+           return await kvOAuth.getSessionId(req) === undefined
              ? new Response("Unauthorized", { status: 401 })
              : new Response("You are allowed");
          },

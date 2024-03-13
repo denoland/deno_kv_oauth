@@ -16,7 +16,11 @@ import {
 } from "./_http.ts";
 import { setOAuthSession } from "./_kv.ts";
 
-/** Options for {@linkcode signIn}. */
+/**
+ * Options for {@linkcode signIn}.
+ *
+ * @deprecated Use {@linkcode KvOAuth.signIn} instead. This will be removed in v0.12.0.
+ */
 export interface SignInOptions {
   /** URL parameters that are appended to the authorization URI, if defined. */
   urlParams?: Record<string, string>;
@@ -38,6 +42,8 @@ export interface SignInOptions {
  *  return await signIn(request, oauthConfig);
  * }
  * ```
+ *
+ * @deprecated Use {@linkcode KvOAuth.signIn} instead. This will be removed in v0.12.0.
  */
 export async function signIn(
   request: Request,

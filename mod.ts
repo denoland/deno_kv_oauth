@@ -20,4 +20,5 @@ export * from "./lib/create_spotify_oauth_config.ts";
 export * from "./lib/create_twitter_oauth_config.ts";
 export * from "./lib/create_helpers.ts";
 export * from "./lib/get_required_env.ts";
+export * from "./lib/kv_oauth.ts";
 export * from "./lib/types.ts";

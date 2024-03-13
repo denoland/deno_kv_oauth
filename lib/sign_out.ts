@@ -11,7 +11,11 @@ import {
 } from "./_http.ts";
 import { deleteSiteSession } from "./_kv.ts";
 
-/** Options for {@linkcode signOut}. */
+/**
+ * Options for {@linkcode signOut}.
+ *
+ * @deprecated Use {@linkcode KvOAuth.signOut} instead. This will be removed in v0.12.0.
+ */
 export interface SignOutOptions {
   /**
    * Overwrites cookie properties set in the response. These must match the
@@ -35,6 +39,8 @@ export interface SignOutOptions {
  *   return await signOut(request);
  * }
  * ```
+ *
+ * @deprecated Use {@linkcode KvOAuth.signOut} instead. This will be removed in v0.12.0.
  */
 export async function signOut(
   request: Request,

@@ -18,7 +18,11 @@ import {
 } from "./_http.ts";
 import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.ts";
 
-/** Options for {@linkcode handleCallback}. */
+/**
+ * Options for {@linkcode handleCallback}.
+ *
+ * @deprecated Use {@linkcode KvOAuth.handleCallback} instead. This will be removed in v0.12.0.
+ */
 export interface HandleCallbackOptions {
   /** Overwrites cookie properties set in the response. These must match the
    * cookie properties used in {@linkcode getSessionId} and
@@ -49,6 +53,8 @@ export interface HandleCallbackOptions {
  *    return response;
  * }
  * ```
+ *
+ * @deprecated Use {@linkcode KvOAuth.handleCallback} instead. This will be removed in v0.12.0.
  */
 export async function handleCallback(
   request: Request,

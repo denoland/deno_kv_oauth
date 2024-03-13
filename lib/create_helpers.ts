@@ -6,7 +6,11 @@ import { handleCallback } from "./handle_callback.ts";
 import { signIn, type SignInOptions } from "./sign_in.ts";
 import { signOut } from "./sign_out.ts";
 
-/** Options for {@linkcode createHelpers}. */
+/**
+ * Options for {@linkcode createHelpers}.
+ *
+ * @deprecated Use {@linkcode KvOAuth} instead. This will be removed in v0.12.0.
+ */
 export interface CreateHelpersOptions {
   /**
    * Options for overwriting the default cookie options throughout each of the
@@ -60,6 +64,8 @@ export interface CreateHelpersOptions {
  *
  * Deno.serve(handler);
  * ```
+ *
+ * @deprecated Use {@linkcode KvOAuth} instead. This will be removed in v0.12.0.
  */
 export function createHelpers(
   oauthConfig: OAuth2ClientConfig,
