@@ -316,7 +316,7 @@ The following providers have pre-defined OAuth configurations:
 1. [Auth0](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAuth0OAuthConfig)
 1. [AzureAD](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAzureADAuthConfig)
 1. [AzureADB2C](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAzureADB2CAuthConfig)
-1. [Cognito User Pool](https://deno.land/x/deno_kv_oauth/mod.ts?s=createCognitoUserPoolOAuthConfig)
+1. [AWS Cognito User Pool](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAwsCognitoOAuthConfig)
 1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuthConfig)
 1. [Dropbox](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDropboxOAuthConfig)
 1. [Facebook](https://deno.land/x/deno_kv_oauth/mod.ts?s=createFacebookOAuthConfig)
@@ -343,7 +343,7 @@ starting your server. E.g. `DISCORD`, `GOOGLE`, or `SLACK`.
    [Client secret](https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/)
    of a given OAuth application.
 1. `PROVIDER_DOMAIN` (optional) - Server domain of a given OAuth application.
-   Required for Auth0, AzureADB2C, Cognito User Pool, and Okta.
+   Required for Auth0, AzureADB2C, AWS Cognito, and Okta.
 
 > Note: reading environment variables requires the
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See

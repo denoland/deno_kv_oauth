@@ -5,17 +5,17 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for an Amazon Cognito user pool.
  *
- * Requires `--allow-env[=COGNITO_USER_POOL_CLIENT_ID,COGNITO_USER_POOL_CLIENT_SECRET,COGNITO_USER_POOL_DOMAIN]`
+ * Requires `--allow-env[=AWS_COGNITO_CLIENT_ID,AWS_COGNITO_CLIENT_SECRET,AWS_COGNITO_DOMAIN]`
  * permissions and environment variables:
- * 1. `COGNITO_USER_POOL_CLIENT_ID`
- * 2. `COGNITO_USER_POOL_CLIENT_SECRET`
- * 3. `COGNITO_USER_POOL_DOMAIN`
+ * 1. `AWS_COGNITO_CLIENT_ID`
+ * 2. `AWS_COGNITO_CLIENT_SECRET`
+ * 3. `AWS_COGNITO_DOMAIN`
  *
  * @example
  * ```ts
- * import { createCognitoUserPoolOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createAwsCognitoOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
- * const oauthConfig = createCognitoUserPoolOAuthConfig({
+ * const oauthConfig = createAwsCognitoOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",
  *   scope: "openid"
  * });
@@ -24,7 +24,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * @see {@link https://docs.aws.amazon.com/cognito/latest/developerguide/federation-endpoints-oauth-grants.html}
  */
 
-export function createCognitoUserPoolOAuthConfig(
+export function createAwsCognitoOAuthConfig(
   config: {
     /** @see {@linkcode OAuth2ClientConfig.redirectUri} */
     redirectUri: string;
@@ -32,11 +32,11 @@ export function createCognitoUserPoolOAuthConfig(
     scope?: string | string[];
   },
 ): OAuth2ClientConfig {
-  const domain = getRequiredEnv("COGNITO_USER_POOL_DOMAIN");
+  const domain = getRequiredEnv("AWS_COGNITO_DOMAIN");
   const baseURL = `https://${domain}/oauth2`;
   return {
-    clientId: getRequiredEnv("COGNITO_USER_POOL_CLIENT_ID"),
-    clientSecret: getRequiredEnv("COGNITO_USER_POOL_CLIENT_SECRET"),
+    clientId: getRequiredEnv("AWS_COGNITO_CLIENT_ID"),
+    clientSecret: getRequiredEnv("AWS_COGNITO_CLIENT_SECRET"),
     authorizationEndpointUri: `${baseURL}/authorize`,
     tokenUri: `${baseURL}/token`,
     redirectUri: config.redirectUri,
