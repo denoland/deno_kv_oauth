@@ -29,8 +29,9 @@ export interface Helpers {
   signIn(request: Request, options?: SignInOptions): Promise<Response>;
   /**
    * Handles the OAuth callback request for the given OAuth configuration, and
-   * then redirects the client to the success URL set in {@linkcode signIn}. The
-   * request URL must match the redirect URL of the OAuth application.
+   * then redirects the client to the success URL set in
+   * {@linkcode Handlers.signIn}. The request URL must match the redirect URL
+   * of the OAuth application.
    *
    * @example
    * ```ts
