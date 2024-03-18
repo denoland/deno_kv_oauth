@@ -314,6 +314,7 @@ is set in the following order of precedence:
 The following providers have pre-defined OAuth configurations:
 
 1. [Auth0](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAuth0OAuthConfig)
+1. [AWS Cognito User Pool](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAwsCognitoOAuthConfig)
 1. [AzureAD](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAzureADAuthConfig)
 1. [AzureADB2C](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAzureADB2CAuthConfig)
 1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuthConfig)
@@ -342,7 +343,7 @@ starting your server. E.g. `DISCORD`, `GOOGLE`, or `SLACK`.
    [Client secret](https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/)
    of a given OAuth application.
 1. `PROVIDER_DOMAIN` (optional) - Server domain of a given OAuth application.
-   Only required for Okta and Auth0.
+   Required for Auth0, AzureADB2C, AWS Cognito, and Okta.
 
 > Note: reading environment variables requires the
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See
