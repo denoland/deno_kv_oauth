@@ -7,12 +7,7 @@ if (
 ) {
   path = Deno.env.get(DENO_KV_PATH_KEY);
 }
-const kv = await Deno.openKv(path);
-
-// Gracefully shutdown after tests
-addEventListener("beforeunload", async () => {
-  await kv.close();
-});
+using kv = await Deno.openKv(path);
 
 export interface OAuthSession {
   state: string;
