@@ -38,6 +38,8 @@ export interface SignInOptions {
  *  return await signIn(request, oauthConfig);
  * }
  * ```
+ *
+ * @deprecated Use {@linkcode createHelpers} instead. This will be removed in v0.12.0.
  */
 export async function signIn(
   request: Request,

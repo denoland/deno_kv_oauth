@@ -49,6 +49,8 @@ export interface HandleCallbackOptions {
  *    return response;
  * }
  * ```
+ *
+ * @deprecated Use {@linkcode createHelpers} instead. This will be removed in v0.12.0.
  */
 export async function handleCallback(
   request: Request,

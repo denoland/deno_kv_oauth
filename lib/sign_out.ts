@@ -35,6 +35,8 @@ export interface SignOutOptions {
  *   return await signOut(request);
  * }
  * ```
+ *
+ * @deprecated Use {@linkcode createHelpers} instead. This will be removed in v0.12.0.
  */
 export async function signOut(
   request: Request,
