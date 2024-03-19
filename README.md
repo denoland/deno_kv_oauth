@@ -14,6 +14,14 @@
   <a href="https://codecov.io/gh/denoland/deno_kv_oauth">
     <img src="https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z" alt="codecov">
   </a>
+  <a href="https://deno.land/std">
+    <img
+      width="135"
+      height="20"
+      src="https://raw.githubusercontent.com/denoland/deno_std/main/badge.svg"
+      alt="Built with the Deno Standard Library"
+    />
+  </a>
 </div>
 
 # Deno KV OAuth (Beta)
