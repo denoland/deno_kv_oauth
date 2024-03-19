@@ -1,8 +1,18 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { handleCallback } from "./handle_callback.ts";
-import { assertEquals, assertRejects } from "std/assert/mod.ts";
+import {
+  assert,
+  assertEquals,
+  assertNotEquals,
+  assertRejects,
+} from "std/assert/mod.ts";
+import { getSetCookies } from "std/http/cookie.ts";
 import { returnsNext, stub } from "std/testing/mock.ts";
-import { getAndDeleteOAuthSession, setOAuthSession } from "./_kv.ts";
+import {
+  getAndDeleteOAuthSession,
+  getSiteSession,
+  setOAuthSession,
+} from "./_kv.ts";
 import { OAUTH_COOKIE_NAME } from "./_http.ts";
 import {
   assertRedirect,
@@ -15,7 +25,7 @@ import type { Cookie } from "../deps.ts";
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
   const request = new Request("http://example.com");
   await assertRejects(
-    async () => await handleCallback(request, randomOAuthConfig()),
+    async () => await handleCallback(request, randomOAuthConfig(), () => true),
     Error,
     "OAuth cookie not found",
   );
@@ -26,7 +36,18 @@ Deno.test("handleCallback() rejects for non-existent OAuth session", async () =>
     headers: { cookie: `${OAUTH_COOKIE_NAME}=xxx` },
   });
   await assertRejects(
-    async () => await handleCallback(request, randomOAuthConfig()),
+    async () => await handleCallback(request, randomOAuthConfig(), () => true),
+    Deno.errors.NotFound,
+    "OAuth session not found",
+  );
+});
+
+Deno.test("handleCallback() rejects for non-existent OAuth session", async () => {
+  const request = new Request("http://example.com", {
+    headers: { cookie: `${OAUTH_COOKIE_NAME}=xxx` },
+  });
+  await assertRejects(
+    async () => await handleCallback(request, randomOAuthConfig(), () => true),
     Deno.errors.NotFound,
     "OAuth session not found",
   );
@@ -39,7 +60,9 @@ Deno.test("handleCallback() deletes the OAuth session KV entry", async () => {
   const request = new Request("http://example.com", {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
-  await assertRejects(() => handleCallback(request, randomOAuthConfig()));
+  await assertRejects(async () =>
+    await handleCallback(request, randomOAuthConfig(), () => true)
+  );
   await assertRejects(
     async () => await getAndDeleteOAuthSession(oauthSessionId),
     Deno.errors.NotFound,
@@ -67,19 +90,24 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   const request = new Request(`http://example.com/callback?${searchParams}`, {
     headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
   });
-  const { response, tokens, sessionId } = await handleCallback(
+  const response = await handleCallback(
     request,
     randomOAuthConfig(),
+    (accessToken) => accessToken,
   );
   fetchStub.restore();
 
   assertRedirect(response, oauthSession.successUrl);
-  assertEquals(
-    response.headers.get("set-cookie"),
-    `site-session=${sessionId}; HttpOnly; Max-Age=7776000; SameSite=Lax; Path=/`,
-  );
-  assertEquals(tokens.accessToken, tokensBody.access_token);
-  assertEquals(typeof sessionId, "string");
+  const [cookie] = getSetCookies(response.headers);
+  assert(cookie !== undefined);
+  assertEquals(cookie.name, "site-session");
+  assertEquals(cookie.maxAge, 7776000);
+  assertEquals(cookie.sameSite, "Lax");
+  assertEquals(cookie.path, "/");
+  assertEquals(await getSiteSession(cookie.value), tokensBody.access_token);
+
+  const sessionId = cookie.value;
+  assertNotEquals(sessionId, undefined);
   await assertRejects(
     async () => await getAndDeleteOAuthSession(oauthSessionId),
     Deno.errors.NotFound,
@@ -112,23 +140,91 @@ Deno.test("handleCallback() correctly handles the callback response with options
     maxAge: 420,
     domain: "example.com",
   };
-  const { response, tokens, sessionId } = await handleCallback(
+  const response = await handleCallback(
     request,
     randomOAuthConfig(),
+    (accessToken) => accessToken,
     { cookieOptions },
   );
   fetchStub.restore();
 
   assertRedirect(response, oauthSession.successUrl);
-  assertEquals(
-    response.headers.get("set-cookie"),
-    `${cookieOptions.name}=${sessionId}; HttpOnly; Max-Age=${cookieOptions.maxAge}; Domain=${cookieOptions.domain}; SameSite=Lax; Path=/`,
-  );
-  assertEquals(tokens.accessToken, tokensBody.access_token);
-  assertEquals(typeof sessionId, "string");
+  const [cookie] = getSetCookies(response.headers);
+  assert(cookie !== undefined);
+  assertEquals(cookie.name, cookieOptions.name);
+  assertEquals(cookie.maxAge, cookieOptions.maxAge);
+  assertEquals(cookie.domain, cookieOptions.domain);
+  assertEquals(cookie.sameSite, "Lax");
+  assertEquals(cookie.path, "/");
+  assertEquals(await getSiteSession(cookie.value), tokensBody.access_token);
+
+  const sessionId = cookie.value;
+  assertNotEquals(sessionId, undefined);
   await assertRejects(
     async () => await getAndDeleteOAuthSession(oauthSessionId),
     Deno.errors.NotFound,
     "OAuth session not found",
   );
+});
+
+Deno.test("handleCallback() throws when `tokenCallback()` resolves to `undefined`", async () => {
+  const tokensBody = randomTokensBody();
+  const fetchStub = stub(
+    window,
+    "fetch",
+    returnsNext([Promise.resolve(Response.json(tokensBody))]),
+  );
+  const oauthSessionId = crypto.randomUUID();
+  const oauthSession = randomOAuthSession();
+  await setOAuthSession(oauthSessionId, oauthSession, { expireIn: 1_000 });
+  const searchParams = new URLSearchParams({
+    "response_type": "code",
+    "client_id": "clientId",
+    "code_challenge_method": "S256",
+    code: "code",
+    state: oauthSession.state,
+  });
+  const request = new Request(`http://example.com/callback?${searchParams}`, {
+    headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
+  });
+
+  await assertRejects(
+    async () =>
+      // @ts-ignore Just for the test
+      await handleCallback(request, randomOAuthConfig(), () => undefined),
+    Error,
+    "tokenCallback() must resolve to a non-nullable value",
+  );
+  fetchStub.restore();
+});
+
+Deno.test("handleCallback() throws when `tokenCallback()` resolves to `null`", async () => {
+  const tokensBody = randomTokensBody();
+  const fetchStub = stub(
+    window,
+    "fetch",
+    returnsNext([Promise.resolve(Response.json(tokensBody))]),
+  );
+  const oauthSessionId = crypto.randomUUID();
+  const oauthSession = randomOAuthSession();
+  await setOAuthSession(oauthSessionId, oauthSession, { expireIn: 1_000 });
+  const searchParams = new URLSearchParams({
+    "response_type": "code",
+    "client_id": "clientId",
+    "code_challenge_method": "S256",
+    code: "code",
+    state: oauthSession.state,
+  });
+  const request = new Request(`http://example.com/callback?${searchParams}`, {
+    headers: { cookie: `${OAUTH_COOKIE_NAME}=${oauthSessionId}` },
+  });
+
+  await assertRejects(
+    async () =>
+      // @ts-ignore Just for the test
+      await handleCallback(request, randomOAuthConfig(), () => null),
+    Error,
+    "tokenCallback() must resolve to a non-nullable value",
+  );
+  fetchStub.restore();
 });

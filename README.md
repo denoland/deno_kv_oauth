@@ -67,7 +67,7 @@ configurations.
    // server.ts
    import {
      createGitHubOAuthConfig,
-     getSessionId,
+     getSessionData,
      handleCallback,
      signIn,
      signOut,
@@ -75,18 +75,27 @@ configurations.
 
    const oauthConfig = createGitHubOAuthConfig();
 
+   async function getGitHubUser(accessToken: string) {
+     const response = await fetch("https://api.github.com/user", {
+       headers: {
+         Authorization: `bearer ${accessToken}`,
+       },
+     });
+     if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+     return await response.json();
+   }
+
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
          return await signIn(request, oauthConfig);
        case "/oauth/callback":
-         const { response } = await handleCallback(request, oauthConfig);
-         return response;
+         return await handleCallback(request, oauthConfig, getGitHubUser);
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return await getSessionData(request) === null
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -118,7 +127,7 @@ configurations.
    // server.ts
    import {
      getRequiredEnv,
-     getSessionId,
+     getSessionData,
      handleCallback,
      type OAuth2ClientConfig,
      signIn,
@@ -133,18 +142,27 @@ configurations.
      redirectUri: "https://my-site.com/another-dir/callback",
    };
 
+   async function getGitHubUser(accessToken: string) {
+     const response = await fetch("https://api.github.com/user", {
+       headers: {
+         Authorization: `bearer ${accessToken}`,
+       },
+     });
+     if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+     return await response.json();
+   }
+
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
          return await signIn(request, oauthConfig);
        case "/another-dir/callback":
-         const { response } = await handleCallback(request, oauthConfig);
-         return response;
+         return await handleCallback(request, oauthConfig, getGitHubUser);
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return await getSessionData(request) === null
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -182,7 +200,7 @@ This is required for OAuth solutions that span more than one sub-domain.
      signIn,
      handleCallback,
      signOut,
-     getSessionId,
+     getSessionData,
    } = createHelpers(createGitHubOAuthConfig(), {
      cookieOptions: {
        name: "__Secure-triple-choc",
@@ -190,18 +208,27 @@ This is required for OAuth solutions that span more than one sub-domain.
      },
    });
 
+   async function getGitHubUser(accessToken: string) {
+     const response = await fetch("https://api.github.com/user", {
+       headers: {
+         Authorization: `bearer ${accessToken}`,
+       },
+     });
+     if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+     return await response.json();
+   }
+
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
          return await signIn(request);
        case "/oauth/callback":
-         const { response } = await handleCallback(request);
-         return response;
+         return await handleCallback(request, getGitHubUser);
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return await getSessionData(request) === null
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -233,9 +260,19 @@ This is required for OAuth solutions that span more than one sub-domain.
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
    import type { Plugin } from "$fresh/server.ts";
 
-   const { signIn, handleCallback, signOut, getSessionId } = createHelpers(
+   const { signIn, handleCallback, signOut, getSessionData } = createHelpers(
      createGitHubOAuthConfig(),
    );
+
+   async function getGitHubUser(accessToken: string) {
+     const response = await fetch("https://api.github.com/user", {
+       headers: {
+         Authorization: `bearer ${accessToken}`,
+       },
+     });
+     if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+     return await response.json();
+   }
 
    export default {
      name: "kv-oauth",
@@ -249,9 +286,7 @@ This is required for OAuth solutions that span more than one sub-domain.
        {
          path: "/callback",
          async handler(req) {
-           // Return object also includes `accessToken` and `sessionId` properties.
-           const { response } = await handleCallback(req);
-           return response;
+           return await handleCallback(req, getGitHubUser);
          },
        },
        {
@@ -263,7 +298,7 @@ This is required for OAuth solutions that span more than one sub-domain.
        {
          path: "/protected",
          async handler(req) {
-           return await getSessionId(req) === undefined
+           return await getSessionData(req) === null
              ? new Response("Unauthorized", { status: 401 })
              : new Response("You are allowed");
          },

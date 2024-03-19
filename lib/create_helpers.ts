@@ -1,7 +1,7 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 
-import { type Cookie, OAuth2ClientConfig, type Tokens } from "../deps.ts";
-import { getSessionId } from "./get_session_id.ts";
+import { type Cookie, OAuth2ClientConfig } from "../deps.ts";
+import { getSessionData } from "./get_session_data.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signIn, type SignInOptions } from "./sign_in.ts";
 import { signOut } from "./sign_out.ts";
@@ -31,7 +31,7 @@ export interface CreateHelpersOptions {
  *   signIn,
  *   handleCallback,
  *   signOut,
- *   getSessionId,
+ *   getSessionData,
  * } = createHelpers(createGitHubOAuthConfig(), {
  *   cookieOptions: {
  *     name: "__Secure-triple-choc",
@@ -39,18 +39,27 @@ export interface CreateHelpersOptions {
  *   },
  * });
  *
+ * async function getGitHubUser(accessToken: string) {
+ *   const response = await fetch("https://api.github.com/user", {
+ *     headers: {
+ *       Authorization: `bearer ${accessToken}`,
+ *     },
+ *   });
+ *   if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+ *   return await response.json();
+ * }
+ *
  * async function handler(request: Request) {
  *   const { pathname } = new URL(request.url);
  *   switch (pathname) {
  *     case "/oauth/signin":
  *       return await signIn(request);
  *     case "/oauth/callback":
- *       const { response } = await handleCallback(request);
- *       return response;
+ *       return await handleCallback(request, getGitHubUser);
  *     case "/oauth/signout":
  *       return await signOut(request);
  *     case "/protected-route":
- *       return await getSessionId(request) === undefined
+ *       return await getSessionData(request) === null
  *         ? new Response("Unauthorized", { status: 401 })
  *         : new Response("You are allowed");
  *     default:
@@ -61,33 +70,36 @@ export interface CreateHelpersOptions {
  * Deno.serve(handler);
  * ```
  */
-export function createHelpers(
+// deno-lint-ignore ban-types
+export function createHelpers<T extends NonNullable<{}> = {}>(
   oauthConfig: OAuth2ClientConfig,
   options?: CreateHelpersOptions,
 ): {
   signIn(request: Request, options?: SignInOptions): Promise<Response>;
-  handleCallback(request: Request): Promise<{
-    response: Response;
-    sessionId: string;
-    tokens: Tokens;
-  }>;
+  handleCallback(
+    request: Request,
+    tokenHandler: (accessToken: string) => T | Promise<T>,
+  ): Promise<Response>;
   signOut(request: Request): Promise<Response>;
-  getSessionId(request: Request): Promise<string | undefined>;
+  getSessionData(request: Request): Promise<T | null>;
 } {
   return {
     async signIn(request: Request, options?: SignInOptions) {
       return await signIn(request, oauthConfig, options);
     },
-    async handleCallback(request: Request) {
-      return await handleCallback(request, oauthConfig, {
+    async handleCallback(
+      request: Request,
+      tokenHandler: (accessToken: string) => T | Promise<T>,
+    ) {
+      return await handleCallback(request, oauthConfig, tokenHandler, {
         cookieOptions: options?.cookieOptions,
       });
     },
     async signOut(request: Request) {
       return await signOut(request, { cookieOptions: options?.cookieOptions });
     },
-    async getSessionId(request: Request) {
-      return await getSessionId(request, {
+    async getSessionData(request: Request) {
+      return await getSessionData<T>(request, {
         cookieName: options?.cookieOptions?.name,
       });
     },

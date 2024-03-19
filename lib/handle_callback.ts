@@ -6,7 +6,6 @@ import {
   type OAuth2ClientConfig,
   SECOND,
   setCookie,
-  Tokens,
 } from "../deps.ts";
 import {
   COOKIE_BASE,
@@ -19,8 +18,9 @@ import {
 import { getAndDeleteOAuthSession, setSiteSession } from "./_kv.ts";
 
 /** Options for {@linkcode handleCallback}. */
-export interface HandleCallbackOptions {
-  /** Overwrites cookie properties set in the response. These must match the
+export interface HandleCallbackOptions<T extends unknown = unknown> {
+  /**
+   * Overwrites cookie properties set in the response. These must match the
    * cookie properties used in {@linkcode getSessionId} and
    * {@linkcode signOut}.
    */
@@ -32,33 +32,45 @@ export interface HandleCallbackOptions {
  * then redirects the client to the success URL set in {@linkcode signIn}. The
  * request URL must match the redirect URL of the OAuth application.
  *
+ * @param tokenCallback Function that uses the access token to get the session
+ * object. This is used for fetching the user's profile from the OAuth
+ * provider. An {@linkcode Error} will be thrown if this function resolves to a
+ * `null` or `undefined` value. This is because `null` represents a non-existent
+ * session object and `undefined` is too similar, and may be confusing, from
+ * {@linkcode getSessionData}.
+ *
  * @example
  * ```ts
  * import { handleCallback, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
  *
  * const oauthConfig = createGitHubOAuthConfig();
  *
+ * async function getGitHubUser(accessToken: string) {
+ *   const response = await fetch("https://api.github.com/user", {
+ *     headers: {
+ *       Authorization: `bearer ${accessToken}`,
+ *     },
+ *   });
+ *   if (!response.ok) throw new Error("Failed to fetch GitHub user profile");
+ *   return await response.json();
+ * }
+ *
  * export async function handleOAuthCallback(request: Request) {
- *   const { response, tokens, sessionId } = await handleCallback(
+ *   return await handleCallback(
  *     request,
  *     oauthConfig,
- *   );
- *
- *    // Perform some actions with the `tokens` and `sessionId`.
- *
- *    return response;
+ *     getGitHubUser,
+ *  );
  * }
  * ```
  */
-export async function handleCallback(
+// deno-lint-ignore ban-types
+export async function handleCallback<T extends NonNullable<{}> = {}>(
   request: Request,
   oauthConfig: OAuth2ClientConfig,
-  options?: HandleCallbackOptions,
-): Promise<{
-  response: Response;
-  sessionId: string;
-  tokens: Tokens;
-}> {
+  tokenCallback: (accessToken: string) => T | Promise<T>,
+  options?: HandleCallbackOptions<T>,
+): Promise<Response> {
   const oauthCookieName = getCookieName(
     OAUTH_COOKIE_NAME,
     isHttps(request.url),
@@ -80,14 +92,17 @@ export async function handleCallback(
     ...options?.cookieOptions,
   };
   setCookie(response.headers, cookie);
+
+  const sessionData = await tokenCallback(tokens.accessToken);
+  if (sessionData === null || sessionData === undefined) {
+    throw new Error("tokenCallback() must resolve to a non-nullable value");
+  }
+
   await setSiteSession(
     sessionId,
+    sessionData,
     cookie.maxAge ? cookie.maxAge * SECOND : undefined,
   );
 
-  return {
-    response,
-    sessionId,
-    tokens,
-  };
+  return response;
 }
