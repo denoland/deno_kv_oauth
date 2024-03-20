@@ -67,21 +67,24 @@ configurations.
    // server.ts
    import {
      createGitHubOAuthConfig,
-     getSessionId,
-     handleCallback,
-     signIn,
-     signOut,
+     createHelpers,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauthConfig = createGitHubOAuthConfig();
+   const {
+     signIn,
+     handleCallback,
+     getSessionId,
+     signOut,
+   } = createHelpers(oauthConfig);
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await signIn(request, oauthConfig);
+         return await signIn(request);
        case "/oauth/callback":
-         const { response } = await handleCallback(request, oauthConfig);
+         const { response } = await handleCallback(request);
          return response;
        case "/oauth/signout":
          return await signOut(request);
@@ -117,12 +120,9 @@ configurations.
    ```ts
    // server.ts
    import {
+     createHelpers,
      getRequiredEnv,
-     getSessionId,
-     handleCallback,
      type OAuth2ClientConfig,
-     signIn,
-     signOut,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauthConfig: OAuth2ClientConfig = {
@@ -132,14 +132,20 @@ configurations.
      tokenUri: "https://custom.com/oauth/token",
      redirectUri: "https://my-site.com/another-dir/callback",
    };
+   const {
+     signIn,
+     handleCallback,
+     getSessionId,
+     signOut,
+   } = createHelpers(oauthConfig);
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await signIn(request, oauthConfig);
+         return await signIn(request);
        case "/another-dir/callback":
-         const { response } = await handleCallback(request, oauthConfig);
+         const { response } = await handleCallback(request);
          return response;
        case "/oauth/signout":
          return await signOut(request);
