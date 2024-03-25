@@ -12,7 +12,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createNotionOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createNotionOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createNotionOAuthConfig();
  * ```

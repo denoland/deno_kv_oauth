@@ -39,7 +39,7 @@ export function redirect(location: string): Response {
 }
 
 /**
- * @see {@link https://deno.land/x/deno_kv_oauth@v0.9.0#redirects-after-sign-in-and-sign-out}
+ * @see {@link https://github.com/denoland/deno_kv_oauth/tree/main#redirects-after-sign-in-and-sign-out}
  */
 export function getSuccessUrl(request: Request): string {
   const url = new URL(request.url);

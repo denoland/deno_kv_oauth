@@ -25,11 +25,11 @@ export interface SignInOptions {
  * Handles the sign-in request and process for the given OAuth configuration
  * and redirects the client to the authorization URL.
  *
- * @see {@link https://deno.land/x/deno_kv_oauth#redirects-after-sign-in-and-sign-out}
+ * @see {@link https://github.com/denoland/deno_kv_oauth/tree/main#redirects-after-sign-in-and-sign-out}
  *
  * @example
  * ```ts
- * import { signIn, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { signIn, createGitHubOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createGitHubOAuthConfig();
  *

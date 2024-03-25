@@ -13,7 +13,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createAwsCognitoOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createAwsCognitoOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createAwsCognitoOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",

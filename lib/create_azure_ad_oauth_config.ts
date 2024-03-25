@@ -13,7 +13,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createAzureAdOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createAzureAdOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createAzureAdOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",

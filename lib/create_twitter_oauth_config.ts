@@ -12,7 +12,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createTwitterOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createTwitterOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createTwitterOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",

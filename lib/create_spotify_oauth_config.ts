@@ -12,7 +12,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createSpotifyOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { createSpotifyOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createSpotifyOAuthConfig({
  *   scope: "user-read-private user-read-email"
