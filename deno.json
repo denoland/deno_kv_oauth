@@ -10,7 +10,7 @@
     "@std/http": "jsr:@std/http@^0.220.0",
     "@std/testing": "jsr:@std/testing@^0.220.1",
     "https://deno.land/": "./vendor/deno.land/",
-    "https://deno.land/x/deno_kv_oauth/": "./",
+    "jsr:@deno/kv-oauth": "./mod.ts",
     "oauth2_client/": "https://deno.land/x/oauth2_client@v1.0.2/"
   },
   "tasks": {
