@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { STATUS_CODE } from "@std/http/status";
+import { STATUS_CODE } from "jsr:@std@^0.220.0/http/status";
 import {
   createGitHubOAuthConfig,
   getSessionId,
