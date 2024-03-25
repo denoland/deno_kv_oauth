@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { assertEquals, assertThrows } from "std/assert/mod.ts";
+import { assertEquals, assertThrows } from "@std/assert";
 import { getRequiredEnv } from "./get_required_env.ts";
 
 Deno.test("getRequiredEnv()", () => {

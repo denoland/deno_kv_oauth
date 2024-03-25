@@ -231,7 +231,7 @@ This is required for OAuth solutions that span more than one sub-domain.
 
 1. Create your OAuth configuration and Fresh plugin.
 
-   ```ts
+   ```ts, ignore
    // plugins/kv_oauth.ts
    import {
      createGitHubOAuthConfig,

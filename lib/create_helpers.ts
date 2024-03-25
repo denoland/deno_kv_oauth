@@ -1,6 +1,10 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 
-import { type Cookie, OAuth2ClientConfig, type Tokens } from "../deps.ts";
+import {
+  OAuth2ClientConfig,
+  type Tokens,
+} from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
+import type { Cookie } from "@std/http/cookie";
 import { getSessionId } from "./get_session_id.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signIn, type SignInOptions } from "./sign_in.ts";

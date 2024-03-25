@@ -1,13 +1,11 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import {
-  type Cookie,
-  getCookies,
   OAuth2Client,
   type OAuth2ClientConfig,
-  SECOND,
-  setCookie,
   Tokens,
-} from "../deps.ts";
+} from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
+import { SECOND } from "@std/datetime/constants";
+import { type Cookie, getCookies, setCookie } from "@std/http/cookie";
 import {
   COOKIE_BASE,
   getCookieName,

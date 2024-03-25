@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { walk } from "std/fs/walk.ts";
+import { walk } from "@std/fs/walk";
 
 const CHECK = Deno.args.includes("--check");
 const CURRENT_YEAR = new Date().getFullYear();
@@ -20,6 +20,7 @@ for await (
   const { path } of walk(new URL("../", import.meta.url), {
     exts: [".ts"],
     includeDirs: false,
+    skip: [/vendor/],
   })
 ) {
   checkLicense(path);
