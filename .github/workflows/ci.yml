@@ -33,7 +33,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: crate-ci/typos@master
         with:
-          config: ../_typos.toml
+          config: .github/_typos.toml
 
       - name: Check formatting, linting, types and run tests
         run: deno task ok
