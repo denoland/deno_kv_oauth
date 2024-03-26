@@ -71,8 +71,9 @@ configurations.
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauthConfig = createGitHubOAuthConfig();
-   const { signIn, handleCallback, getSessionId, signOut } =
-     createHelpers(oauthConfig);
+   const { signIn, handleCallback, getSessionId, signOut } = createHelpers(
+     oauthConfig,
+   );
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
@@ -128,8 +129,9 @@ configurations.
      tokenUri: "https://custom.com/oauth/token",
      redirectUri: "https://my-site.com/another-dir/callback",
    };
-   const { signIn, handleCallback, getSessionId, signOut } =
-     createHelpers(oauthConfig);
+   const { signIn, handleCallback, getSessionId, signOut } = createHelpers(
+     oauthConfig,
+   );
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
