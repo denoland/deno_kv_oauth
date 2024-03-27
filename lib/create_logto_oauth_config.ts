@@ -5,7 +5,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Logto.
  *
- * Requires `--allow-env[=LOGTO_CLIENT_ID,LOGTO_CLIENT_SECRET,LOGTO_DOMAINL]` permissions
+ * Requires `--allow-env[=LOGTO_CLIENT_ID,LOGTO_CLIENT_SECRET,LOGTO_DOMAIN]` permissions
  * and environment variables:
  * 1. `LOGTO_CLIENT_ID`
  * 2. `LOGTO_CLIENT_SECRET`
