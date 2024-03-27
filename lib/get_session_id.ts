@@ -18,7 +18,7 @@ export interface GetSessionIdOptions {
  *
  * @example
  * ```ts
- * import { getSessionId } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { getSessionId } from "jsr:@deno/kv-oauth";
  *
  * export async function handler(request: Request) {
  *   const sessionId = await getSessionId(request);

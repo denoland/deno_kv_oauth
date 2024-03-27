@@ -1,7 +1,7 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { handleCallback } from "./handle_callback.ts";
-import { assertEquals, assertRejects } from "std/assert/mod.ts";
-import { returnsNext, stub } from "std/testing/mock.ts";
+import { assertEquals, assertRejects } from "@std/assert";
+import { returnsNext, stub } from "@std/testing/mock";
 import { getAndDeleteOAuthSession, setOAuthSession } from "./_kv.ts";
 import { OAUTH_COOKIE_NAME } from "./_http.ts";
 import {
@@ -10,7 +10,7 @@ import {
   randomOAuthSession,
   randomTokensBody,
 } from "./_test_utils.ts";
-import type { Cookie } from "../deps.ts";
+import type { Cookie } from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
 
 Deno.test("handleCallback() rejects for no OAuth cookie", async () => {
   const request = new Request("http://example.com");

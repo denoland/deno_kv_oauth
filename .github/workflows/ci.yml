@@ -32,9 +32,14 @@ jobs:
       - name: Check typos
         if: matrix.os == 'ubuntu-latest'
         uses: crate-ci/typos@master
+        with:
+          config: .github/_typos.toml
 
       - name: Check formatting, linting, types and run tests
         run: deno task ok
+
+      - name: Publish (dry-run)
+        run: deno publish --dry-run --allow-dirty
 
       - name: Create lcov file
         run: deno task cov:gen
