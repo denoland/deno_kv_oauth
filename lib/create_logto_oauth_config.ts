@@ -5,11 +5,11 @@ import { getRequiredEnv } from "./get_required_env.ts";
 /**
  * Returns the OAuth configuration for Logto.
  *
- * Requires `--allow-env[=LOGTO_APP_ID,LOGTO_APP_SECRET,LOGTO_APP_URL]` permissions
+ * Requires `--allow-env[=LOGTO_CLIENT_ID,LOGTO_CLIENT_SECRET,LOGTO_DOMAINL]` permissions
  * and environment variables:
- * 1. `LOGTO_APP_ID`
- * 2. `LOGTO_APP_SECRET`
- * 3. `LOGTO_APP_URL`
+ * 1. `LOGTO_CLIENT_ID`
+ * 2. `LOGTO_CLIENT_SECRET`
+ * 3. `LOGTO_DOMAIN`
  *
  * @example
  * ```ts
@@ -26,10 +26,10 @@ export function createLogtoOAuthConfig(config?: {
   /** @see {@linkcode OAuth2ClientConfig.defaults.scope} */
   scope?: string | string[];
 }): OAuth2ClientConfig {
-  const baseURL = getRequiredEnv("LOGTO_APP_URL");
+  const baseURL = getRequiredEnv("LOGTO_DOMAIN");
   return {
-    clientId: getRequiredEnv("LOGTO_APP_ID"),
-    clientSecret: getRequiredEnv("LOGTO_APP_SECRET"),
+    clientId: getRequiredEnv("LOGTO_CLIENT_ID"),
+    clientSecret: getRequiredEnv("LOGTO_CLIENT_SECRET"),
     authorizationEndpointUri: `${baseURL}/auth`,
     tokenUri: `${baseURL}/token`,
     redirectUri: config?.redirectUri,
