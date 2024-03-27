@@ -328,6 +328,7 @@ The following providers have pre-defined OAuth configurations:
 1. [GitHub](https://jsr.io/@deno/kv-oauth/doc/~/createGitHubOAuthConfig)
 1. [GitLab](https://jsr.io/@deno/kv-oauth/doc/~/createGitLabOAuthConfig)
 1. [Google](https://jsr.io/@deno/kv-oauth/doc/~/createGoogleOAuthConfig)
+1. [Logto](https://jsr.io/@deno/kv-oauth/doc/~/createLogtoOAuthConfig)
 1. [Notion](https://jsr.io/@deno/kv-oauth/doc/~/createNotionOAuthConfig)
 1. [Okta](https://jsr.io/@deno/kv-oauth/doc/~/createOktaOAuthConfig)
 1. [Patreon](https://jsr.io/@deno/kv-oauth/doc/~/createPatreonOAuthConfig)
