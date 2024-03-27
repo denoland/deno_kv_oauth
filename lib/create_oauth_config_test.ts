@@ -103,5 +103,5 @@ import { createTwitterOAuthConfig } from "./create_twitter_oauth_config.ts";
     assertEquals(oauthConfig.clientSecret, clientSecret);
     assertEquals(oauthConfig.redirectUri, redirectUri);
     assertEquals(oauthConfig.defaults?.scope, scope);
-  }),
+  })
 );
