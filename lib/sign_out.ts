@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { type Cookie, deleteCookie } from "@std/http/cookie";
+import { type Cookie, deleteCookie } from "@std/http";
 import {
   COOKIE_BASE,
   getCookieName,

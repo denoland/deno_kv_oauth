@@ -19,7 +19,7 @@ import {
   randomOAuthSession,
   randomTokensBody,
 } from "./_test_utils.ts";
-import { type Cookie, getSetCookies } from "@std/http/cookie";
+import { type Cookie, getSetCookies } from "@std/http";
 
 Deno.test("signIn() returns a response that signs-in the user", async () => {
   const { signIn } = createHelpers(randomOAuthConfig());

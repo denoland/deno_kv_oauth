@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { walk } from "@std/fs/walk";
+import { walk } from "@std/fs";
 
 const CHECK = Deno.args.includes("--check");
 const CURRENT_YEAR = new Date().getFullYear();

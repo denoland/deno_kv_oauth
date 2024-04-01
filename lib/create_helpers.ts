@@ -4,7 +4,7 @@ import type {
   OAuth2ClientConfig,
   Tokens,
 } from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
-import type { Cookie } from "@std/http/cookie";
+import type { Cookie } from "@std/http";
 import { getSessionId } from "./get_session_id.ts";
 import { handleCallback } from "./handle_callback.ts";
 import { signIn, type SignInOptions } from "./sign_in.ts";

@@ -8,7 +8,7 @@
     "@std/datetime": "jsr:@std/datetime@^0.221.0",
     "@std/fs": "jsr:@std/fs@^0.221.0",
     "@std/http": "jsr:@std/http@^0.221.0",
-    "@std/testing": "jsr:@std/testing@^0.221.0",
+    "@std/testing/mock": "jsr:@std/testing@^0.221.0/mock",
     "https://deno.land/": "./vendor/deno.land/",
     "jsr:@deno/kv-oauth": "./mod.ts",
     "oauth2_client/": "https://deno.land/x/oauth2_client@v1.0.2/"

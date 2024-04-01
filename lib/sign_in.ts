@@ -4,7 +4,7 @@ import {
   type OAuth2ClientConfig,
 } from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
 import { SECOND } from "@std/datetime/constants";
-import { type Cookie, setCookie } from "@std/http/cookie";
+import { type Cookie, setCookie } from "@std/http";
 import {
   COOKIE_BASE,
   getCookieName,

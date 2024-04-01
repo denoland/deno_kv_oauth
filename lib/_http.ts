@@ -1,6 +1,6 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { type Cookie, getCookies } from "@std/http/cookie";
-import { STATUS_CODE } from "@std/http/status";
+import { type Cookie, getCookies } from "@std/http";
+import { STATUS_CODE } from "@std/http";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
