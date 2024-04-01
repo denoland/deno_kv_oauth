@@ -1,7 +1,7 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { signIn } from "./sign_in.ts";
-import { assert, assertEquals, assertNotEquals } from "std/assert/mod.ts";
-import { getSetCookies } from "../deps.ts";
+import { assert, assertEquals, assertNotEquals } from "@std/assert";
+import { getSetCookies } from "@std/http";
 import { OAUTH_COOKIE_NAME } from "./_http.ts";
 import { getAndDeleteOAuthSession } from "./_kv.ts";
 import { assertRedirect, randomOAuthConfig } from "./_test_utils.ts";
