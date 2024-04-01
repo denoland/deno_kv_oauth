@@ -1,7 +1,7 @@
 import { MissingClientSecretError } from "./errors.ts";
 import { OAuth2GrantBase } from "./grant_base.ts";
 import type { OAuth2Client } from "./oauth2_client.ts";
-import { RequestOptions, Tokens } from "./types.ts";
+import type { RequestOptions, Tokens } from "./types.ts";
 
 export interface ClientCredentialsTokenOptions {
   /**

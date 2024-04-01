@@ -1,5 +1,5 @@
-import { RequestOptions, Tokens } from "./types.ts";
-import { OAuth2Client } from "./oauth2_client.ts";
+import type { RequestOptions, Tokens } from "./types.ts";
+import type { OAuth2Client } from "./oauth2_client.ts";
 import { OAuth2GrantBase } from "./grant_base.ts";
 
 export interface RefreshTokenOptions {

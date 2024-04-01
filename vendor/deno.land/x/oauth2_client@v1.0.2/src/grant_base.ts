@@ -1,6 +1,6 @@
 import { OAuth2ResponseError, TokenResponseError } from "./errors.ts";
-import { OAuth2Client } from "./oauth2_client.ts";
-import { RequestOptions, Tokens } from "./types.ts";
+import type { OAuth2Client } from "./oauth2_client.ts";
+import type { RequestOptions, Tokens } from "./types.ts";
 
 interface AccessTokenResponse {
   "access_token": string;
@@ -61,7 +61,7 @@ export abstract class OAuth2GrantBase {
   }
 
   protected toUrl(url: string | URL): URL {
-    if (typeof (url) === "string") {
+    if (typeof url === "string") {
       return new URL(url, "http://example.com");
     }
     return url;

@@ -3,7 +3,7 @@ import { ClientCredentialsGrant } from "./client_credentials_grant.ts";
 import { ImplicitGrant } from "./implicit_grant.ts";
 import { RefreshTokenGrant } from "./refresh_token_grant.ts";
 import { ResourceOwnerPasswordCredentialsGrant } from "./resource_owner_password_credentials.ts";
-import { RequestOptions } from "./types.ts";
+import type { RequestOptions } from "./types.ts";
 
 export interface OAuth2ClientConfig {
   /** The client ID provided by the authorization server. */
