@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { assertEquals } from "@std/assert/assert-equals";
+import { assertEquals } from "@std/assert";
 import { createAuth0OAuthConfig } from "./create_auth0_oauth_config.ts";
 import { createAzureAdb2cOAuthConfig } from "./create_azure_adb2c_oauth_config.ts";
 import { createAzureAdOAuthConfig } from "./create_azure_ad_oauth_config.ts";
