@@ -3,7 +3,7 @@ import type { OAuth2ClientConfig } from "../deps.ts";
 import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
- * Returns the OAuth configuration for Logto.
+ * Returns the OAuth configuration for Clerk.
  *
  * Requires `--allow-env[=CLERK_CLIENT_ID,CLERK_CLIENT_SECRET,CLERK_DOMAIN]` permissions
  * and environment variables:
