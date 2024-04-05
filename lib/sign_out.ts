@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { Cookie, deleteCookie } from "../deps.ts";
+import { type Cookie, deleteCookie } from "@std/http";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -25,11 +25,11 @@ export interface SignOutOptions {
  * Handles the sign-out process, and then redirects the client to the given
  * success URL.
  *
- * @see {@link https://deno.land/x/deno_kv_oauth#redirects-after-sign-in-and-sign-out}
+ * @see {@link https://github.com/denoland/deno_kv_oauth/tree/main#redirects-after-sign-in-and-sign-out}
  *
  * @example
  * ```ts
- * import { signOut } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { signOut } from "jsr:@deno/kv-oauth";
  *
  * export async function signOutHandler(request: Request) {
  *   return await signOut(request);

@@ -1,5 +1,6 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { type Cookie, getCookies, STATUS_CODE } from "../deps.ts";
+import { type Cookie, getCookies } from "@std/http";
+import { STATUS_CODE } from "@std/http";
 
 export const OAUTH_COOKIE_NAME = "oauth-session";
 export const SITE_COOKIE_NAME = "site-session";
@@ -38,7 +39,7 @@ export function redirect(location: string): Response {
 }
 
 /**
- * @see {@link https://deno.land/x/deno_kv_oauth@v0.9.0#redirects-after-sign-in-and-sign-out}
+ * @see {@link https://github.com/denoland/deno_kv_oauth/tree/main#redirects-after-sign-in-and-sign-out}
  */
 export function getSuccessUrl(request: Request): string {
   const url = new URL(request.url);

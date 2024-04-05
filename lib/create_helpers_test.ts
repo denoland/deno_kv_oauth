@@ -5,8 +5,8 @@ import {
   assertEquals,
   assertNotEquals,
   assertRejects,
-} from "std/assert/mod.ts";
-import { returnsNext, stub } from "std/testing/mock.ts";
+} from "@std/assert";
+import { returnsNext, stub } from "@std/testing/mock";
 import {
   getAndDeleteOAuthSession,
   setOAuthSession,
@@ -19,7 +19,7 @@ import {
   randomOAuthSession,
   randomTokensBody,
 } from "./_test_utils.ts";
-import { type Cookie, getSetCookies } from "../deps.ts";
+import { type Cookie, getSetCookies } from "@std/http";
 
 Deno.test("signIn() returns a response that signs-in the user", async () => {
   const { signIn } = createHelpers(randomOAuthConfig());
