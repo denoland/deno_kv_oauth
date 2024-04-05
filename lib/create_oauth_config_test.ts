@@ -3,6 +3,7 @@ import { assertEquals } from "std/assert/assert_equals.ts";
 import { createAuth0OAuthConfig } from "./create_auth0_oauth_config.ts";
 import { createAzureAdb2cOAuthConfig } from "./create_azure_adb2c_oauth_config.ts";
 import { createAzureAdOAuthConfig } from "./create_azure_ad_oauth_config.ts";
+import { createClerkOAuthConfig } from "./create_clerk_oauth_config.ts";
 import { createDiscordOAuthConfig } from "./create_discord_oauth_config.ts";
 import { createDropboxOAuthConfig } from "./create_dropbox_oauth_config.ts";
 import { createFacebookOAuthConfig } from "./create_facebook_oauth_config.ts";
@@ -29,6 +30,10 @@ import { createTwitterOAuthConfig } from "./create_twitter_oauth_config.ts";
   {
     envPrefix: "AZURE_AD",
     createOAuthConfigFn: createAzureAdOAuthConfig,
+  },
+  {
+    envPrefix: "CLERK",
+    createOAuthConfigFn: createClerkOAuthConfig,
   },
   {
     envPrefix: "DISCORD",
@@ -103,5 +108,5 @@ import { createTwitterOAuthConfig } from "./create_twitter_oauth_config.ts";
     assertEquals(oauthConfig.clientSecret, clientSecret);
     assertEquals(oauthConfig.redirectUri, redirectUri);
     assertEquals(oauthConfig.defaults?.scope, scope);
-  })
+  }),
 );
