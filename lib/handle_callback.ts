@@ -1,13 +1,11 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import {
-  type Cookie,
-  getCookies,
   OAuth2Client,
   type OAuth2ClientConfig,
-  SECOND,
-  setCookie,
-  Tokens,
-} from "../deps.ts";
+  type Tokens,
+} from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
+import { SECOND } from "@std/datetime";
+import { type Cookie, getCookies, setCookie } from "@std/http";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -34,7 +32,7 @@ export interface HandleCallbackOptions {
  *
  * @example
  * ```ts
- * import { handleCallback, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth/mod.ts";
+ * import { handleCallback, createGitHubOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createGitHubOAuthConfig();
  *
