@@ -1,7 +1,7 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { STATUS_CODE } from "./deps.ts";
 import {
-  createLogtoOAuthConfig,
+  createGitHubOAuthConfig,
   getSessionId,
   handleCallback,
   signIn,
@@ -18,9 +18,7 @@ import {
  * const oauthConfig = createNotionOAuthConfig();
  * ```
  */
-const oauthConfig = createLogtoOAuthConfig({
-  scope: "openid",
-});
+const oauthConfig = createGitHubOAuthConfig();
 
 async function indexHandler(request: Request) {
   const sessionId = await getSessionId(request);

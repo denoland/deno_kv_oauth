@@ -71,12 +71,8 @@ configurations.
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
    const oauthConfig = createGitHubOAuthConfig();
-   const {
-     signIn,
-     handleCallback,
-     getSessionId,
-     signOut,
-   } = createHelpers(oauthConfig);
+   const { signIn, handleCallback, getSessionId, signOut } =
+     createHelpers(oauthConfig);
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
@@ -89,7 +85,7 @@ configurations.
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return (await getSessionId(request)) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -132,12 +128,8 @@ configurations.
      tokenUri: "https://custom.com/oauth/token",
      redirectUri: "https://my-site.com/another-dir/callback",
    };
-   const {
-     signIn,
-     handleCallback,
-     getSessionId,
-     signOut,
-   } = createHelpers(oauthConfig);
+   const { signIn, handleCallback, getSessionId, signOut } =
+     createHelpers(oauthConfig);
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
@@ -150,7 +142,7 @@ configurations.
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return (await getSessionId(request)) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -184,17 +176,15 @@ This is required for OAuth solutions that span more than one sub-domain.
      createHelpers,
    } from "https://deno.land/x/deno_kv_oauth/mod.ts";
 
-   const {
-     signIn,
-     handleCallback,
-     signOut,
-     getSessionId,
-   } = createHelpers(createGitHubOAuthConfig(), {
-     cookieOptions: {
-       name: "__Secure-triple-choc",
-       domain: "news.site",
+   const { signIn, handleCallback, signOut, getSessionId } = createHelpers(
+     createGitHubOAuthConfig(),
+     {
+       cookieOptions: {
+         name: "__Secure-triple-choc",
+         domain: "news.site",
+       },
      },
-   });
+   );
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
@@ -207,7 +197,7 @@ This is required for OAuth solutions that span more than one sub-domain.
        case "/oauth/signout":
          return await signOut(request);
        case "/protected-route":
-         return await getSessionId(request) === undefined
+         return (await getSessionId(request)) === undefined
            ? new Response("Unauthorized", { status: 401 })
            : new Response("You are allowed");
        default:
@@ -269,7 +259,7 @@ This is required for OAuth solutions that span more than one sub-domain.
        {
          path: "/protected",
          async handler(req) {
-           return await getSessionId(req) === undefined
+           return (await getSessionId(req)) === undefined
              ? new Response("Unauthorized", { status: 401 })
              : new Response("You are allowed");
          },
@@ -331,6 +321,7 @@ The following providers have pre-defined OAuth configurations:
 1. [AWS Cognito User Pool](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAwsCognitoOAuthConfig)
 1. [AzureAD](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAzureADAuthConfig)
 1. [AzureADB2C](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAzureADB2CAuthConfig)
+1. [Clerk](https://deno.land/x/deno_kv_oauth/mod.ts?s=createClerkOAuthConfig)
 1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuthConfig)
 1. [Dropbox](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDropboxOAuthConfig)
 1. [Facebook](https://deno.land/x/deno_kv_oauth/mod.ts?s=createFacebookOAuthConfig)
