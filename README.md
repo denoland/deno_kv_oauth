@@ -322,6 +322,7 @@ The following providers have pre-defined OAuth configurations:
 1. [AWS Cognito User Pool](https://jsr.io/@deno/kv-oauth/doc/~/createAwsCognitoOAuthConfig)
 1. [AzureAD](https://jsr.io/@deno/kv-oauth/doc/~/createAzureADAuthConfig)
 1. [AzureADB2C](https://jsr.io/@deno/kv-oauth/doc/~/createAzureADB2CAuthConfig)
+1. [Clerk](https://jsr.io/@deno/kv-oauth/doc/~/createClerkOAuthConfig)
 1. [Discord](https://jsr.io/@deno/kv-oauth/doc/~/createDiscordOAuthConfig)
 1. [Dropbox](https://jsr.io/@deno/kv-oauth/doc/~/createDropboxOAuthConfig)
 1. [Facebook](https://jsr.io/@deno/kv-oauth/doc/~/createFacebookOAuthConfig)
