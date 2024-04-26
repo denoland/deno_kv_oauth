@@ -48,4 +48,5 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           name: ${{ matrix.os }}
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: cov.lcov
