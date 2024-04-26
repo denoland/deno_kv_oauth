@@ -41,6 +41,7 @@ export function createLinkedInOAuthConfig(config: {
         body: {
           client_id: clientId,
           client_secret: clientSecret,
+          code_verifier: "",
         },
       },
       scope: config.scope,
