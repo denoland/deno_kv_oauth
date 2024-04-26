@@ -1,11 +1,10 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import {
-  Cookie,
   OAuth2Client,
   type OAuth2ClientConfig,
-  SECOND,
-  setCookie,
-} from "../deps.ts";
+} from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
+import { SECOND } from "@std/datetime";
+import { type Cookie, setCookie } from "@std/http";
 import {
   COOKIE_BASE,
   getCookieName,
@@ -26,11 +25,11 @@ export interface SignInOptions {
  * Handles the sign-in request and process for the given OAuth configuration
  * and redirects the client to the authorization URL.
  *
- * @see {@link https://deno.land/x/deno_kv_oauth#redirects-after-sign-in-and-sign-out}
+ * @see {@link https://github.com/denoland/deno_kv_oauth/tree/main#redirects-after-sign-in-and-sign-out}
  *
  * @example
  * ```ts
- * import { signIn, createGitHubOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { signIn, createGitHubOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createGitHubOAuthConfig();
  *
@@ -38,6 +37,8 @@ export interface SignInOptions {
  *  return await signIn(request, oauthConfig);
  * }
  * ```
+ *
+ * @deprecated Use {@linkcode createHelpers} instead. This will be removed in v0.12.0.
  */
 export async function signIn(
   request: Request,

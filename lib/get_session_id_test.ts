@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { assertEquals } from "std/assert/assert_equals.ts";
+import { assertEquals } from "@std/assert";
 import { SITE_COOKIE_NAME } from "./_http.ts";
 import { getSessionId } from "./get_session_id.ts";
 import { setSiteSession } from "./_kv.ts";

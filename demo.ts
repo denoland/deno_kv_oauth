@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { STATUS_CODE } from "./deps.ts";
+import { STATUS_CODE } from "@std/http";
 import {
   createGitHubOAuthConfig,
   getSessionId,
@@ -36,7 +36,7 @@ async function indexHandler(request: Request) {
       <a href="/signout">Sign out</a>
     </p>
     <p>
-      <a href="https://deno.land/x/deno_kv_oauth/demo.ts?source">Source code</a>
+      <a href="https://github.com/denoland/deno_kv_oauth/blob/main/demo.ts">Source code</a>
     </p>
   `;
 

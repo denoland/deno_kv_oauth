@@ -5,7 +5,7 @@
     <img alt="Deno KV OAuth logo" width="300" height="240" src="./logo-light.svg">
   </picture>
   <p>High-level OAuth 2.0 powered by <a href="https://deno.com/kv">Deno KV</a>.</p>
-  <a href="https://deno.land/x/deno_kv_oauth?doc">
+  <a href="https://jsr.io/@deno/kv-oauth/doc">
     <img src="https://doc.deno.land/badge.svg" alt="Docs">
   </a>
   <a href="https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml">
@@ -13,6 +13,14 @@
   </a>
   <a href="https://codecov.io/gh/denoland/deno_kv_oauth">
     <img src="https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z" alt="codecov">
+  </a>
+  <a href="https://deno.land/std">
+    <img
+      width="135"
+      height="20"
+      src="https://raw.githubusercontent.com/denoland/deno_std/main/badge.svg"
+      alt="Built with the Deno Standard Library"
+    />
   </a>
 </div>
 
@@ -41,7 +49,7 @@
 ## Documentation
 
 Check out the full documentation and API reference
-[here](https://deno.land/x/deno_kv_oauth?doc).
+[here](https://jsr.io/@deno/kv-oauth/doc).
 
 ## How-to
 
@@ -57,23 +65,23 @@ configurations.
 
    ```ts
    // server.ts
-   import {
-     createGitHubOAuthConfig,
-     getSessionId,
-     handleCallback,
-     signIn,
-     signOut,
-   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
 
    const oauthConfig = createGitHubOAuthConfig();
+   const {
+     signIn,
+     handleCallback,
+     getSessionId,
+     signOut,
+   } = createHelpers(oauthConfig);
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await signIn(request, oauthConfig);
+         return await signIn(request);
        case "/oauth/callback":
-         const { response } = await handleCallback(request, oauthConfig);
+         const { response } = await handleCallback(request);
          return response;
        case "/oauth/signout":
          return await signOut(request);
@@ -93,7 +101,7 @@ configurations.
    [environment variables](#environment-variables).
 
    ```bash
-   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable-kv --allow-env --allow-net server.ts
    ```
 
 > Check out a full implementation in the [demo source code](./demo.ts) which
@@ -109,13 +117,10 @@ configurations.
    ```ts
    // server.ts
    import {
+     createHelpers,
      getRequiredEnv,
-     getSessionId,
-     handleCallback,
      type OAuth2ClientConfig,
-     signIn,
-     signOut,
-   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   } from "jsr:@deno/kv-oauth";
 
    const oauthConfig: OAuth2ClientConfig = {
      clientId: getRequiredEnv("CUSTOM_CLIENT_ID"),
@@ -124,14 +129,20 @@ configurations.
      tokenUri: "https://custom.com/oauth/token",
      redirectUri: "https://my-site.com/another-dir/callback",
    };
+   const {
+     signIn,
+     handleCallback,
+     getSessionId,
+     signOut,
+   } = createHelpers(oauthConfig);
 
    async function handler(request: Request) {
      const { pathname } = new URL(request.url);
      switch (pathname) {
        case "/oauth/signin":
-         return await signIn(request, oauthConfig);
+         return await signIn(request);
        case "/another-dir/callback":
-         const { response } = await handleCallback(request, oauthConfig);
+         const { response } = await handleCallback(request);
          return response;
        case "/oauth/signout":
          return await signOut(request);
@@ -151,7 +162,7 @@ configurations.
    [environment variables](#environment-variables).
 
    ```bash
-   CUSTOM_CLIENT_ID=xxx CUSTOM_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   CUSTOM_CLIENT_ID=xxx CUSTOM_CLIENT_SECRET=xxx deno run --unstable-kv --allow-env --allow-net server.ts
    ```
 
 ### Get Started with Cookie Options
@@ -165,10 +176,7 @@ This is required for OAuth solutions that span more than one sub-domain.
 
    ```ts
    // server.ts
-   import {
-     createGitHubOAuthConfig,
-     createHelpers,
-   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
 
    const {
      signIn,
@@ -208,7 +216,7 @@ This is required for OAuth solutions that span more than one sub-domain.
    [environment variables](#environment-variables).
 
    ```bash
-   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable --allow-env --allow-net server.ts
+   GITHUB_CLIENT_ID=xxx GITHUB_CLIENT_SECRET=xxx deno run --unstable-kv --allow-env --allow-net server.ts
    ```
 
 ### Get Started with [Fresh](https://fresh.deno.dev/)
@@ -217,12 +225,9 @@ This is required for OAuth solutions that span more than one sub-domain.
 
 1. Create your OAuth configuration and Fresh plugin.
 
-   ```ts
+   ```ts, ignore
    // plugins/kv_oauth.ts
-   import {
-     createGitHubOAuthConfig,
-     createHelpers,
-   } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+   import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
    import type { Plugin } from "$fresh/server.ts";
 
    const { signIn, handleCallback, signOut, getSessionId } = createHelpers(
@@ -313,20 +318,25 @@ is set in the following order of precedence:
 
 The following providers have pre-defined OAuth configurations:
 
-1. [Auth0](https://deno.land/x/deno_kv_oauth/mod.ts?s=createAuth0OAuthConfig)
-1. [Discord](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDiscordOAuthConfig)
-1. [Dropbox](https://deno.land/x/deno_kv_oauth/mod.ts?s=createDropboxOAuthConfig)
-1. [Facebook](https://deno.land/x/deno_kv_oauth/mod.ts?s=createFacebookOAuthConfig)
-1. [GitHub](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitHubOAuthConfig)
-1. [GitLab](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGitLabOAuthConfig)
-1. [Google](https://deno.land/x/deno_kv_oauth/mod.ts?s=createGoogleOAuthConfig)
+1. [Auth0](https://jsr.io/@deno/kv-oauth/doc/~/createAuth0OAuthConfig)
+1. [AWS Cognito User Pool](https://jsr.io/@deno/kv-oauth/doc/~/createAwsCognitoOAuthConfig)
+1. [AzureAD](https://jsr.io/@deno/kv-oauth/doc/~/createAzureADAuthConfig)
+1. [AzureADB2C](https://jsr.io/@deno/kv-oauth/doc/~/createAzureADB2CAuthConfig)
+1. [Clerk](https://jsr.io/@deno/kv-oauth/doc/~/createClerkOAuthConfig)
+1. [Discord](https://jsr.io/@deno/kv-oauth/doc/~/createDiscordOAuthConfig)
+1. [Dropbox](https://jsr.io/@deno/kv-oauth/doc/~/createDropboxOAuthConfig)
+1. [Facebook](https://jsr.io/@deno/kv-oauth/doc/~/createFacebookOAuthConfig)
+1. [GitHub](https://jsr.io/@deno/kv-oauth/doc/~/createGitHubOAuthConfig)
+1. [GitLab](https://jsr.io/@deno/kv-oauth/doc/~/createGitLabOAuthConfig)
+1. [Google](https://jsr.io/@deno/kv-oauth/doc/~/createGoogleOAuthConfig)
 1. [LinkedIn](https://deno.land/x/deno_kv_oauth/mod.ts?s=createLinkedInOAuthConfig)
-1. [Notion](https://deno.land/x/deno_kv_oauth/mod.ts?s=createNotionOAuthConfig)
-1. [Okta](https://deno.land/x/deno_kv_oauth/mod.ts?s=createOktaOAuthConfig)
-1. [Patreon](https://deno.land/x/deno_kv_oauth/mod.ts?s=createPatreonOAuthConfig)
-1. [Slack](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSlackOAuthConfig)
-1. [Spotify](https://deno.land/x/deno_kv_oauth/mod.ts?s=createSpotifyOAuthConfig)
-1. [Twitter](https://deno.land/x/deno_kv_oauth/mod.ts?s=createTwitterOAuthConfig)
+1. [Logto](https://jsr.io/@deno/kv-oauth/doc/~/createLogtoOAuthConfig)
+1. [Notion](https://jsr.io/@deno/kv-oauth/doc/~/createNotionOAuthConfig)
+1. [Okta](https://jsr.io/@deno/kv-oauth/doc/~/createOktaOAuthConfig)
+1. [Patreon](https://jsr.io/@deno/kv-oauth/doc/~/createPatreonOAuthConfig)
+1. [Slack](https://jsr.io/@deno/kv-oauth/doc/~/createSlackOAuthConfig)
+1. [Spotify](https://jsr.io/@deno/kv-oauth/doc/~/createSpotifyOAuthConfig)
+1. [Twitter](https://jsr.io/@deno/kv-oauth/doc/~/createTwitterOAuthConfig)
 
 #### Environment Variables
 
@@ -341,7 +351,7 @@ starting your server. E.g. `DISCORD`, `GOOGLE`, or `SLACK`.
    [Client secret](https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/)
    of a given OAuth application.
 1. `PROVIDER_DOMAIN` (optional) - Server domain of a given OAuth application.
-   Only required for Okta and Auth0.
+   Required for Auth0, AzureADB2C, AWS Cognito, and Okta.
 
 > Note: reading environment variables requires the
 > `--allow-env[=<VARIABLE_NAME>...]` permission flag. See

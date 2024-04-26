@@ -18,7 +18,7 @@ export interface GetSessionIdOptions {
  *
  * @example
  * ```ts
- * import { getSessionId } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { getSessionId } from "jsr:@deno/kv-oauth";
  *
  * export async function handler(request: Request) {
  *   const sessionId = await getSessionId(request);
@@ -27,6 +27,8 @@ export interface GetSessionIdOptions {
  *   return Response.json({ sessionId, hasSessionIdCookie });
  * }
  * ```
+ *
+ * @deprecated Use {@linkcode createHelpers} instead. This will be removed in v0.12.0.
  */
 export async function getSessionId(
   request: Request,

@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import type { OAuth2ClientConfig } from "../deps.ts";
+import type { OAuth2ClientConfig } from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
 import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
@@ -13,7 +13,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  *
  * @example
  * ```ts
- * import { createOktaOAuthConfig } from "https://deno.land/x/deno_kv_oauth@$VERSION/mod.ts";
+ * import { createOktaOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createOktaOAuthConfig({
  *   redirectUri: "http://localhost:8000/callback",
