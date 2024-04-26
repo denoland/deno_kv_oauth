@@ -1,30 +1,11 @@
-<div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" width="300" height="240" srcset="./logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" width="300" height="240" srcset="./logo-light.svg">
-    <img alt="Deno KV OAuth logo" width="300" height="240" src="./logo-light.svg">
-  </picture>
-  <p>High-level OAuth 2.0 powered by <a href="https://deno.com/kv">Deno KV</a>.</p>
-  <a href="https://jsr.io/@deno/kv-oauth/doc">
-    <img src="https://doc.deno.land/badge.svg" alt="Docs">
-  </a>
-  <a href="https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml">
-    <img src="https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml/badge.svg" alt="CI">
-  </a>
-  <a href="https://codecov.io/gh/denoland/deno_kv_oauth">
-    <img src="https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z" alt="codecov">
-  </a>
-  <a href="https://deno.land/std">
-    <img
-      width="135"
-      height="20"
-      src="https://raw.githubusercontent.com/denoland/deno_std/main/badge.svg"
-      alt="Built with the Deno Standard Library"
-    />
-  </a>
-</div>
-
 # Deno KV OAuth (Beta)
+
+[![JSR](https://jsr.io/badges/@deno/kv-oauth)](https://jsr.io/@deno/kv-oauth)
+[![CI](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml/badge.svg)](https://github.com/denoland/deno_kv_oauth/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/denoland/deno_kv_oauth/branch/main/graph/badge.svg?token=UZ570U128Z)](https://codecov.io/gh/denoland/deno_kv_oauth)
+[![Built with the Deno Standard Library](https://raw.githubusercontent.com/denoland/deno_std/main/badge.svg)](https://deno.land/std)
+
+High-level OAuth 2.0 powered by [Deno KV](https://deno.com/kv).
 
 ## Features
 
