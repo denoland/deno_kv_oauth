@@ -1,16 +1,34 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-
-import type {
-  OAuth2ClientConfig,
-  Tokens,
+import {
+  OAuth2Client,
+  type OAuth2ClientConfig,
+  type Tokens,
 } from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
-import type { Cookie } from "@std/http";
-import { getSessionId } from "./get_session_id.ts";
-import { handleCallback } from "./handle_callback.ts";
-import { signIn, type SignInOptions } from "./sign_in.ts";
-import { signOut } from "./sign_out.ts";
+import { SECOND } from "@std/datetime";
+import { type Cookie, deleteCookie, getCookies, setCookie } from "@std/http";
+import {
+  COOKIE_BASE,
+  getCookieName,
+  getSessionIdCookie,
+  getSuccessUrl,
+  isHttps,
+  OAUTH_COOKIE_NAME,
+  redirect,
+  SITE_COOKIE_NAME,
+} from "./_http.ts";
+import {
+  deleteSiteSession,
+  getAndDeleteOAuthSession,
+  isSiteSession,
+  setOAuthSession,
+  setSiteSession,
+} from "./_kv.ts";
 
-export type { SignInOptions };
+/** Options for {@linkcode signIn}. */
+export interface SignInOptions {
+  /** URL parameters that are appended to the authorization URI, if defined. */
+  urlParams?: Record<string, string>;
+}
 
 /** High-level OAuth 2.0 functions */
 export interface Helpers {
@@ -154,20 +172,104 @@ export function createHelpers(
 ): Helpers {
   return {
     async signIn(request: Request, options?: SignInOptions) {
-      return await signIn(request, oauthConfig, options);
+      const state = crypto.randomUUID();
+      const { uri, codeVerifier } = await new OAuth2Client(oauthConfig)
+        .code.getAuthorizationUri({ state });
+
+      if (options?.urlParams) {
+        Object.entries(options.urlParams).forEach(([key, value]) =>
+          uri.searchParams.append(key, value)
+        );
+      }
+
+      const oauthSessionId = crypto.randomUUID();
+      const cookie: Cookie = {
+        ...COOKIE_BASE,
+        name: getCookieName(OAUTH_COOKIE_NAME, isHttps(request.url)),
+        value: oauthSessionId,
+        secure: isHttps(request.url),
+        /**
+         * A maximum authorization code lifetime of 10 minutes is recommended.
+         * This cookie lifetime matches that value.
+         *
+         * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
+         */
+        maxAge: 10 * 60,
+      };
+      const successUrl = getSuccessUrl(request);
+      await setOAuthSession(
+        oauthSessionId,
+        { state, codeVerifier, successUrl },
+        {
+          expireIn: cookie.maxAge! * SECOND,
+        },
+      );
+      const response = redirect(uri.toString());
+      setCookie(response.headers, cookie);
+      return response;
     },
     async handleCallback(request: Request) {
-      return await handleCallback(request, oauthConfig, {
-        cookieOptions: options?.cookieOptions,
-      });
+      const oauthCookieName = getCookieName(
+        OAUTH_COOKIE_NAME,
+        isHttps(request.url),
+      );
+      const oauthSessionId = getCookies(request.headers)[oauthCookieName];
+      if (oauthSessionId === undefined) {
+        throw new Error("OAuth cookie not found");
+      }
+      const oauthSession = await getAndDeleteOAuthSession(oauthSessionId);
+
+      const tokens = await new OAuth2Client(oauthConfig)
+        .code.getToken(request.url, oauthSession);
+
+      const sessionId = crypto.randomUUID();
+      const response = redirect(oauthSession.successUrl);
+      const cookie: Cookie = {
+        ...COOKIE_BASE,
+        name: getCookieName(SITE_COOKIE_NAME, isHttps(request.url)),
+        value: sessionId,
+        secure: isHttps(request.url),
+        ...options?.cookieOptions,
+      };
+      setCookie(response.headers, cookie);
+      await setSiteSession(
+        sessionId,
+        cookie.maxAge ? cookie.maxAge * SECOND : undefined,
+      );
+
+      return {
+        response,
+        sessionId,
+        tokens,
+      };
     },
     async signOut(request: Request) {
-      return await signOut(request, { cookieOptions: options?.cookieOptions });
+      const successUrl = getSuccessUrl(request);
+      const response = redirect(successUrl);
+
+      const sessionId = getSessionIdCookie(
+        request,
+        options?.cookieOptions?.name,
+      );
+      if (sessionId === undefined) return response;
+      await deleteSiteSession(sessionId);
+
+      const cookieName = options?.cookieOptions?.name ??
+        getCookieName(SITE_COOKIE_NAME, isHttps(request.url));
+      deleteCookie(response.headers, cookieName, {
+        path: COOKIE_BASE.path,
+        ...options?.cookieOptions,
+      });
+      return response;
     },
     async getSessionId(request: Request) {
-      return await getSessionId(request, {
-        cookieName: options?.cookieOptions?.name,
-      });
+      const sessionId = getSessionIdCookie(
+        request,
+        options?.cookieOptions?.name,
+      );
+      return (sessionId !== undefined && await isSiteSession(sessionId))
+        ? sessionId
+        : undefined;
     },
   };
 }

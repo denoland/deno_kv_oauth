@@ -1,8 +1,4 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-export * from "./lib/handle_callback.ts";
-export * from "./lib/get_session_id.ts";
-export * from "./lib/sign_in.ts";
-export * from "./lib/sign_out.ts";
 export * from "./lib/create_auth0_oauth_config.ts";
 export * from "./lib/create_azure_ad_oauth_config.ts";
 export * from "./lib/create_azure_adb2c_oauth_config.ts";
