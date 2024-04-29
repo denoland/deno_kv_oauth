@@ -68,12 +68,7 @@ export async function handleCallback(
   const oauthSession = await getAndDeleteOAuthSession(oauthSessionId);
 
   const tokens = await new OAuth2Client(oauthConfig)
-    .code.getToken(request.url, {
-      ...oauthSession,
-      // Workaround ensuring the default code verifier is used, if defined.
-      codeVerifier: oauthConfig.defaults?.requestOptions?.body?.code_verifier ??
-        oauthSession.codeVerifier,
-    });
+    .code.getToken(request.url, oauthSession);
 
   const sessionId = crypto.randomUUID();
   const response = redirect(oauthSession.successUrl);
