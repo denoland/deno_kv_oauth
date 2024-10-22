@@ -5,7 +5,7 @@
  * OAuth configuration.
  *
  * @example Usage
- * ```ts
+ * ```ts ignore
  * import { getRequiredEnv } from "jsr:@deno/kv-oauth";
  *
  * getRequiredEnv("HOME"); // Returns "/home/alice"
