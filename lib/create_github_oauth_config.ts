@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `GITHUB_CLIENT_ID`
  * 2. `GITHUB_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createGitHubOAuthConfig } from "jsr:@deno/kv-oauth";
  *

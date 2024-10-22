@@ -11,7 +11,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 2. `CLERK_CLIENT_SECRET`
  * 3. `CLERK_DOMAIN`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createClerkOAuthConfig } from "jsr:@deno/kv-oauth";
  *

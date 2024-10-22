@@ -11,7 +11,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 2. `AZURE_AD_CLIENT_SECRET`
  * 4. `AZURE_AD_TENANT_ID`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createAzureAdOAuthConfig } from "jsr:@deno/kv-oauth";
  *

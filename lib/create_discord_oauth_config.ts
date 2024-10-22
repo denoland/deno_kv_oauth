@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `DISCORD_CLIENT_ID`
  * 2. `DISCORD_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createDiscordOAuthConfig } from "jsr:@deno/kv-oauth";
  *

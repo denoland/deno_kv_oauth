@@ -5,7 +5,7 @@ import { createGitHubOAuthConfig, createHelpers } from "./mod.ts";
 /**
  * Modify the OAuth configuration creation function when testing for providers.
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createNotionOAuthConfig } from "./mod.ts";
  *

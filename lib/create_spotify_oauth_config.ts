@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `SPOTIFY_CLIENT_ID`
  * 2. `SPOTIFY_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createSpotifyOAuthConfig } from "jsr:@deno/kv-oauth";
  *
