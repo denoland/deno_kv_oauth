@@ -28,7 +28,7 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: ${{ matrix.deno }}
-      
+
       - name: Check typos
         if: matrix.os == 'ubuntu-latest'
         uses: crate-ci/typos@master
