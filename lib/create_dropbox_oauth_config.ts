@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `DROPBOX_CLIENT_ID`
  * 2. `DROPBOX_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createDropboxOAuthConfig } from "jsr:@deno/kv-oauth";
  *

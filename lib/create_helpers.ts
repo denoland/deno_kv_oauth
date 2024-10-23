@@ -38,8 +38,8 @@ export interface Helpers {
    *
    * @see {@link https://github.com/denoland/deno_kv_oauth/tree/main#redirects-after-sign-in-and-sign-out}
    *
-   * @example
-   * ```ts
+   * @example Usage
+   * ```ts ignore
    * import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
    *
    * const oauthConfig = createGitHubOAuthConfig();
@@ -55,8 +55,8 @@ export interface Helpers {
    * {@linkcode Handlers.signIn}. The request URL must match the redirect URL
    * of the OAuth application.
    *
-   * @example
-   * ```ts
+   * @example Usage
+   * ```ts ignore
    * import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
    *
    * const oauthConfig = createGitHubOAuthConfig();
@@ -79,8 +79,8 @@ export interface Helpers {
    *
    * @see {@link https://github.com/denoland/deno_kv_oauth/tree/main#redirects-after-sign-in-and-sign-out}
    *
-   * @example
-   * ```ts
+   * @example Usage
+   * ```ts ignore
    * import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
    *
    * const oauthConfig = createGitHubOAuthConfig();
@@ -95,8 +95,8 @@ export interface Helpers {
    * check whether the client is signed-in and whether the session ID was created
    * on the server by checking if the return value is defined.
    *
-   * @example
-   * ```ts
+   * @example Usage
+   * ```ts ignore
    * import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
    *
    * const oauthConfig = createGitHubOAuthConfig();
@@ -124,8 +124,8 @@ export interface CreateHelpersOptions {
  * Creates the full set of helpers with the given OAuth configuration and
  * options.
  *
- * @example
- * ```ts
+ * @example Usage
+ * ```ts ignore
  * // server.ts
  * import {
  *   createGitHubOAuthConfig,

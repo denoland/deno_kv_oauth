@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `NOTION_CLIENT_ID`
  * 2. `NOTION_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createNotionOAuthConfig } from "jsr:@deno/kv-oauth";
  *

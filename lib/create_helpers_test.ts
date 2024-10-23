@@ -96,7 +96,7 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
   const { handleCallback } = createHelpers(randomOAuthConfig());
   const tokensBody = randomTokensBody();
   const fetchStub = stub(
-    window,
+    globalThis,
     "fetch",
     returnsNext([Promise.resolve(Response.json(tokensBody))]),
   );
@@ -133,7 +133,7 @@ Deno.test("handleCallback() correctly handles the callback response", async () =
 Deno.test("handleCallback() correctly handles the callback response with options", async () => {
   const tokensBody = randomTokensBody();
   const fetchStub = stub(
-    window,
+    globalThis,
     "fetch",
     returnsNext([Promise.resolve(Response.json(tokensBody))]),
   );

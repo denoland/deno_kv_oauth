@@ -11,7 +11,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 2. `AUTH0_CLIENT_SECRET`
  * 3. `AUTH0_DOMAIN`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createAuth0OAuthConfig } from "jsr:@deno/kv-oauth";
  *

@@ -4,8 +4,8 @@
  * been set in the current process. This can be used when defining a custom
  * OAuth configuration.
  *
- * @example
- * ```ts
+ * @example Usage
+ * ```ts ignore
  * import { getRequiredEnv } from "jsr:@deno/kv-oauth";
  *
  * getRequiredEnv("HOME"); // Returns "/home/alice"

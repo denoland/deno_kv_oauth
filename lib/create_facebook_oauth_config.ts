@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `FACEBOOK_CLIENT_ID`
  * 2. `FACEBOOK_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createFacebookOAuthConfig } from "jsr:@deno/kv-oauth";
  *

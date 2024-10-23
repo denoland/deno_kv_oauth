@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `GOOGLE_CLIENT_ID`
  * 2. `GOOGLE_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createGoogleOAuthConfig } from "jsr:@deno/kv-oauth";
  *

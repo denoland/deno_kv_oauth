@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `PATREON_CLIENT_ID`
  * 2. `PATREON_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createPatreonOAuthConfig } from "jsr:@deno/kv-oauth";
  *

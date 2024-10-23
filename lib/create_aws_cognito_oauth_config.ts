@@ -11,8 +11,8 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 2. `AWS_COGNITO_CLIENT_SECRET`
  * 3. `AWS_COGNITO_DOMAIN`
  *
- * @example
- * ```ts
+ * @example Usage
+ * ```ts ignore
  * import { createAwsCognitoOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createAwsCognitoOAuthConfig({

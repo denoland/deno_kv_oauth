@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `GITLAB_CLIENT_ID`
  * 2. `GITLAB_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createGitLabOAuthConfig } from "jsr:@deno/kv-oauth";
  *

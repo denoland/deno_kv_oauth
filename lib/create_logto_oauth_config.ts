@@ -11,7 +11,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 2. `LOGTO_CLIENT_SECRET`
  * 3. `LOGTO_DOMAIN`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createLogtoOAuthConfig } from "jsr:@deno/kv-oauth";
  *

@@ -13,7 +13,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 4. `AZURE_ADB2C_POLICY`
  * 5. `AZURE_ADB2C_TENANT_ID`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createAzureAdb2cOAuthConfig } from "jsr:@deno/kv-oauth";
  *

@@ -10,7 +10,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 1. `SLACK_CLIENT_ID`
  * 2. `SLACK_CLIENT_SECRET`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createSlackOAuthConfig } from "jsr:@deno/kv-oauth";
  *

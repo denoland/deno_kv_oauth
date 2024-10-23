@@ -44,7 +44,7 @@ configurations.
 1. Create your web server using Deno KV OAuth's request handlers, helpers and
    pre-defined OAuth configuration.
 
-   ```ts
+   ```ts ignore
    // server.ts
    import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
 
@@ -95,7 +95,7 @@ configurations.
 1. Create your web server using Deno KV OAuth's request handlers and helpers,
    and custom OAuth configuration.
 
-   ```ts
+   ```ts ignore
    // server.ts
    import {
      createHelpers,
@@ -155,7 +155,7 @@ This is required for OAuth solutions that span more than one sub-domain.
 1. Create your web server using Deno KV OAuth's helpers factory function with
    cookie options defined.
 
-   ```ts
+   ```ts ignore
    // server.ts
    import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
 
@@ -206,7 +206,7 @@ This is required for OAuth solutions that span more than one sub-domain.
 
 1. Create your OAuth configuration and Fresh plugin.
 
-   ```ts, ignore
+   ```ts ignore
    // plugins/kv_oauth.ts
    import { createGitHubOAuthConfig, createHelpers } from "jsr:@deno/kv-oauth";
    import type { Plugin } from "$fresh/server.ts";

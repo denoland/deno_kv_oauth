@@ -11,7 +11,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 2. `OKTA_CLIENT_SECRET`
  * 3. `OKTA_DOMAIN`
  *
- * @example
+ * @example Usage
  * ```ts
  * import { createOktaOAuthConfig } from "jsr:@deno/kv-oauth";
  *
