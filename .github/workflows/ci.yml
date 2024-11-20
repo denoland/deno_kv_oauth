@@ -45,7 +45,7 @@ jobs:
         run: deno task cov:gen
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           name: ${{ matrix.os }}
           token: ${{ secrets.CODECOV_TOKEN }}
