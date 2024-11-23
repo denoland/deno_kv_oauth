@@ -10,6 +10,7 @@ import { createFacebookOAuthConfig } from "./create_facebook_oauth_config.ts";
 import { createGitHubOAuthConfig } from "./create_github_oauth_config.ts";
 import { createGitLabOAuthConfig } from "./create_gitlab_oauth_config.ts";
 import { createGoogleOAuthConfig } from "./create_google_oauth_config.ts";
+import { createLinkedInOAuthConfig } from "./create_linkedin_oauth_config.ts";
 import { createLogtoOAuthConfig } from "./create_logto_oauth_config.ts";
 import { createNotionOAuthConfig } from "./create_notion_oauth_config.ts";
 import { createOktaOAuthConfig } from "./create_okta_oauth_config.ts";
@@ -58,6 +59,10 @@ import { createTwitterOAuthConfig } from "./create_twitter_oauth_config.ts";
   {
     envPrefix: "GOOGLE",
     createOAuthConfigFn: createGoogleOAuthConfig,
+  },
+  {
+    envPrefix: "LINKEDIN",
+    createOAuthConfigFn: createLinkedInOAuthConfig,
   },
   {
     envPrefix: "LOGTO",
