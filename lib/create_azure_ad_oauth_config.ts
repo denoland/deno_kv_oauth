@@ -1,5 +1,5 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import type { OAuth2ClientConfig } from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
+import type { OAuth2ClientConfig } from "@cmd-johnson/oauth2-client";
 import { getRequiredEnv } from "./get_required_env.ts";
 
 /**
@@ -12,7 +12,7 @@ import { getRequiredEnv } from "./get_required_env.ts";
  * 4. `AZURE_AD_TENANT_ID`
  *
  * @example Usage
- * ```ts
+ * ```ts ignore
  * import { createAzureAdOAuthConfig } from "jsr:@deno/kv-oauth";
  *
  * const oauthConfig = createAzureAdOAuthConfig({

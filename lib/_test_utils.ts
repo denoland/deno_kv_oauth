@@ -1,6 +1,6 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { assert, assertEquals } from "@std/assert";
-import type { OAuth2ClientConfig } from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
+import type { OAuth2ClientConfig } from "@cmd-johnson/oauth2-client";
 import { STATUS_CODE } from "@std/http";
 
 import type { OAuthSession } from "./_kv.ts";

@@ -4,14 +4,12 @@
   "exports": "./mod.ts",
   "lock": false,
   "imports": {
+    "@cmd-johnson/oauth2-client": "jsr:@cmd-johnson/oauth2-client@^2.0.0",
     "@std/assert": "jsr:@std/assert@^1.0.6",
     "@std/datetime": "jsr:@std/datetime@^0.225.2",
     "@std/fs": "jsr:@std/fs@^1.0.4",
     "@std/http": "jsr:@std/http@^1.0.8",
-    "@std/testing": "jsr:@std/testing@^1.0.3",
-    "https://deno.land/": "./vendor/deno.land/",
-    "jsr:@deno/kv-oauth": "./mod.ts",
-    "oauth2_client/": "https://deno.land/x/oauth2_client@v1.0.2/"
+    "@std/testing": "jsr:@std/testing@^1.0.3"
   },
   "tasks": {
     "demo": "deno run --allow-net --env --allow-env --unstable-kv --watch demo.ts",

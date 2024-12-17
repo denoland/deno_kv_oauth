@@ -3,7 +3,7 @@ import {
   OAuth2Client,
   type OAuth2ClientConfig,
   type Tokens,
-} from "https://deno.land/x/oauth2_client@v1.0.2/mod.ts";
+} from "@cmd-johnson/oauth2-client";
 import { SECOND } from "@std/datetime";
 import { type Cookie, deleteCookie, getCookies, setCookie } from "@std/http";
 import {
