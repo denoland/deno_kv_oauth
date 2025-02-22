@@ -171,13 +171,13 @@ export function createHelpers(
   options?: CreateHelpersOptions,
 ): Helpers {
   return {
-    async signIn(request: Request, options?: SignInOptions) {
+    async signIn(request: Request, signInOptions?: SignInOptions) {
       const state = crypto.randomUUID();
       const { uri, codeVerifier } = await new OAuth2Client(oauthConfig)
         .code.getAuthorizationUri({ state });
 
-      if (options?.urlParams) {
-        Object.entries(options.urlParams).forEach(([key, value]) =>
+      if (signInOptions?.urlParams) {
+        Object.entries(signInOptions.urlParams).forEach(([key, value]) =>
           uri.searchParams.append(key, value)
         );
       }
@@ -185,9 +185,6 @@ export function createHelpers(
       const oauthSessionId = crypto.randomUUID();
       const cookie: Cookie = {
         ...COOKIE_BASE,
-        name: getCookieName(OAUTH_COOKIE_NAME, isHttps(request.url)),
-        value: oauthSessionId,
-        secure: isHttps(request.url),
         /**
          * A maximum authorization code lifetime of 10 minutes is recommended.
          * This cookie lifetime matches that value.
@@ -195,6 +192,10 @@ export function createHelpers(
          * @see {@link https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2}
          */
         maxAge: 10 * 60,
+        secure: isHttps(request.url),
+        name: getCookieName(OAUTH_COOKIE_NAME, isHttps(request.url)),
+        ...options?.cookieOptions,
+        value: oauthSessionId,
       };
       const successUrl = getSuccessUrl(request);
       await setOAuthSession(
