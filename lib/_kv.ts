@@ -1,11 +1,11 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-const DENO_KV_PATH_KEY = "DENO_KV_PATH";
+const DKV_PATH_KEY = "DKV_PATH";
 let path = undefined;
 if (
-  (await Deno.permissions.query({ name: "env", variable: DENO_KV_PATH_KEY }))
+  (await Deno.permissions.query({ name: "env", variable: DKV_PATH_KEY }))
     .state === "granted"
 ) {
-  path = Deno.env.get(DENO_KV_PATH_KEY);
+  path = Deno.env.get(DKV_PATH_KEY);
 }
 const kv = await Deno.openKv(path);
 
@@ -34,10 +34,7 @@ export async function getAndDeleteOAuthSession(
     throw new Deno.errors.NotFound("OAuth session not found");
   }
 
-  const res = await kv.atomic()
-    .check(oauthSessionRes)
-    .delete(key)
-    .commit();
+  const res = await kv.atomic().check(oauthSessionRes).delete(key).commit();
 
   if (!res.ok) throw new Error("Failed to delete OAuth session");
   return oauthSession;
