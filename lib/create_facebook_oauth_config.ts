@@ -1,4 +1,4 @@
-// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2025 the Deno authors. All rights reserved. MIT license.
 import type { OAuth2ClientConfig } from "@cmd-johnson/oauth2-client";
 import { getRequiredEnv } from "./get_required_env.ts";
 
