@@ -1,4 +1,4 @@
-// Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
+// Copyright 2023-2025 the Deno authors. All rights reserved. MIT license.
 import { assert, assertEquals } from "@std/assert";
 import type { OAuth2ClientConfig } from "@cmd-johnson/oauth2-client";
 import { STATUS_CODE } from "@std/http";
