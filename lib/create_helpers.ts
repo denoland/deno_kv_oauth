@@ -273,3 +273,13 @@ export function createHelpers(
     },
   };
 }
+
+export async function getSessionId(request: Request, cookieName?: string) {
+  const sessionId = getSessionIdCookie(
+    request,
+    cookieName
+  );
+  return (sessionId !== undefined && await isSiteSession(sessionId))
+    ? sessionId
+    : undefined;
+}
